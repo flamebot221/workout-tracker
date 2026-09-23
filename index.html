@@ -1,0 +1,1102 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>myfit &bull; 12-Week Transformation</title>
+
+  <!-- PWA & Android Meta -->
+  <meta name="theme-color" content="#0C0E12">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="manifest" href="./manifest.json">
+  <link rel="icon" type="image/svg+xml" href="./icon.svg">
+
+  <!-- Typography: Plus Jakarta Sans & Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'Inter', 'sans-serif'],
+            mono: ['ui-monospace', 'SFMono-Regular', 'Menlo', 'monospace']
+          },
+          colors: {
+            base: {
+              bg: '#0C0E12',
+              surface: '#13171F',
+              card: '#161B24',
+              elevated: '#1D222E',
+              border: 'rgba(255, 255, 255, 0.08)',
+              borderSubtle: 'rgba(255, 255, 255, 0.04)'
+            },
+            accent: {
+              gold: '#E5A93C',
+              goldHover: '#F59E0B',
+              goldBg: 'rgba(229, 169, 60, 0.12)',
+              goldBorder: 'rgba(229, 169, 60, 0.35)',
+              emerald: '#10B981',
+              emeraldBg: 'rgba(16, 185, 129, 0.12)',
+              cyan: '#38BDF8',
+              cyanBg: 'rgba(56, 189, 248, 0.12)',
+              orange: '#FB923C'
+            }
+          },
+          borderRadius: {
+            'none': '0px',
+            'sm': '4px',
+            'DEFAULT': '6px',
+            'md': '6px',
+            'lg': '8px',
+            'xl': '10px'
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      background-color: #0C0E12;
+      color: #F3F4F6;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+    }
+    input {
+      user-select: auto;
+    }
+    
+    /* Strict square button & input geometry per user request */
+    button, input, select {
+      border-radius: 6px;
+    }
+
+    /* Cards matching ui_inspiration.jpg */
+    .dashboard-card {
+      background-color: #13171F;
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      border-radius: 8px;
+    }
+    .dashboard-card-interactive {
+      background-color: #161B24;
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      border-radius: 8px;
+      transition: all 0.15s ease-in-out;
+    }
+    .dashboard-card-interactive:active {
+      transform: scale(0.99);
+      border-color: rgba(229, 169, 60, 0.4);
+    }
+
+    /* Primary gold button matching inspiration image */
+    .btn-gold {
+      background-color: #E5A93C;
+      color: #0C0E12;
+      font-weight: 700;
+      border-radius: 6px;
+      transition: all 0.15s ease;
+    }
+    .btn-gold:hover {
+      background-color: #F59E0B;
+    }
+    .btn-gold:active {
+      transform: scale(0.98);
+    }
+
+    /* Secondary square button */
+    .btn-dark {
+      background-color: #1D222E;
+      color: #E5E7EB;
+      border: 1px solid rgba(255, 255, 255, 0.09);
+      border-radius: 6px;
+      transition: all 0.15s ease;
+    }
+    .btn-dark:hover {
+      background-color: #252C3A;
+      color: #FFFFFF;
+    }
+    .btn-dark:active {
+      transform: scale(0.98);
+    }
+
+    /* Square Checkbox */
+    .square-checkbox {
+      width: 18px;
+      height: 18px;
+      border-radius: 4px;
+      border: 1.5px solid rgba(255, 255, 255, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.15s ease;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+    .square-checkbox.checked {
+      background-color: #10B981;
+      border-color: #10B981;
+    }
+
+    /* Scenic hero banner */
+    .hero-banner {
+      background: linear-gradient(to right, rgba(12, 14, 18, 0.94) 0%, rgba(12, 14, 18, 0.7) 45%, rgba(12, 14, 18, 0.4) 100%),
+                  url('./hero_mountain_banner.jpg');
+      background-size: cover;
+      background-position: center;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 8px;
+    }
+
+    /* Forest quote banner */
+    .quote-banner {
+      background: linear-gradient(to right, rgba(19, 23, 31, 0.92) 0%, rgba(19, 23, 31, 0.75) 100%),
+                  url('./quote_card_banner.jpg');
+      background-size: cover;
+      background-position: center;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 8px;
+    }
+
+    /* Scrollbar */
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+  </style>
+</head>
+
+<body class="min-h-screen flex flex-col lg:flex-row font-sans text-gray-200 antialiased selection:bg-amber-500/30 selection:text-amber-200">
+
+  <!-- ======================================================== -->
+  <!-- 1. DESKTOP SIDEBAR (Matches ui_inspiration.jpg Left Bar) -->
+  <!-- ======================================================== -->
+  <aside class="hidden lg:flex flex-col w-60 bg-[#0C0E12] border-r border-white/[0.07] p-5 h-screen sticky top-0 flex-shrink-0 z-40 justify-between">
+    <div>
+      <!-- Brand Logo & Motto -->
+      <div class="mb-7">
+        <div class="flex items-center gap-2">
+          <span class="text-xl font-black text-[#E5A93C] tracking-tight font-sans">myfit</span>
+        </div>
+        <p class="text-[11px] text-gray-400 mt-1 leading-tight font-medium">
+          Discipline today,<br>a better tomorrow.
+        </p>
+      </div>
+
+      <!-- Navigation Links (All Square Buttons) -->
+      <nav class="space-y-1.5 text-xs font-semibold">
+        <button id="desk-nav-dashboard" onclick="switchNavTab('dashboard')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded text-[#E5A93C] bg-[#E5A93C]/10 border border-[#E5A93C]/20 transition-all text-left">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+          <span>Dashboard</span>
+        </button>
+
+        <button id="desk-nav-workouts" onclick="switchNavTab('workouts')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded text-gray-400 hover:text-white hover:bg-white/[0.03] transition-all text-left">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
+          <span>Workouts</span>
+        </button>
+
+        <button id="desk-nav-tracker" onclick="switchNavTab('tracker')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded text-gray-400 hover:text-white hover:bg-white/[0.03] transition-all text-left">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>
+          <span>Track Session</span>
+        </button>
+
+        <button id="desk-nav-progress" onclick="switchNavTab('progress')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded text-gray-400 hover:text-white hover:bg-white/[0.03] transition-all text-left">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+          <span>Progress</span>
+        </button>
+
+        <button id="desk-nav-library" onclick="switchNavTab('library')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded text-gray-400 hover:text-white hover:bg-white/[0.03] transition-all text-left">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+          <span>Exercise Demos</span>
+        </button>
+
+        <button id="desk-nav-goals" onclick="openPlanOverviewModal()" class="w-full flex items-center gap-3 px-3 py-2.5 rounded text-gray-400 hover:text-white hover:bg-white/[0.03] transition-all text-left">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+          <span>12-Week Goals</span>
+        </button>
+      </nav>
+    </div>
+
+    <!-- Sidebar Footer -->
+    <div class="pt-4 border-t border-white/[0.07]">
+      <p class="text-[11px] text-gray-500 font-medium">Same you,<br><span class="text-gray-300 font-bold">Stronger you.</span></p>
+    </div>
+  </aside>
+
+  <!-- ======================================================== -->
+  <!-- 2. MAIN VIEW AREA (Top Header + Dashboard Content) -->
+  <!-- ======================================================== -->
+  <div class="flex-1 flex flex-col min-w-0">
+
+    <!-- TOP HEADER BAR (Search, Date, User Status) -->
+    <header class="sticky top-0 z-30 bg-[#0C0E12]/95 backdrop-blur-md border-b border-white/[0.07] px-4 lg:px-7 py-3 flex items-center justify-between gap-4">
+      
+      <!-- Mobile Brand Logo / Desktop Search Bar -->
+      <div class="flex items-center gap-3 flex-1 max-w-md">
+        <div class="lg:hidden flex items-center gap-1.5">
+          <span class="text-base font-black text-[#E5A93C] font-sans">myfit</span>
+        </div>
+
+        <!-- Search Bar (All Square) -->
+        <div class="relative w-full">
+          <svg class="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+          <input 
+            type="text" 
+            id="global-search-input" 
+            placeholder="Search workouts, exercises, cues..." 
+            oninput="handleGlobalSearch(this.value)"
+            class="w-full bg-[#161B24] border border-white/[0.08] text-xs text-gray-200 placeholder-gray-500 pl-8 pr-3 py-1.5 rounded focus:outline-none focus:border-[#E5A93C]/50 transition-colors"
+          />
+        </div>
+      </div>
+
+      <!-- Right Header Items: Date, Deload Toggle & User Profile -->
+      <div class="flex items-center gap-2.5">
+        
+        <!-- Date Badge -->
+        <div class="hidden sm:flex items-center gap-1.5 text-xs text-gray-400 bg-[#161B24] border border-white/[0.07] px-2.5 py-1 rounded font-mono">
+          <span>📅</span>
+          <span id="header-date-display">Tue, 23 Sep 2026</span>
+        </div>
+
+        <!-- Week 7 Deload Toggle (Square Button) -->
+        <button id="btn-deload-toggle" onclick="toggleWeek7Deload()" class="text-[11px] font-semibold px-2.5 py-1.5 rounded bg-[#161B24] border border-white/[0.08] text-gray-300 hover:text-white transition-all flex items-center gap-1.5">
+          <span id="deload-dot" class="w-1.5 h-1.5 rounded-sm bg-gray-500"></span>
+          <span id="deload-text">Deload: OFF</span>
+        </button>
+
+        <!-- User Badge -->
+        <div class="flex items-center gap-2 bg-[#161B24] border border-white/[0.08] px-2 py-1 rounded">
+          <div class="w-5 h-5 rounded-sm bg-emerald-600/30 text-emerald-400 text-[10px] font-bold flex items-center justify-center font-mono">
+            U
+          </div>
+          <span class="text-xs text-gray-300 font-medium hidden md:inline">Keep Going</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- ======================================================== -->
+    <!-- 3. SCROLLABLE TAB CONTENT -->
+    <!-- ======================================================== -->
+    <main class="flex-1 p-4 lg:p-7 max-w-7xl w-full mx-auto pb-28 lg:pb-12">
+
+      <!-- ======================================================== -->
+      <!-- TAB 1: DASHBOARD (Matches ui_inspiration.jpg Exactly) -->
+      <!-- ======================================================== -->
+      <div id="view-dashboard" class="space-y-6">
+
+        <!-- HERO SCENIC MOUNTAIN BANNER -->
+        <div class="hero-banner p-6 sm:p-7 relative overflow-hidden flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-lg">
+          <div class="relative z-10 max-w-xl">
+            <h1 id="hero-greeting" class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">Good Evening,</h1>
+            <h2 class="text-xl sm:text-2xl font-bold text-gray-200 mt-0.5">Small steps. Big progress.</h2>
+            <p class="text-xs text-amber-300/90 italic mt-2 font-medium">"Discipline compounds. Results follow."</p>
+          </div>
+
+          <div class="relative z-10 sm:text-right border-l-2 sm:border-l-0 sm:border-r-2 border-amber-400/40 pl-3 sm:pl-0 sm:pr-3 py-0.5">
+            <span class="block text-[10px] font-extrabold text-gray-400 uppercase tracking-widest">BETTER DISCIPLINE</span>
+            <span class="block text-xs font-black text-amber-400 tracking-wider">BETTER RESULTS</span>
+          </div>
+        </div>
+
+        <!-- ROW OF 5 STAT CARDS (Square Geometry) -->
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+          
+          <!-- Card 1: Weight -->
+          <div class="dashboard-card p-3.5 flex flex-col justify-between">
+            <div class="flex items-center justify-between text-gray-400 text-xs mb-1">
+              <span>Weight</span>
+              <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
+            </div>
+            <div class="text-xl font-black text-white font-mono" id="stat-weight-val">94.5 kg</div>
+            <div class="text-[10px] text-gray-400 mt-1">Target: <strong class="text-emerald-400 font-mono">85.0 kg</strong></div>
+          </div>
+
+          <!-- Card 2: Body Fat -->
+          <div class="dashboard-card p-3.5 flex flex-col justify-between">
+            <div class="flex items-center justify-between text-gray-400 text-xs mb-1">
+              <span>Body Fat</span>
+              <span class="text-xs text-orange-400">~24%</span>
+            </div>
+            <div class="text-xl font-black text-white font-mono">24.2%</div>
+            <div class="text-[10px] text-gray-400 mt-1">Est. trend <strong class="text-orange-400">&darr; Deficit</strong></div>
+          </div>
+
+          <!-- Card 3: Steps Today -->
+          <div class="dashboard-card p-3.5 flex flex-col justify-between">
+            <div class="flex items-center justify-between text-gray-400 text-xs mb-1">
+              <span>Steps (Today)</span>
+              <span class="text-emerald-400">👟</span>
+            </div>
+            <div class="text-xl font-black text-white font-mono" id="stat-steps-val">8,420</div>
+            <div class="text-[10px] text-gray-400 mt-1">Target: <strong class="text-emerald-400 font-mono">8,000–10k</strong></div>
+          </div>
+
+          <!-- Card 4: Deficit & Calories -->
+          <div class="dashboard-card p-3.5 flex flex-col justify-between">
+            <div class="flex items-center justify-between text-gray-400 text-xs mb-1">
+              <span>Calories</span>
+              <span class="text-amber-400">🔥</span>
+            </div>
+            <div class="text-xl font-black text-white font-mono" id="stat-cal-val">1,980</div>
+            <div class="text-[10px] text-gray-400 mt-1">Deficit: <strong class="text-amber-400 font-mono">500–700 kcal</strong></div>
+          </div>
+
+          <!-- Card 5: Protein Target -->
+          <div class="dashboard-card p-3.5 flex flex-col justify-between col-span-2 sm:col-span-1">
+            <div class="flex items-center justify-between text-gray-400 text-xs mb-1">
+              <span>Protein</span>
+              <span class="text-cyan-400">🍗</span>
+            </div>
+            <div class="text-xl font-black text-white font-mono" id="stat-protein-val">145 g</div>
+            <div class="text-[10px] text-gray-400 mt-1">Target: <strong class="text-cyan-400 font-mono">140–170 g</strong></div>
+          </div>
+
+        </div>
+
+        <!-- MAIN 2-COLUMN SECTION: Today's Workout + Nutrition & Consistency -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+          <!-- ============================================== -->
+          <!-- LEFT 7 COLS: TODAY'S WORKOUT (CROSSED WITH DEMOS) -->
+          <!-- ============================================== -->
+          <div class="lg:col-span-7 space-y-4">
+            
+            <div class="dashboard-card p-4 sm:p-5">
+              
+              <!-- Card Header -->
+              <div class="flex items-start justify-between pb-3 border-b border-white/[0.06] mb-3">
+                <div>
+                  <div class="flex items-center gap-2 mb-1">
+                    <h3 class="text-sm font-bold text-white uppercase tracking-wider">Today's Workout</h3>
+                    <span id="dash-workout-status-badge" class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
+                      &bull; In Progress
+                    </span>
+                  </div>
+                  <h4 id="dash-workout-title" class="text-base font-extrabold text-white">Upper Body A + Easy Cardio</h4>
+                  <p id="dash-workout-subtitle" class="text-xs text-gray-400 mt-0.5">Flat DB Press &bull; Lat Pulldown &bull; Shoulders &bull; Arms</p>
+                </div>
+                <span class="text-xs text-gray-400 font-mono">~ 75–90 min</span>
+              </div>
+
+              <!-- Exercise List (Crossed with Demos directly!) -->
+              <div id="dash-exercise-list" class="space-y-2.5 my-3">
+                <!-- Dynamically generated with Square Demo Thumbnails -->
+              </div>
+
+              <!-- Bottom Actions (Square Buttons per User Request) -->
+              <div class="pt-3 border-t border-white/[0.06] flex flex-col sm:flex-row items-center justify-between gap-3">
+                <button onclick="startTodayWorkoutSession()" class="w-full sm:w-auto px-5 py-2.5 rounded btn-gold flex items-center justify-center gap-2 text-xs font-extrabold tracking-wide shadow-md">
+                  <span>Log Workout</span>
+                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                </button>
+
+                <button onclick="switchNavTab('library')" class="text-xs text-gray-400 hover:text-amber-400 transition-colors flex items-center gap-1 font-semibold">
+                  <span>View All Exercise Demos &rarr;</span>
+                </button>
+              </div>
+
+            </div>
+
+            <!-- WEEKLY PROGRESS OVER TIME CHART -->
+            <div class="dashboard-card p-4 sm:p-5">
+              <div class="flex items-center justify-between pb-3 border-b border-white/[0.06] mb-3">
+                <div>
+                  <h3 class="text-xs font-bold text-white uppercase tracking-wider">Progress Over Time</h3>
+                  <p class="text-[11px] text-gray-400">Target trajectory to 85.0 kg</p>
+                </div>
+
+                <!-- Metric Selectors (Square Buttons) -->
+                <div class="flex items-center gap-1">
+                  <button class="px-2.5 py-1 rounded text-[11px] font-bold bg-[#E5A93C] text-black">Weight</button>
+                  <button onclick="showToast('Body fat trajectory tracking: 24.2% -> 17% target')" class="px-2.5 py-1 rounded text-[11px] font-medium bg-[#1D222E] text-gray-400 hover:text-white">Body Fat</button>
+                </div>
+              </div>
+
+              <!-- Responsive SVG Line Chart -->
+              <div class="relative w-full h-44 bg-[#0C0E12] rounded p-2 flex items-end">
+                <svg class="w-full h-full" viewBox="0 0 400 120" preserveAspectRatio="none">
+                  <!-- Gridlines -->
+                  <line x1="0" y1="20" x2="400" y2="20" stroke="rgba(255,255,255,0.05)" stroke-dasharray="3,3"/>
+                  <line x1="0" y1="60" x2="400" y2="60" stroke="rgba(255,255,255,0.05)" stroke-dasharray="3,3"/>
+                  <line x1="0" y1="100" x2="400" y2="100" stroke="rgba(255,255,255,0.05)" stroke-dasharray="3,3"/>
+
+                  <!-- Target line: 85 kg at y=100 -->
+                  <line x1="0" y1="100" x2="400" y2="100" stroke="#10B981" stroke-width="1.5" stroke-dasharray="4,4" opacity="0.6"/>
+
+                  <!-- Progress Area Gradient -->
+                  <defs>
+                    <linearGradient id="weightGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                      <stop offset="0%" stop-color="#10B981" stop-opacity="0.25"/>
+                      <stop offset="100%" stop-color="#10B981" stop-opacity="0.0"/>
+                    </linearGradient>
+                  </defs>
+
+                  <path d="M 0 30 Q 80 35 150 48 T 280 68 T 400 78 L 400 120 L 0 120 Z" fill="url(#weightGrad)"/>
+                  <path d="M 0 30 Q 80 35 150 48 T 280 68 T 400 78" fill="none" stroke="#10B981" stroke-width="2.5"/>
+
+                  <!-- Current Marker -->
+                  <circle cx="280" cy="68" r="4" fill="#E5A93C" stroke="#FFFFFF" stroke-width="1.5"/>
+                </svg>
+
+                <div class="absolute top-3 right-3 text-[10px] font-mono text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/25">
+                  Current: 94.5 kg &rarr; Goal: 85 kg
+                </div>
+              </div>
+
+              <!-- Time Filters (Square Buttons) -->
+              <div class="flex items-center justify-between text-[11px] text-gray-500 font-mono mt-2 pt-2 border-t border-white/[0.04]">
+                <span>26 Aug</span>
+                <span>2 Sep</span>
+                <span>9 Sep</span>
+                <span>16 Sep</span>
+                <span class="text-white font-bold">Today</span>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- ============================================== -->
+          <!-- RIGHT 5 COLS: NUTRITION, QUICK LOG, GOALS & CONSISTENCY -->
+          <!-- ============================================== -->
+          <div class="lg:col-span-5 space-y-4">
+            
+            <!-- NUTRITION & DEFICIT OVERVIEW -->
+            <div class="dashboard-card p-4 sm:p-5">
+              <div class="flex items-center justify-between pb-2 border-b border-white/[0.06] mb-3">
+                <h3 class="text-xs font-bold text-white uppercase tracking-wider">Nutrition Overview</h3>
+                <button onclick="quickLogItem('meal')" class="text-xs text-[#E5A93C] hover:underline font-semibold">Log Meals +</button>
+              </div>
+
+              <!-- Radial Macro Breakdown & Calorie Ring -->
+              <div class="flex items-center gap-4 my-2">
+                
+                <!-- Circular Calorie Progress -->
+                <div class="relative w-24 h-24 flex items-center justify-center flex-shrink-0">
+                  <svg class="w-24 h-24 -rotate-90" viewBox="0 0 100 100">
+                    <circle cx="50" cy="50" r="42" stroke="rgba(255,255,255,0.06)" stroke-width="8" fill="none"/>
+                    <circle cx="50" cy="50" r="42" stroke="#10B981" stroke-width="8" stroke-dasharray="264" stroke-dashoffset="65" stroke-linecap="round" fill="none"/>
+                  </svg>
+                  <div class="absolute inset-0 flex flex-col items-center justify-center text-center">
+                    <span class="text-sm font-black text-white font-mono">1,980</span>
+                    <span class="text-[9px] text-gray-400">cal / 2,500</span>
+                  </div>
+                </div>
+
+                <!-- Macro Bars -->
+                <div class="flex-1 space-y-2 text-xs">
+                  <div>
+                    <div class="flex justify-between text-[11px] mb-0.5">
+                      <span class="text-cyan-400 font-semibold">Protein</span>
+                      <span class="text-gray-300 font-mono">145 / 170 g</span>
+                    </div>
+                    <div class="w-full bg-[#0C0E12] h-1.5 rounded-none overflow-hidden">
+                      <div class="bg-cyan-400 h-full w-[85%]"></div>
+                    </div>
+                  </div>
+
+                  <div>
+                    <div class="flex justify-between text-[11px] mb-0.5">
+                      <span class="text-amber-400 font-semibold">Carbs</span>
+                      <span class="text-gray-300 font-mono">210 / 260 g</span>
+                    </div>
+                    <div class="w-full bg-[#0C0E12] h-1.5 rounded-none overflow-hidden">
+                      <div class="bg-amber-400 h-full w-[80%]"></div>
+                    </div>
+                  </div>
+
+                  <div>
+                    <div class="flex justify-between text-[11px] mb-0.5">
+                      <span class="text-orange-400 font-semibold">Fats</span>
+                      <span class="text-gray-300 font-mono">55 / 75 g</span>
+                    </div>
+                    <div class="w-full bg-[#0C0E12] h-1.5 rounded-none overflow-hidden">
+                      <div class="bg-orange-400 h-full w-[73%]"></div>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+
+              <!-- Quick Log Square Tiles (Matching ui_inspiration.jpg) -->
+              <div class="mt-4 pt-3 border-t border-white/[0.06]">
+                <span class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-2">Quick Log</span>
+                <div class="grid grid-cols-5 gap-1.5 text-center">
+                  
+                  <button onclick="quickLogItem('meal')" class="p-2 rounded bg-[#161B24] border border-white/[0.06] hover:border-amber-400/40 text-gray-300 hover:text-white flex flex-col items-center gap-1 transition-all">
+                    <span class="text-base">🍴</span>
+                    <span class="text-[10px] font-medium">Meal</span>
+                  </button>
+
+                  <button onclick="quickLogItem('water')" class="p-2 rounded bg-[#161B24] border border-white/[0.06] hover:border-cyan-400/40 text-gray-300 hover:text-white flex flex-col items-center gap-1 transition-all">
+                    <span class="text-base">💧</span>
+                    <span class="text-[10px] font-medium">Water</span>
+                  </button>
+
+                  <button onclick="quickLogItem('weight')" class="p-2 rounded bg-[#161B24] border border-white/[0.06] hover:border-emerald-400/40 text-gray-300 hover:text-white flex flex-col items-center gap-1 transition-all">
+                    <span class="text-base">⚖️</span>
+                    <span class="text-[10px] font-medium">Weight</span>
+                  </button>
+
+                  <button onclick="quickLogItem('steps')" class="p-2 rounded bg-[#161B24] border border-white/[0.06] hover:border-emerald-400/40 text-gray-300 hover:text-white flex flex-col items-center gap-1 transition-all">
+                    <span class="text-base">👟</span>
+                    <span class="text-[10px] font-medium">Steps</span>
+                  </button>
+
+                  <button onclick="quickLogItem('sleep')" class="p-2 rounded bg-[#161B24] border border-white/[0.06] hover:border-purple-400/40 text-gray-300 hover:text-white flex flex-col items-center gap-1 transition-all">
+                    <span class="text-base">😴</span>
+                    <span class="text-[10px] font-medium">Sleep</span>
+                  </button>
+
+                </div>
+              </div>
+
+            </div>
+
+            <!-- WEEKLY CONSISTENCY (5/7 Days) -->
+            <div class="dashboard-card p-4">
+              <div class="flex items-center justify-between mb-2.5">
+                <h3 class="text-xs font-bold text-white uppercase tracking-wider">Weekly Consistency</h3>
+                <span class="text-xs font-black text-emerald-400 font-mono">5 / 7 Days</span>
+              </div>
+
+              <!-- Day Dots Indicator (Mon - Sun) -->
+              <div class="grid grid-cols-7 gap-1 text-center font-mono">
+                <div class="flex flex-col items-center gap-1">
+                  <span class="text-[10px] text-gray-400">Mon</span>
+                  <span class="w-3.5 h-3.5 rounded-sm bg-emerald-500 flex items-center justify-center text-[9px] text-black font-bold">✓</span>
+                </div>
+                <div class="flex flex-col items-center gap-1">
+                  <span class="text-[10px] text-gray-400">Tue</span>
+                  <span class="w-3.5 h-3.5 rounded-sm bg-emerald-500 flex items-center justify-center text-[9px] text-black font-bold">✓</span>
+                </div>
+                <div class="flex flex-col items-center gap-1">
+                  <span class="text-[10px] text-gray-400">Wed</span>
+                  <span class="w-3.5 h-3.5 rounded-sm bg-emerald-500 flex items-center justify-center text-[9px] text-black font-bold">✓</span>
+                </div>
+                <div class="flex flex-col items-center gap-1">
+                  <span class="text-[10px] text-gray-400">Thu</span>
+                  <span class="w-3.5 h-3.5 rounded-sm bg-emerald-500 flex items-center justify-center text-[9px] text-black font-bold">✓</span>
+                </div>
+                <div class="flex flex-col items-center gap-1">
+                  <span class="text-[10px] text-gray-400">Fri</span>
+                  <span class="w-3.5 h-3.5 rounded-sm bg-emerald-500 flex items-center justify-center text-[9px] text-black font-bold">✓</span>
+                </div>
+                <div class="flex flex-col items-center gap-1">
+                  <span class="text-[10px] text-gray-400">Sat</span>
+                  <span class="w-3.5 h-3.5 rounded-sm border border-white/20 bg-[#161B24]"></span>
+                </div>
+                <div class="flex flex-col items-center gap-1">
+                  <span class="text-[10px] text-gray-400">Sun</span>
+                  <span class="w-3.5 h-3.5 rounded-sm border border-white/20 bg-[#161B24]"></span>
+                </div>
+              </div>
+            </div>
+
+            <!-- MY GOALS & TODAY'S CHECKLIST -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-4">
+              
+              <!-- Goals Card -->
+              <div class="dashboard-card p-4">
+                <div class="flex items-center justify-between pb-2 border-b border-white/[0.06] mb-2.5">
+                  <h3 class="text-xs font-bold text-white uppercase tracking-wider">My Goals</h3>
+                  <button onclick="openPlanOverviewModal()" class="text-[10px] text-gray-400 hover:text-white">Edit</button>
+                </div>
+                <div class="space-y-2 text-xs">
+                  <div class="flex items-center gap-2 text-gray-300">
+                    <span class="square-checkbox checked"><svg class="w-3 h-3 text-black" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span>
+                    <span>Weight: 85–87 kg Target</span>
+                  </div>
+                  <div class="flex items-center gap-2 text-gray-300">
+                    <span class="square-checkbox checked"><svg class="w-3 h-3 text-black" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span>
+                    <span>Protein: 140–170 g/day</span>
+                  </div>
+                  <div class="flex items-center gap-2 text-gray-300">
+                    <span class="square-checkbox checked"><svg class="w-3 h-3 text-black" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span>
+                    <span>Cardio: 12–15m Post-Lift</span>
+                  </div>
+                  <div class="flex items-center gap-2 text-gray-300">
+                    <span class="square-checkbox checked"><svg class="w-3 h-3 text-black" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span>
+                    <span>Consistent Gym: 5/7 Days</span>
+                  </div>
+                  <div class="flex items-center gap-2 text-gray-400">
+                    <span class="square-checkbox"></span>
+                    <span>Better Sleep: 7+ hrs</span>
+                  </div>
+                  <div class="flex items-center gap-2 text-gray-400">
+                    <span class="square-checkbox"></span>
+                    <span>8,000–10,000 Daily Steps</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Today's Checklist Card -->
+              <div class="dashboard-card p-4">
+                <h3 class="text-xs font-bold text-white uppercase tracking-wider pb-2 border-b border-white/[0.06] mb-2.5">Today's Checklist</h3>
+                <div class="space-y-2 text-xs">
+                  <div class="flex items-center gap-2 text-gray-300">
+                    <span class="square-checkbox checked"><svg class="w-3 h-3 text-black" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span>
+                    <span>8:30 PM Workout Session</span>
+                  </div>
+                  <div class="flex items-center gap-2 text-gray-300">
+                    <span class="square-checkbox checked"><svg class="w-3 h-3 text-black" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span>
+                    <span>Hit 140g+ Protein Goal</span>
+                  </div>
+                  <div class="flex items-center gap-2 text-gray-400">
+                    <span class="square-checkbox" onclick="this.classList.toggle('checked')"></span>
+                    <span>8,000+ Daily Steps</span>
+                  </div>
+                  <div class="flex items-center gap-2 text-gray-400">
+                    <span class="square-checkbox" onclick="this.classList.toggle('checked')"></span>
+                    <span>7–9 Hours Sleep</span>
+                  </div>
+                  <div class="flex items-center gap-2 text-gray-400">
+                    <span class="square-checkbox" onclick="this.classList.toggle('checked')"></span>
+                    <span>Plan Tomorrow's Nutrition</span>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- QUOTE CARD (From ui_inspiration.jpg bottom-right) -->
+            <div class="quote-banner p-4 relative overflow-hidden">
+              <h4 class="text-sm font-extrabold text-white">Progress,<br>not perfection.</h4>
+              <p class="text-[9px] font-bold text-amber-400 uppercase tracking-widest mt-2">CONSISTENCY CREATES FREEDOM.</p>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- ======================================================== -->
+      <!-- TAB 2: WORKOUTS & 7-DAY SCHEDULE (Crossed with Demos) -->
+      <!-- ======================================================== -->
+      <div id="view-workouts" class="hidden space-y-5">
+        
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div>
+            <h2 class="text-xl font-black text-white tracking-tight">12-Week Workout Plan</h2>
+            <p class="text-xs text-gray-400">Non-rotating weekly schedule with progressive overload & RIR 2</p>
+          </div>
+
+          <!-- Day Switcher Tabs (All Square Buttons) -->
+          <div class="flex flex-wrap gap-1" id="workout-day-tabs">
+            <!-- Populated via JS -->
+          </div>
+        </div>
+
+        <!-- Selected Day Details Card -->
+        <div class="dashboard-card p-5">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-white/[0.07] gap-2 mb-4">
+            <div>
+              <div class="flex items-center gap-2 mb-1">
+                <span id="prog-day-badge" class="px-2.5 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-amber-500/15 text-amber-400 border border-amber-500/30">MONDAY</span>
+                <span id="prog-day-time" class="text-xs text-gray-400 font-mono">8:30 PM &bull; 75–90 min</span>
+              </div>
+              <h3 id="prog-day-title" class="text-lg font-black text-white">Upper Body A</h3>
+              <p id="prog-day-subtitle" class="text-xs text-gray-400">Chest Strength & Lat Width Focus</p>
+            </div>
+
+            <!-- Start Logging this routine button -->
+            <button onclick="startSelectedDayWorkout()" class="px-4 py-2 rounded btn-gold text-xs font-bold flex items-center gap-1.5 flex-shrink-0">
+              <span>Start Workout</span>
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            </button>
+          </div>
+
+          <!-- Warmup and Cardio info -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-5">
+            <div class="p-3 rounded bg-[#161B24] border border-white/[0.05] text-xs">
+              <span class="font-bold text-amber-400 flex items-center gap-1.5 mb-1">
+                <span>🚴</span> 8-Min Bike Warm-Up
+              </span>
+              <p id="prog-warmup-text" class="text-gray-300 text-[11px] leading-relaxed"></p>
+            </div>
+
+            <div class="p-3 rounded bg-[#161B24] border border-white/[0.05] text-xs">
+              <span class="font-bold text-emerald-400 flex items-center gap-1.5 mb-1">
+                <span>🏃</span> 12–15 Min Cardio
+              </span>
+              <p id="prog-cardio-text" class="text-gray-300 text-[11px] leading-relaxed"></p>
+            </div>
+          </div>
+
+          <!-- Exercise List Crossed with Demos -->
+          <div class="space-y-3" id="prog-exercises-list">
+            <!-- Populated via JS -->
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ======================================================== -->
+      <!-- TAB 3: TRACK SESSION (Interactive Set-by-Set Gym Tracker) -->
+      <!-- ======================================================== -->
+      <div id="view-tracker" class="hidden space-y-5">
+        
+        <!-- Active Header -->
+        <div class="dashboard-card p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div>
+            <div class="flex items-center gap-2 mb-1">
+              <span id="tracker-day-tag" class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">ACTIVE SESSION</span>
+              <span id="tracker-session-date" class="text-xs text-gray-400 font-mono">Today</span>
+            </div>
+            <h2 id="tracker-title" class="text-lg font-black text-white">Logging Session</h2>
+            <p id="tracker-subtitle" class="text-xs text-gray-400">Record clean weight and reps. Rest 90–120s between sets.</p>
+          </div>
+
+          <!-- Floating Rest Timer Indicator -->
+          <div class="flex items-center gap-2">
+            <button onclick="startCustomRest(90)" class="px-3 py-1.5 rounded btn-dark text-xs font-mono font-bold flex items-center gap-1">
+              <span>⏱️ Rest 90s</span>
+            </button>
+            <button onclick="startCustomRest(120)" class="px-3 py-1.5 rounded btn-dark text-xs font-mono font-bold flex items-center gap-1">
+              <span>⏱️ Rest 120s</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- 8-Minute Warmup Counter Bar -->
+        <div class="dashboard-card p-4 flex items-center justify-between gap-3 bg-[#161B24]">
+          <div class="flex items-center gap-3">
+            <span class="text-xl">🚴</span>
+            <div>
+              <h4 class="text-xs font-bold text-white">8-Minute Stationary Bike Warm-Up</h4>
+              <p class="text-[11px] text-gray-400">Moderate cadence. Replaces decline presses & weighted side sit-ups.</p>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-2">
+            <span id="warmup-timer-display" class="font-mono text-sm font-bold text-amber-400">08:00</span>
+            <button id="btn-warmup-toggle" onclick="toggleWarmupTimer()" class="px-3 py-1 rounded btn-gold text-xs font-bold">Start</button>
+          </div>
+        </div>
+
+        <!-- Exercise Logging Cards Container (With Inline Demos) -->
+        <div id="tracker-exercise-cards" class="space-y-4">
+          <!-- Dynamically populated via JS -->
+        </div>
+
+        <!-- Save Session Action (Square Button) -->
+        <div class="p-4 dashboard-card flex flex-col sm:flex-row items-center justify-between gap-3">
+          <div>
+            <h4 class="text-xs font-bold text-white">Finished All Planned Sets?</h4>
+            <p class="text-[11px] text-gray-400">Complete 12–15 min cardio, then cool down for 5 minutes before leaving.</p>
+          </div>
+
+          <button onclick="saveActiveWorkoutSession()" class="w-full sm:w-auto px-6 py-3 rounded btn-gold text-xs font-extrabold shadow-lg">
+            Save & Complete Session
+          </button>
+        </div>
+
+      </div>
+
+      <!-- ======================================================== -->
+      <!-- TAB 4: PROGRESS & METRICS (Weigh-ins, Average, History) -->
+      <!-- ======================================================== -->
+      <div id="view-progress" class="hidden space-y-5">
+        
+        <div class="flex items-center justify-between">
+          <div>
+            <h2 class="text-xl font-black text-white tracking-tight">Body Metrics & Progress</h2>
+            <p class="text-xs text-gray-400">Rolling 7-day average tracking & stagnation diagnostic rules</p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <!-- Metric 1: Weight Rolling Avg -->
+          <div class="dashboard-card p-4">
+            <div class="flex items-center justify-between text-gray-400 text-xs mb-1">
+              <span>Rolling 7-Day Average</span>
+              <span class="text-emerald-400 font-bold">Trend</span>
+            </div>
+            <div class="text-2xl font-black text-white font-mono" id="metric-rolling-avg-val">94.5 kg</div>
+            <p class="text-[11px] text-gray-400 mt-1">Starting point: 94.5 kg &bull; Goal: 85.0 kg</p>
+          </div>
+
+          <!-- Metric 2: Total Weight Lost -->
+          <div class="dashboard-card p-4">
+            <div class="flex items-center justify-between text-gray-400 text-xs mb-1">
+              <span>Total Lost</span>
+              <span class="text-xs text-amber-400">Target: 9.5 kg</span>
+            </div>
+            <div class="text-2xl font-black text-emerald-400 font-mono" id="metric-total-loss-badge">0.0 kg</div>
+            <p class="text-[11px] text-gray-400 mt-1">Target pace: 0.5–0.8 kg per week</p>
+          </div>
+
+          <!-- Metric 3: Log New Weigh-In (Square Form) -->
+          <div class="dashboard-card p-4 flex flex-col justify-between">
+            <span class="text-xs font-bold text-white mb-2">Log Morning Weigh-In</span>
+            <div class="flex items-center gap-2">
+              <input type="number" step="0.1" id="input-weight-entry" placeholder="e.g. 94.2" class="w-full bg-[#0C0E12] border border-white/[0.08] text-xs text-white px-3 py-2 rounded focus:outline-none focus:border-amber-400" />
+              <button onclick="handleWeightSubmit()" class="px-3 py-2 rounded btn-gold text-xs font-bold flex-shrink-0">Log</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 12-Week Progress Bar -->
+        <div class="dashboard-card p-4">
+          <div class="flex items-center justify-between text-xs mb-2">
+            <span class="font-bold text-white">12-Week Transformation Progress</span>
+            <span id="progress-percent-label" class="font-mono text-emerald-400 font-bold">0% Achieved</span>
+          </div>
+          <div class="w-full bg-[#0C0E12] h-2.5 rounded overflow-hidden">
+            <div id="progress-bar-fill" class="bg-gradient-to-r from-emerald-500 to-amber-400 h-full w-[0%] transition-all duration-500"></div>
+          </div>
+        </div>
+
+        <!-- Stagnation / Adjustment Diagnostic Advisor (plan-adjustments.md) -->
+        <div class="dashboard-card p-5 border-l-4 border-l-[#E5A93C]">
+          <h3 class="text-xs font-bold text-amber-400 uppercase tracking-wider mb-2">2-Week Diagnostic Rule (plan-adjustments.md)</h3>
+          <p class="text-xs text-gray-300 leading-relaxed">
+            Weigh yourself 3–4 mornings weekly after using the bathroom. If your weekly average does not drop by at least <strong>0.25 kg</strong> after two full consecutive weeks and gym adherence is solid:
+          </p>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 mt-3 text-xs">
+            <div class="p-2.5 rounded bg-[#161B24] border border-white/[0.05]">
+              <strong class="text-white block mb-0.5">Step 1: Increase NEAT Activity</strong>
+              <span class="text-gray-400 text-[11px]">Add 1,500–2,000 daily steps (aim for 10,000–11,500 total).</span>
+            </div>
+            <div class="p-2.5 rounded bg-[#161B24] border border-white/[0.05]">
+              <strong class="text-white block mb-0.5">Step 2: Moderate Food Intake</strong>
+              <span class="text-gray-400 text-[11px]">Reduce daily intake by 150–200 kcal without dropping protein below 140g.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recent Weigh-ins History -->
+        <div class="dashboard-card p-4">
+          <h3 class="text-xs font-bold text-white uppercase tracking-wider pb-2 border-b border-white/[0.06] mb-3">Recent Logs</h3>
+          <div id="metrics-recent-history" class="space-y-2">
+            <!-- Populated via JS -->
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ======================================================== -->
+      <!-- TAB 5: EXERCISE LIBRARY (Searchable with Motion Demos) -->
+      <!-- ======================================================== -->
+      <div id="view-library" class="hidden space-y-5">
+        
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div>
+            <h2 class="text-xl font-black text-white tracking-tight">Exercise Library & Technique Demos</h2>
+            <p class="text-xs text-gray-400">Complete collection of all 32 plan exercises with animated motion guides</p>
+          </div>
+
+          <!-- Muscle Filter Tabs (All Square Buttons) -->
+          <div class="flex flex-wrap gap-1.5" id="library-muscle-filters">
+            <button onclick="filterLibrary('all')" class="px-2.5 py-1 rounded text-xs font-bold bg-[#E5A93C] text-black">All (32)</button>
+            <button onclick="filterLibrary('chest')" class="px-2.5 py-1 rounded text-xs font-medium bg-[#161B24] border border-white/10 text-gray-300">Chest</button>
+            <button onclick="filterLibrary('lats')" class="px-2.5 py-1 rounded text-xs font-medium bg-[#161B24] border border-white/10 text-gray-300">Back/Lats</button>
+            <button onclick="filterLibrary('quadriceps')" class="px-2.5 py-1 rounded text-xs font-medium bg-[#161B24] border border-white/10 text-gray-300">Quads/Legs</button>
+            <button onclick="filterLibrary('hamstrings')" class="px-2.5 py-1 rounded text-xs font-medium bg-[#161B24] border border-white/10 text-gray-300">Hamstrings</button>
+            <button onclick="filterLibrary('shoulders')" class="px-2.5 py-1 rounded text-xs font-medium bg-[#161B24] border border-white/10 text-gray-300">Shoulders</button>
+            <button onclick="filterLibrary('arms')" class="px-2.5 py-1 rounded text-xs font-medium bg-[#161B24] border border-white/10 text-gray-300">Arms</button>
+            <button onclick="filterLibrary('core')" class="px-2.5 py-1 rounded text-xs font-medium bg-[#161B24] border border-white/10 text-gray-300">Core</button>
+          </div>
+        </div>
+
+        <!-- Exercise Cards Grid -->
+        <div id="library-exercise-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+          <!-- Dynamically populated via JS -->
+        </div>
+
+      </div>
+
+    </main>
+
+  </div>
+
+  <!-- ======================================================== -->
+  <!-- 4. MOBILE BOTTOM APP BAR (Square Buttons for Android) -->
+  <!-- ======================================================== -->
+  <nav class="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-[#0C0E12]/95 backdrop-blur-xl border-t border-white/[0.08] px-3 py-2">
+    <div class="max-w-md mx-auto grid grid-cols-5 gap-1.5 text-center">
+      
+      <!-- Nav Button 1: Dashboard -->
+      <button id="mob-nav-dashboard" onclick="switchNavTab('dashboard')" class="flex flex-col items-center justify-center p-1.5 rounded text-[#E5A93C] bg-[#E5A93C]/10 transition-colors">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+        <span class="text-[10px] font-bold mt-0.5">Home</span>
+      </button>
+
+      <!-- Nav Button 2: Workouts -->
+      <button id="mob-nav-workouts" onclick="switchNavTab('workouts')" class="flex flex-col items-center justify-center p-1.5 rounded text-gray-400 hover:text-white transition-colors">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
+        <span class="text-[10px] font-medium mt-0.5">Plan</span>
+      </button>
+
+      <!-- Nav Button 3: Track Session -->
+      <button id="mob-nav-tracker" onclick="switchNavTab('tracker')" class="flex flex-col items-center justify-center p-1.5 rounded text-gray-400 hover:text-white transition-colors">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>
+        <span class="text-[10px] font-medium mt-0.5">Track</span>
+      </button>
+
+      <!-- Nav Button 4: Progress -->
+      <button id="mob-nav-progress" onclick="switchNavTab('progress')" class="flex flex-col items-center justify-center p-1.5 rounded text-gray-400 hover:text-white transition-colors">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+        <span class="text-[10px] font-medium mt-0.5">Metrics</span>
+      </button>
+
+      <!-- Nav Button 5: Demos -->
+      <button id="mob-nav-library" onclick="switchNavTab('library')" class="flex flex-col items-center justify-center p-1.5 rounded text-gray-400 hover:text-white transition-colors">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+        <span class="text-[10px] font-medium mt-0.5">Demos</span>
+      </button>
+
+    </div>
+  </nav>
+
+  <!-- ======================================================== -->
+  <!-- 5. FLOATING REST STOPWATCH WIDGET (Square Styling) -->
+  <!-- ======================================================== -->
+  <div id="floating-rest-widget" class="fixed bottom-20 lg:bottom-6 right-4 z-40 bg-[#161B24] border border-amber-500/40 shadow-2xl p-2.5 rounded flex items-center gap-3 hidden">
+    <div class="flex items-center gap-2">
+      <span class="w-2.5 h-2.5 rounded-sm bg-amber-400 animate-pulse"></span>
+      <span class="text-xs text-gray-400 font-bold uppercase tracking-wider">REST:</span>
+      <span id="floating-rest-display" class="font-mono text-base font-black text-amber-400">90s</span>
+    </div>
+
+    <div class="flex items-center gap-1">
+      <button onclick="adjustRestTimer(-15)" class="px-2 py-0.5 rounded btn-dark text-xs font-mono">-15</button>
+      <button onclick="adjustRestTimer(15)" class="px-2 py-0.5 rounded btn-dark text-xs font-mono">+15</button>
+      <button onclick="cancelRestTimer()" class="w-6 h-6 rounded btn-dark text-xs flex items-center justify-center text-gray-400 hover:text-white">&times;</button>
+    </div>
+  </div>
+
+  <!-- ======================================================== -->
+  <!-- 6. EXERCISE DEMONSTRATION & TECHNIQUE MODAL (Square) -->
+  <!-- ======================================================== -->
+  <div id="exercise-demo-modal" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-end sm:items-center justify-center p-0 sm:p-4 hidden">
+    <div class="dashboard-card w-full max-w-lg rounded-t-lg sm:rounded-lg p-5 border border-white/10 shadow-2xl max-h-[90vh] overflow-y-auto no-scrollbar">
+      
+      <!-- Modal Header -->
+      <div class="flex items-start justify-between pb-3 border-b border-white/[0.08] mb-3">
+        <div>
+          <div class="flex items-center gap-2 mb-1">
+            <span id="demo-exercise-muscle" class="text-[10px] font-bold text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/25">CHEST</span>
+            <span id="demo-exercise-equip" class="text-[10px] text-gray-400">Dumbbells</span>
+          </div>
+          <h3 id="demo-exercise-title" class="text-base font-extrabold text-white">Dumbbell Flat Bench Press</h3>
+        </div>
+        <button onclick="closeExerciseDemo()" class="w-8 h-8 rounded bg-[#1D222E] text-gray-400 hover:text-white flex items-center justify-center text-lg">&times;</button>
+      </div>
+
+      <!-- Guaranteed Motion Loop Player (Position 1 Setup <-> Position 2 Peak) -->
+      <div class="mb-4">
+        <div class="relative w-full aspect-video rounded overflow-hidden bg-[#0C0E12] border border-white/10 flex items-center justify-center">
+          <img id="demo-motion-img" src="" alt="Exercise demonstration" class="w-full h-full object-contain transition-opacity duration-200" />
+          
+          <!-- Motion Indicator Badge (Square) -->
+          <div class="absolute bottom-2.5 left-2.5 flex items-center gap-1.5 bg-black/85 px-2.5 py-1 rounded border border-white/10">
+            <span class="w-2 h-2 rounded-sm bg-amber-400 animate-pulse"></span>
+            <span id="demo-step-badge" class="text-[10px] font-bold text-amber-300 font-mono">1 / 2: Setup</span>
+          </div>
+
+          <!-- Motion Controls (All Square Buttons) -->
+          <div class="absolute bottom-2.5 right-2.5 flex items-center gap-1">
+            <button id="btn-toggle-motion" onclick="toggleMotionLoop()" class="bg-black/85 hover:bg-black px-2.5 py-1 rounded border border-white/10 text-[10.5px] font-bold text-white flex items-center gap-1.5 transition-all">
+              <span id="motion-btn-icon">⏸️</span>
+              <span id="motion-btn-text">Pause</span>
+            </button>
+            <button onclick="stepMotionManually()" title="Step to next frame" class="w-7 h-7 bg-black/85 hover:bg-black rounded border border-white/10 text-xs font-bold text-white flex items-center justify-center">
+              &rarr;
+            </button>
+          </div>
+        </div>
+
+        <!-- 1-Tap Watch on YouTube Button (Direct App Launch on Android) -->
+        <div class="mt-2.5 flex items-center justify-between gap-2 p-2.5 rounded bg-red-950/20 border border-red-500/25 text-xs">
+          <div class="flex items-center gap-2 text-red-200 text-[11px]">
+            <span class="text-base">▶️</span>
+            <span>Prefer a full narrated video tutorial?</span>
+          </div>
+          <a id="demo-youtube-link" href="#" target="_blank" rel="noopener noreferrer" class="px-3 py-1.5 rounded bg-red-600 hover:bg-red-500 text-white font-bold text-[11px] flex items-center gap-1 shadow flex-shrink-0">
+            <span>Watch on YouTube</span>
+            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <!-- Step-by-Step Technique Blueprint -->
+      <div class="space-y-3 text-xs mb-4">
+        <!-- Setup Guide -->
+        <div class="p-3 rounded bg-[#161B24] border border-white/[0.06]">
+          <h4 class="font-bold text-amber-400 text-xs flex items-center gap-1.5 mb-2">
+            <span>🛠️</span> 1. Setup & Starting Position
+          </h4>
+          <ul id="demo-setup-list" class="space-y-1 text-gray-300 list-disc list-inside leading-relaxed text-[11.5px]"></ul>
+        </div>
+
+        <!-- Movement Execution -->
+        <div class="p-3 rounded bg-[#161B24] border border-white/[0.06]">
+          <h4 class="font-bold text-emerald-400 text-xs flex items-center gap-1.5 mb-2">
+            <span>🎯</span> 2. Execution & Technique
+          </h4>
+          <ul id="demo-execution-list" class="space-y-1 text-gray-300 list-disc list-inside leading-relaxed text-[11.5px]"></ul>
+        </div>
+
+        <!-- Common Mistakes to Avoid -->
+        <div class="p-3 rounded bg-rose-950/20 border border-rose-500/30 text-rose-200">
+          <h4 class="font-bold text-rose-400 text-xs flex items-center gap-1.5 mb-2">
+            <span>⚠️</span> 3. Common Mistakes to Avoid
+          </h4>
+          <ul id="demo-mistakes-list" class="space-y-1 text-rose-200/90 list-disc list-inside leading-relaxed text-[11.5px]"></ul>
+        </div>
+
+        <!-- Breathing Pattern -->
+        <div class="p-2.5 rounded bg-[#161B24] border border-white/[0.04] text-[11px] text-gray-300 flex items-center gap-2">
+          <span class="text-base">💨</span>
+          <div><strong class="text-white">Breathing:</strong> <span id="demo-breathing-text"></span></div>
+        </div>
+      </div>
+
+      <button onclick="closeExerciseDemo()" class="w-full py-2.5 rounded btn-gold font-bold text-xs">Done / Return to Workout</button>
+    </div>
+  </div>
+
+  <!-- ======================================================== -->
+  <!-- 7. PLAN OVERVIEW & BODY DETAILS MODAL (Square) -->
+  <!-- ======================================================== -->
+  <div id="plan-overview-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+    <div class="dashboard-card w-full max-w-lg rounded-lg p-5 border border-white/10 shadow-2xl max-h-[85vh] overflow-y-auto no-scrollbar">
+      <div class="flex items-center justify-between pb-3 border-b border-white/[0.07] mb-3">
+        <h3 class="text-sm font-bold text-white uppercase tracking-wider">12-Week Transformation Blueprint</h3>
+        <button onclick="closePlanOverviewModal()" class="w-7 h-7 rounded bg-[#1D222E] text-gray-400 hover:text-white flex items-center justify-center">&times;</button>
+      </div>
+
+      <div class="space-y-3 text-xs text-gray-300">
+        <div class="p-3 rounded bg-[#161B24] border border-white/[0.05]">
+          <h4 class="font-bold text-white mb-1">Baseline & Goal</h4>
+          <p>Starting at <strong>94.5 kg</strong> (175 cm). Target: <strong>85.0 kg</strong> in 12 weeks. Average required fat loss: <strong>0.5–0.8 kg/week</strong>.</p>
+        </div>
+
+        <div class="p-3 rounded bg-[#161B24] border border-white/[0.05]">
+          <h4 class="font-bold text-white mb-1">Progression & RIR Rule</h4>
+          <p>Always maintain <strong>2 Reps in Reserve (RIR 2)</strong>. When all sets reach max rep ceiling (e.g. 12 reps), add +1–2.5 kg next session.</p>
+        </div>
+
+        <div class="p-3 rounded bg-[#161B24] border border-white/[0.05]">
+          <h4 class="font-bold text-white mb-1">Planned Deload (Week 7)</h4>
+          <p>Do <strong>one fewer set per exercise</strong> in Week 7. Keeps joints healthy and primes the central nervous system for Weeks 8–12.</p>
+        </div>
+      </div>
+
+      <button onclick="closePlanOverviewModal()" class="w-full mt-4 py-2.5 rounded btn-gold text-xs font-bold">Close</button>
+    </div>
+  </div>
+
+  <!-- TOAST ALERTS CONTAINER -->
+  <div id="toast-container" class="fixed top-16 right-4 z-50 space-y-2 pointer-events-none"></div>
+
+  <!-- APPLICATION LOGIC ENGINE -->
+  <script src="./app.js"></script>
+</body>
+</html>

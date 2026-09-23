@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0F172A"/>
+      <stop offset="100%" stop-color="#020617"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FF4757"/>
+      <stop offset="100%" stop-color="#FF6B81"/>
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="128" fill="url(#bg)"/>
+  <rect x="16" y="16" width="480" height="480" rx="112" fill="none" stroke="#1E293B" stroke-width="4"/>
+  <!-- Barbell with Glowing Silhouette -->
+  <g transform="translate(256, 256)">
+    <!-- Dumbbell / Weight plates -->
+    <rect x="-180" y="-12" width="360" height="24" rx="12" fill="#E2E8F0"/>
+    <rect x="-150" y="-70" width="34" height="140" rx="10" fill="url(#accent)"/>
+    <rect x="-175" y="-55" width="20" height="110" rx="8" fill="#F43F5E"/>
+    <rect x="116" y="-70" width="34" height="140" rx="10" fill="url(#accent)"/>
+    <rect x="155" y="-55" width="20" height="110" rx="8" fill="#F43F5E"/>
+    <!-- Flame / Muscle icon center -->
+    <path d="M0,-110 C30,-70 70,-40 70,20 C70,65 35,95 0,95 C-35,95 -70,65 -70,20 C-70,-40 -30,-70 0,-110 Z" fill="url(#accent)" opacity="0.9"/>
+    <path d="M0,-60 C15,-35 35,-15 35,20 C35,45 18,65 0,65 C-18,65 -35,45 -35,20 C-35,-15 -15,-35 0,-60 Z" fill="#FFEAA7"/>
+  </g>
+</svg>
