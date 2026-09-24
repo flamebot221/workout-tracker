@@ -9,6 +9,9 @@
   <meta name="theme-color" content="#0C0E12">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
   <link rel="manifest" href="./manifest.json">
   <link rel="icon" type="image/svg+xml" href="./icon.svg">
 
@@ -272,6 +275,12 @@
         <!-- Quick 90s Rest Trigger -->
         <button onclick="startRestTimer(90, 'Quick Rest')" class="hidden sm:flex items-center gap-1.5 text-xs text-amber-400 bg-amber-500/10 border border-amber-500/25 px-2.5 py-1.5 rounded font-mono font-bold hover:bg-amber-500/20 transition-colors">
           <span>⏱️ Rest 90s</span>
+        </button>
+
+        <!-- Force Sync / Refresh Button (Instant update on Android) -->
+        <button onclick="forceAppRefresh()" title="Reload newest version & clear cache" class="flex items-center gap-1.5 text-[11px] font-semibold px-2 py-1.5 rounded bg-[#161B24] border border-white/[0.08] text-gray-300 hover:text-amber-400 hover:border-amber-400/40 transition-all">
+          <span class="text-xs">🔄</span>
+          <span class="text-[10.5px] hidden sm:inline">Sync</span>
         </button>
 
         <!-- User Badge -->
@@ -1054,7 +1063,7 @@
   <!-- TOAST ALERTS CONTAINER -->
   <div id="toast-container" class="fixed top-16 right-4 z-50 space-y-2 pointer-events-none"></div>
 
-  <!-- APPLICATION LOGIC ENGINE -->
-  <script src="./app.js"></script>
+  <!-- APPLICATION LOGIC ENGINE (Cache-busted) -->
+  <script src="./app.js?v=3.2.0"></script>
 </body>
 </html>

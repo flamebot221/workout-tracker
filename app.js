@@ -2575,13 +2575,51 @@ function closePlanOverviewModal() {
 }
 
 // ----------------------------------------------------
-// 19. INITIALIZATION
+// 19. FORCE REFRESH & CACHE BUSTING (Instant Android sync)
+// ----------------------------------------------------
+function forceAppRefresh() {
+  showToast('🔄 Purging cached data and checking for latest updates...', 'info');
+
+  if ('caches' in window) {
+    caches.keys().then((names) => {
+      return Promise.all(names.map((name) => caches.delete(name)));
+    }).catch(() => {});
+  }
+
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.getRegistrations().then((registrations) => {
+      for (let reg of registrations) {
+        reg.unregister();
+      }
+    }).catch(() => {});
+  }
+
+  setTimeout(() => {
+    const cleanUrl = window.location.origin + window.location.pathname + '?sync=' + Date.now();
+    window.location.replace(cleanUrl);
+  }, 400);
+}
+
+// ----------------------------------------------------
+// 20. INITIALIZATION
 // ----------------------------------------------------
 document.addEventListener('DOMContentLoaded', () => {
   renderDashboardView();
   renderProgressView();
 
   if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('./sw.js').catch(() => {});
+    navigator.serviceWorker.register('./sw.js').then((reg) => {
+      reg.update().catch(() => {});
+      reg.addEventListener('updatefound', () => {
+        const newWorker = reg.installing;
+        if (newWorker) {
+          newWorker.addEventListener('statechange', () => {
+            if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+              showToast('🚀 New update available! Tap Sync or reload.', 'info');
+            }
+          });
+        }
+      });
+    }).catch(() => {});
   }
 });
