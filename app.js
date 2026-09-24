@@ -1154,7 +1154,12 @@ const STORAGE_KEYS = {
   LOGS: 'pumpd_workout_logs_v2',
   WEIGH_INS: 'pumpd_weigh_ins_v2',
   WAIST: 'pumpd_waist_logs_v2',
-  SETTINGS: 'pumpd_settings_v2'
+  PROTEIN: 'pumpd_protein_logs_v2',
+  WATER: 'pumpd_water_logs_v2',
+  SLEEP: 'pumpd_sleep_logs_v2',
+  SETTINGS: 'pumpd_settings_v2',
+  TODAY_CHECKLIST: 'pumpd_today_checklist_v2',
+  MY_GOALS: 'pumpd_my_goals_v2'
 };
 
 // ----------------------------------------------------
@@ -1214,12 +1219,15 @@ const AppState = {
   timerInterval: null,
   timerRemaining: 0,
   timerTotal: 0,
+  timerContext: 'Rest between sets',
   warmupInterval: null,
   warmupRemaining: 480,
   warmupRunning: false,
+  cardioInterval: null,
+  cardioRemaining: 720,
+  cardioRunning: false,
   audioCtx: null,
-  waterLogged: 2.25,
-  stepsToday: 8420
+  waterLogged: 2.25
 };
 
 function getTodayDayId() {
@@ -1303,12 +1311,13 @@ function triggerHaptic(type = 'tap') {
 }
 
 // ----------------------------------------------------
-// 6. REST STOPWATCH (Square Floating Widget)
+// 6. REST STOPWATCH & COUNTDOWN (Square Floating Widget)
 // ----------------------------------------------------
-function startRestTimer(seconds) {
+function startRestTimer(seconds, contextLabel = 'Rest between sets') {
   cancelRestTimer();
   AppState.timerTotal = seconds;
   AppState.timerRemaining = seconds;
+  AppState.timerContext = contextLabel;
   updateRestWidgetUI();
 
   const widget = document.getElementById('floating-rest-widget');
@@ -1330,7 +1339,7 @@ function startRestTimer(seconds) {
       cancelRestTimer();
       playDing();
       triggerHaptic('rest');
-      showToast('⏰ Rest complete! Time for the next set.', 'success');
+      showToast(`⏰ Rest complete: ${AppState.timerContext}! Ready for next set.`, 'success');
     }
   }, 1000);
 }
@@ -1348,19 +1357,33 @@ function adjustRestTimer(sec) {
   AppState.timerRemaining = Math.max(0, AppState.timerRemaining + sec);
   AppState.timerTotal = Math.max(AppState.timerTotal, AppState.timerRemaining);
   updateRestWidgetUI();
+  triggerHaptic('tap');
 }
 
-function startCustomRest(sec) {
-  startRestTimer(sec);
+function startCustomRest(sec, label) {
+  startRestTimer(sec, label || `${sec}s Rest`);
   showToast(`Started ${sec}s rest countdown`);
 }
 
 function updateRestWidgetUI() {
   const display = document.getElementById('floating-rest-display');
-  if (!display) return;
-  const m = Math.floor(AppState.timerRemaining / 60);
-  const s = AppState.timerRemaining % 60;
-  display.innerText = m > 0 ? `${m}m ${s < 10 ? '0' : ''}${s}s` : `${s}s`;
+  const contextEl = document.getElementById('floating-rest-context');
+  const bar = document.getElementById('floating-rest-bar');
+
+  if (contextEl) {
+    contextEl.innerText = AppState.timerContext || 'Rest between sets';
+  }
+
+  if (display) {
+    const m = Math.floor(AppState.timerRemaining / 60);
+    const s = AppState.timerRemaining % 60;
+    display.innerText = `${m < 10 ? '0' : ''}${m}:${s < 10 ? '0' : ''}${s}`;
+  }
+
+  if (bar && AppState.timerTotal > 0) {
+    const pct = Math.max(0, Math.min(100, (AppState.timerRemaining / AppState.timerTotal) * 100));
+    bar.style.width = `${pct}%`;
+  }
 }
 
 // ----------------------------------------------------
@@ -1486,14 +1509,34 @@ function renderDashboardView() {
     greetingEl.innerText = hr < 12 ? 'Good Morning,' : hr < 17 ? 'Good Afternoon,' : 'Good Evening,';
   }
 
-  // Weight Rolling Avg Display
+  // Date Badges (Header & Tracker)
+  const todayDateFormatted = new Date().toLocaleDateString('en-US', {
+    weekday: 'short',
+    month: 'short',
+    day: 'numeric'
+  });
+  const headerDate = document.getElementById('header-date-display');
+  if (headerDate) headerDate.innerText = todayDateFormatted;
+  const trackerDate = document.getElementById('tracker-session-date');
+  if (trackerDate) trackerDate.innerText = todayDateFormatted;
+
+  // Grounded Stat Calculations: 94.5 -> 85.0 kg
   const avg = calculateRollingAvg();
+  const startWeight = 94.5;
+  const targetWeight = 85.0;
+  const totalLost = (startWeight - avg).toFixed(1);
+  const remaining = Math.max(0, (avg - targetWeight)).toFixed(1);
+
+  // Weight Rolling Avg Display
   const weightVal = document.getElementById('stat-weight-val');
   if (weightVal) weightVal.innerText = `${avg} kg`;
 
-  // Steps Display
-  const stepsVal = document.getElementById('stat-steps-val');
-  if (stepsVal) stepsVal.innerText = Number(AppState.stepsToday).toLocaleString();
+  // Total Lost & Remaining
+  const totalLostVal = document.getElementById('stat-total-lost-val');
+  if (totalLostVal) totalLostVal.innerText = `${totalLost > 0 ? `-${totalLost}` : totalLost} kg`;
+
+  const remainingVal = document.getElementById('stat-remaining-val');
+  if (remainingVal) remainingVal.innerText = `${remaining} kg to go`;
 
   // Populate Today's Workout Card
   const todayDay = WORKOUT_DAYS.find(d => d.id === AppState.currentDayId) || WORKOUT_DAYS[1];
@@ -1562,6 +1605,10 @@ function renderDashboardView() {
       });
     }
   }
+
+  // Render Persistent Interactive Todo Lists
+  renderTodayChecklist();
+  renderMyGoals();
 }
 
 function toggleDashExerciseDone(exerciseId, el) {
@@ -1570,6 +1617,203 @@ function toggleDashExerciseDone(exerciseId, el) {
   if (svg) svg.classList.toggle('hidden');
   triggerHaptic('tap');
   showToast('Updated workout progress', 'success');
+}
+
+// ----------------------------------------------------
+// 10B. TODAY'S CHECKLIST TODO ENGINE (Persistent)
+// ----------------------------------------------------
+const TODAY_CHECKLIST_ITEMS = [
+  {
+    id: 'chk_workout',
+    title: '8:30 PM Workout Session',
+    detail: 'Complete scheduled lifting session (or active recovery walk on rest days)'
+  },
+  {
+    id: 'chk_warmup',
+    title: '8-Min Stationary Bike Warm-up',
+    detail: 'Moderate pace to elevate body temp & lubricate joints prior to lifting'
+  },
+  {
+    id: 'chk_protein',
+    title: 'Hit 140–170g Protein Target',
+    detail: 'Adequate amino acid pool to preserve lean muscle tissue in deficit'
+  },
+  {
+    id: 'chk_deficit',
+    title: '500–700 kcal Calorie Deficit',
+    detail: 'Strict adherence to maintain steady 0.5–0.8 kg/week fat reduction'
+  },
+  {
+    id: 'chk_cardio',
+    title: '12–15 Min Post-Lift Cardio',
+    detail: 'Stationary bike or incline treadmill at conversational pace'
+  },
+  {
+    id: 'chk_sleep',
+    title: '7–9 Hours Quality Sleep',
+    detail: 'Essential for hormonal recovery, fat loss, and CNS restoration'
+  }
+];
+
+function getTodayChecklistState() {
+  const store = loadStorage(STORAGE_KEYS.TODAY_CHECKLIST, {});
+  const todayKey = new Date().toISOString().slice(0, 10);
+  return store[todayKey] || [];
+}
+
+function saveTodayChecklistState(checkedIds) {
+  const store = loadStorage(STORAGE_KEYS.TODAY_CHECKLIST, {});
+  const todayKey = new Date().toISOString().slice(0, 10);
+  store[todayKey] = checkedIds;
+  saveStorage(STORAGE_KEYS.TODAY_CHECKLIST, store);
+}
+
+function toggleTodayChecklistItem(id) {
+  let checked = getTodayChecklistState();
+  if (checked.includes(id)) {
+    checked = checked.filter(x => x !== id);
+    triggerHaptic('tap');
+  } else {
+    checked.push(id);
+    triggerHaptic('tap');
+    if (checked.length === TODAY_CHECKLIST_ITEMS.length) {
+      triggerHaptic('success');
+      playDing();
+      showToast('🌟 All daily transformation pillars completed! Flawless consistency.', 'success');
+    }
+  }
+  saveTodayChecklistState(checked);
+  renderTodayChecklist();
+}
+
+function renderTodayChecklist() {
+  const container = document.getElementById('today-checklist-container');
+  const counter = document.getElementById('today-checklist-counter');
+  if (!container) return;
+
+  const checked = getTodayChecklistState();
+  if (counter) {
+    counter.innerText = `${checked.length} / ${TODAY_CHECKLIST_ITEMS.length}`;
+    if (checked.length === TODAY_CHECKLIST_ITEMS.length) {
+      counter.className = 'text-xs font-mono font-bold text-emerald-300 bg-emerald-500/20 px-2 py-0.5 rounded border border-emerald-500/40';
+    } else {
+      counter.className = 'text-xs font-mono font-bold text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/20';
+    }
+  }
+
+  container.innerHTML = '';
+  TODAY_CHECKLIST_ITEMS.forEach(item => {
+    const isDone = checked.includes(item.id);
+    const row = document.createElement('div');
+    row.className = `p-2.5 rounded bg-[#161B24] border ${isDone ? 'border-emerald-500/30 bg-emerald-950/15' : 'border-white/[0.04]'} flex items-start gap-3 cursor-pointer hover:border-white/15 transition-all select-none`;
+    row.onclick = () => toggleTodayChecklistItem(item.id);
+    row.innerHTML = `
+      <div class="w-5 h-5 rounded-sm border ${isDone ? 'bg-emerald-500 border-emerald-500 text-black font-extrabold' : 'border-white/20 bg-[#0C0E12] text-transparent'} flex items-center justify-center text-xs flex-shrink-0 mt-0.5 transition-all">
+        ✓
+      </div>
+      <div class="min-w-0 flex-1">
+        <div class="font-bold text-xs ${isDone ? 'text-gray-400 line-through' : 'text-white'} transition-colors">${item.title}</div>
+        <div class="text-[10.5px] ${isDone ? 'text-gray-500' : 'text-gray-400'} mt-0.5 leading-snug">${item.detail}</div>
+      </div>
+    `;
+    container.appendChild(row);
+  });
+}
+
+// ----------------------------------------------------
+// 10C. MY 12-WEEK GOALS TODO ENGINE (Persistent)
+// ----------------------------------------------------
+const MY_GOALS_ITEMS = [
+  {
+    id: 'goal_weight',
+    title: '85.0 kg Target Weight',
+    detail: 'Drop 9.5 kg total from 94.5 kg baseline across 12 structured weeks'
+  },
+  {
+    id: 'goal_rate',
+    title: '0.5–0.8 kg/Week Sustainable Fat Loss',
+    detail: 'Preserves lean muscle mass & metabolic rate without crash dieting'
+  },
+  {
+    id: 'goal_rir',
+    title: 'Strict RIR 2 on Working Sets',
+    detail: 'Stop 2 reps before mechanical failure to maintain technique & avoid injury'
+  },
+  {
+    id: 'goal_progression',
+    title: 'Double Progression Rule Executed',
+    detail: 'Hit max reps on all sets before adding weight (+1–2.5 kg upper / +2.5–5 kg lower)'
+  },
+  {
+    id: 'goal_deload',
+    title: 'Week 7 Planned Deload Completed',
+    detail: 'Reduce sets by 1 per exercise; let tendons and nervous system recover'
+  },
+  {
+    id: 'goal_waist',
+    title: 'Waist Circumference Reduction',
+    detail: 'Direct verification of abdominal and visceral fat elimination'
+  }
+];
+
+function getMyGoalsState() {
+  return loadStorage(STORAGE_KEYS.MY_GOALS, []);
+}
+
+function saveMyGoalsState(checkedIds) {
+  saveStorage(STORAGE_KEYS.MY_GOALS, checkedIds);
+}
+
+function toggleGoalItem(id) {
+  let checked = getMyGoalsState();
+  if (checked.includes(id)) {
+    checked = checked.filter(x => x !== id);
+    triggerHaptic('tap');
+  } else {
+    checked.push(id);
+    triggerHaptic('tap');
+    if (checked.length === MY_GOALS_ITEMS.length) {
+      triggerHaptic('success');
+      playDing();
+      showToast('🏆 Master Milestone! All 12-Week Transformation goals checked.', 'success');
+    }
+  }
+  saveMyGoalsState(checked);
+  renderMyGoals();
+}
+
+function renderMyGoals() {
+  const container = document.getElementById('my-goals-container');
+  const counter = document.getElementById('my-goals-counter');
+  if (!container) return;
+
+  const checked = getMyGoalsState();
+  if (counter) {
+    counter.innerText = `${checked.length} / ${MY_GOALS_ITEMS.length}`;
+    if (checked.length === MY_GOALS_ITEMS.length) {
+      counter.className = 'text-xs font-mono font-bold text-emerald-300 bg-emerald-500/20 px-2 py-0.5 rounded border border-emerald-500/40';
+    } else {
+      counter.className = 'text-xs font-mono font-bold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20';
+    }
+  }
+
+  container.innerHTML = '';
+  MY_GOALS_ITEMS.forEach(item => {
+    const isDone = checked.includes(item.id);
+    const row = document.createElement('div');
+    row.className = `p-2.5 rounded bg-[#161B24] border ${isDone ? 'border-emerald-500/30 bg-emerald-950/15' : 'border-white/[0.04]'} flex items-start gap-3 cursor-pointer hover:border-white/15 transition-all select-none`;
+    row.onclick = () => toggleGoalItem(item.id);
+    row.innerHTML = `
+      <div class="w-5 h-5 rounded-sm border ${isDone ? 'bg-emerald-500 border-emerald-500 text-black font-extrabold' : 'border-white/20 bg-[#0C0E12] text-transparent'} flex items-center justify-center text-xs flex-shrink-0 mt-0.5 transition-all">
+        ✓
+      </div>
+      <div class="min-w-0 flex-1">
+        <div class="font-bold text-xs ${isDone ? 'text-gray-400 line-through' : 'text-white'} transition-colors">${item.title}</div>
+        <div class="text-[10.5px] ${isDone ? 'text-gray-500' : 'text-gray-400'} mt-0.5 leading-snug">${item.detail}</div>
+      </div>
+    `;
+    container.appendChild(row);
+  });
 }
 
 function startTodayWorkoutSession() {
@@ -1769,6 +2013,23 @@ function renderTrackerView() {
     `;
 
     container.appendChild(card);
+
+    // Exercise-to-Exercise Transition Rest Divider
+    if (exIdx < day.exercises.length - 1) {
+      const nextEx = day.exercises[exIdx + 1];
+      const transCard = document.createElement('div');
+      transCard.className = 'flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 p-3 rounded bg-[#161B24]/90 border border-white/[0.05] shadow-inner';
+      transCard.innerHTML = `
+        <div class="flex items-center gap-2.5 text-xs">
+          <span class="text-base">⏭️</span>
+          <span class="text-gray-300">Finished ${ex.name}? Rest before <strong class="text-amber-400 font-bold">${nextEx.name}</strong></span>
+        </div>
+        <button onclick="startRestTimer(120, 'Transition: ${ex.name} ➔ ${nextEx.name}')" class="px-3.5 py-1.5 rounded btn-dark text-xs font-mono font-bold text-amber-400 border border-amber-500/25 hover:bg-amber-500/15 flex items-center justify-center gap-1.5 transition-colors">
+          <span>⏱️ Start 120s Transition Rest</span>
+        </button>
+      `;
+      container.appendChild(transCard);
+    }
   });
 
   // Attach button events
@@ -1776,6 +2037,7 @@ function renderTrackerView() {
     btn.onclick = (e) => {
       const row = e.target.closest('.set-row');
       const exId = row.dataset.exerciseId;
+      const setNum = row.dataset.setNum;
       const isDone = btn.classList.contains('bg-emerald-500');
 
       if (!isDone) {
@@ -1783,7 +2045,7 @@ function renderTrackerView() {
         triggerHaptic('tap');
 
         const ex = day.exercises.find(e => e.id === exId);
-        if (ex) startRestTimer(ex.rest);
+        if (ex) startRestTimer(ex.rest, `${ex.name} — Set #${setNum} complete`);
       } else {
         btn.className = 'btn-check-set w-9 h-9 rounded flex items-center justify-center text-xs font-bold btn-dark transition-all';
       }
@@ -1988,26 +2250,68 @@ function filterLibrary(muscle) {
 // 15. QUICK LOG CONTROLLERS (Square Tiles)
 // ----------------------------------------------------
 function quickLogItem(type) {
-  if (type === 'water') {
+  if (type === 'weight') {
+    const cur = calculateRollingAvg();
+    const entry = prompt('Morning weigh-in (kg):', cur);
+    if (entry !== null && entry.trim() !== '') {
+      const val = parseFloat(entry);
+      if (!isNaN(val) && val > 0) {
+        const list = loadStorage(STORAGE_KEYS.WEIGH_INS, []);
+        const todayStr = new Date().toISOString().slice(0, 10);
+        const existing = list.findIndex(w => w.date === todayStr);
+        if (existing >= 0) list[existing].weight = val;
+        else list.unshift({ date: todayStr, weight: val });
+        saveStorage(STORAGE_KEYS.WEIGH_INS, list);
+        triggerHaptic('success');
+        showToast(`⚖️ Logged ${val} kg! Rolling average updated.`, 'success');
+        renderDashboardView();
+        renderProgressView();
+      }
+    }
+  } else if (type === 'protein') {
+    const entry = prompt('Log Protein intake today (grams):', '155');
+    if (entry !== null && entry.trim() !== '') {
+      const val = parseInt(entry, 10);
+      if (!isNaN(val) && val > 0) {
+        const store = loadStorage(STORAGE_KEYS.PROTEIN, {});
+        const todayStr = new Date().toISOString().slice(0, 10);
+        store[todayStr] = val;
+        saveStorage(STORAGE_KEYS.PROTEIN, store);
+        triggerHaptic('tap');
+        showToast(`🍗 Logged ${val}g protein! (Goal: 140–170g)`, 'success');
+      }
+    }
+  } else if (type === 'waist') {
+    const entry = prompt('Enter waist measurement (e.g. 96 cm or 38 in):', '96 cm');
+    if (entry !== null && entry.trim() !== '') {
+      const store = loadStorage(STORAGE_KEYS.WAIST, []);
+      const todayStr = new Date().toISOString().slice(0, 10);
+      store.unshift({ date: todayStr, waist: entry });
+      saveStorage(STORAGE_KEYS.WAIST, store);
+      triggerHaptic('tap');
+      showToast(`📏 Waist logged: ${entry}! Tracking visceral fat reduction.`, 'success');
+    }
+  } else if (type === 'water') {
     AppState.waterLogged = (Number(AppState.waterLogged) + 0.25).toFixed(2);
+    const store = loadStorage(STORAGE_KEYS.WATER, {});
+    const todayStr = new Date().toISOString().slice(0, 10);
+    store[todayStr] = AppState.waterLogged;
+    saveStorage(STORAGE_KEYS.WATER, store);
     triggerHaptic('tap');
-    showToast(`💧 +250ml logged! Total: ${AppState.waterLogged} L`, 'success');
-  } else if (type === 'steps') {
-    AppState.stepsToday += 1000;
-    const stepsVal = document.getElementById('stat-steps-val');
-    if (stepsVal) stepsVal.innerText = Number(AppState.stepsToday).toLocaleString();
-    triggerHaptic('tap');
-    showToast('👟 +1,000 steps added to daily NEAT!', 'success');
-  } else if (type === 'weight') {
-    switchNavTab('progress');
-    const input = document.getElementById('input-weight-entry');
-    if (input) input.focus();
-  } else if (type === 'meal') {
-    triggerHaptic('tap');
-    showToast('🍴 Logged clean meal (approx 35g protein & 450 kcal)', 'success');
+    showToast(`💧 +250ml logged! Daily total: ${AppState.waterLogged} L`, 'success');
   } else if (type === 'sleep') {
-    triggerHaptic('tap');
-    showToast('😴 7.5 hours recovery sleep logged!', 'success');
+    const entry = prompt('Hours of sleep last night (hrs):', '7.5');
+    if (entry !== null && entry.trim() !== '') {
+      const val = parseFloat(entry);
+      if (!isNaN(val) && val > 0) {
+        const store = loadStorage(STORAGE_KEYS.SLEEP, {});
+        const todayStr = new Date().toISOString().slice(0, 10);
+        store[todayStr] = val;
+        saveStorage(STORAGE_KEYS.SLEEP, store);
+        triggerHaptic('tap');
+        showToast(`😴 Logged ${val} hours sleep! Recovery prioritized.`, 'success');
+      }
+    }
   }
 }
 
@@ -2187,6 +2491,46 @@ function toggleWarmupTimer() {
   } else {
     clearInterval(AppState.warmupInterval);
     AppState.warmupRunning = false;
+    if (btn) {
+      btn.innerText = 'Resume';
+      btn.className = 'px-3 py-1 rounded btn-gold text-xs font-bold';
+    }
+  }
+}
+
+// ----------------------------------------------------
+// 17B. 12-15 MIN POST-LIFT CARDIO TIMER
+// ----------------------------------------------------
+function toggleCardioTimer() {
+  const display = document.getElementById('cardio-timer-display');
+  const btn = document.getElementById('btn-cardio-toggle');
+  if (!AppState.cardioRunning) {
+    AppState.cardioRunning = true;
+    if (btn) {
+      btn.innerText = 'Pause';
+      btn.className = 'px-3 py-1 rounded btn-dark text-xs font-bold';
+    }
+    AppState.cardioInterval = setInterval(() => {
+      AppState.cardioRemaining--;
+      const m = Math.floor(AppState.cardioRemaining / 60);
+      const s = AppState.cardioRemaining % 60;
+      if (display) display.innerText = `${m < 10 ? '0' : ''}${m}:${s < 10 ? '0' : ''}${s}`;
+
+      if (AppState.cardioRemaining <= 0) {
+        clearInterval(AppState.cardioInterval);
+        AppState.cardioRunning = false;
+        playDing();
+        triggerHaptic('rest');
+        showToast('🏃 12-Min Post-Lift Cardio complete! Solid aerobic conditioning.', 'success');
+        if (btn) {
+          btn.innerText = 'Start';
+          btn.className = 'px-3 py-1 rounded btn-gold text-xs font-bold';
+        }
+      }
+    }, 1000);
+  } else {
+    clearInterval(AppState.cardioInterval);
+    AppState.cardioRunning = false;
     if (btn) {
       btn.innerText = 'Resume';
       btn.className = 'px-3 py-1 rounded btn-gold text-xs font-bold';
