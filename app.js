@@ -551,7 +551,7 @@ const WORKOUT_DAYS = [
     time: 'Recovery',
     muscles: [],
     warmup: 'No lifting today. Your body grows and adapts during deep rest.',
-    cardio: 'Aim for 8,000–10,000 steps through a relaxed walk.',
+    cardio: '25–35 min relaxed walk to enhance active blood flow and recovery.',
     exercises: []
   }
 ];
@@ -1553,7 +1553,7 @@ function renderDashboardView() {
       listContainer.innerHTML = `
         <div class="py-6 text-center text-gray-400 text-xs">
           <span class="text-2xl block mb-1">🌿</span>
-          Rest & recovery day. Hit 8,000–10,000 steps and allow muscle fibers to rebuild.
+          Rest & recovery day. Enjoy an active recovery walk and allow muscle fibers to rebuild.
         </div>
       `;
     } else {
@@ -1612,11 +1612,47 @@ function renderDashboardView() {
 }
 
 function toggleDashExerciseDone(exerciseId, el) {
-  el.classList.toggle('checked');
-  const svg = el.querySelector('svg');
-  if (svg) svg.classList.toggle('hidden');
+  const todayDay = WORKOUT_DAYS.find(d => d.id === AppState.currentDayId) || WORKOUT_DAYS[1];
+  const logs = loadStorage(STORAGE_KEYS.LOGS, []);
+  const todayStr = new Date().toISOString().slice(0, 10);
+  let log = logs.find(l => l.date === todayStr && l.dayId === todayDay.id);
+
+  if (!log) {
+    log = {
+      date: todayStr,
+      timestamp: new Date().toISOString(),
+      dayId: todayDay.id,
+      dayName: todayDay.name,
+      exercises: []
+    };
+    logs.unshift(log);
+  }
+
+  let exLog = log.exercises.find(e => e.id === exerciseId);
+  const exDef = todayDay.exercises.find(e => e.id === exerciseId);
+  const setsCount = exDef ? (AppState.isWeek7Deload ? Math.max(1, exDef.sets - 1) : exDef.sets) : 3;
+
+  if (!exLog) {
+    exLog = {
+      id: exerciseId,
+      name: exDef?.name || exerciseId,
+      sets: Array.from({ length: setsCount }, (_, i) => ({
+        setNum: i + 1,
+        weight: 0,
+        reps: exDef?.minReps || 10,
+        completed: true
+      }))
+    };
+    log.exercises.push(exLog);
+  } else {
+    const isCurrentlyDone = exLog.sets.some(s => s.completed);
+    exLog.sets.forEach(s => s.completed = !isCurrentlyDone);
+  }
+
+  saveStorage(STORAGE_KEYS.LOGS, logs);
+  renderDashboardView();
   triggerHaptic('tap');
-  showToast('Updated workout progress', 'success');
+  showToast('Workout progress updated & saved!', 'success');
 }
 
 // ----------------------------------------------------
@@ -1865,7 +1901,7 @@ function renderWorkoutsView() {
   const cardio = document.getElementById('prog-cardio-text');
   const exList = document.getElementById('prog-exercises-list');
 
-  if (badge) badge.innerText = `${day.name.toUpperCase()} &bull; ${day.badge}`;
+  if (badge) badge.innerText = `${day.name.toUpperCase()} • ${day.badge}`;
   if (time) time.innerText = day.time.replace('&bull;', '•');
   if (title) title.innerText = day.title;
   if (subtitle) subtitle.innerText = day.subtitle;
@@ -1879,7 +1915,7 @@ function renderWorkoutsView() {
         <div class="p-8 text-center text-gray-400 text-xs dashboard-card">
           <span class="text-3xl block mb-2">🌿</span>
           <div class="font-bold text-white text-sm mb-1">Rest & Mobility Protocol</div>
-          Walk 8,000–10,000 steps. Sleep 7–9 hours. Keep daily protein at 140–170g.
+          Active recovery walk. Sleep 7–9 hours. Keep daily protein at 140–170g.
         </div>
       `;
     } else {
@@ -1941,9 +1977,9 @@ function renderTrackerView() {
   const subtitle = document.getElementById('tracker-subtitle');
   const container = document.getElementById('tracker-exercise-cards');
 
-  if (tag) tag.innerText = `${day.name.toUpperCase()} &bull; ${day.badge}`;
+  if (tag) tag.innerText = `${day.name.toUpperCase()} • ${day.badge}`;
   if (title) title.innerText = `${day.title}`;
-  if (subtitle) subtitle.innerText = `8:30 PM &bull; ${day.subtitle}`;
+  if (subtitle) subtitle.innerText = `8:30 PM • ${day.subtitle}`;
 
   if (!container) return;
   container.innerHTML = '';
@@ -1999,7 +2035,7 @@ function renderTrackerView() {
             <h4 class="text-xs font-extrabold text-white flex items-center gap-1.5">
               <span>${ex.name}</span>
             </h4>
-            <span class="text-[10px] text-amber-400 font-mono font-semibold">${ex.minReps}–${ex.maxReps} Rep Target &bull; ${ex.rest}s rest</span>
+            <span class="text-[10px] text-amber-400 font-mono font-semibold">${ex.minReps}–${ex.maxReps} Rep Target • ${ex.rest}s rest</span>
           </div>
         </div>
 

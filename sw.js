@@ -1,10 +1,10 @@
 // Service Worker for myfit 12-Week Transformation PWA
 // Version 3.2.0 - Network-First for dynamic app assets to guarantee instantaneous updates
-const CACHE_NAME = 'myfit-workout-v3.2.0';
+const CACHE_NAME = 'myfit-workout-v3.3.0';
 const STATIC_ASSETS = [
   './',
   './index.html',
-  './app.js?v=3.2',
+  './app.js?v=3.3.0',
   './manifest.json',
   './icon.svg',
   './hero_mountain_banner.jpg',

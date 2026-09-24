@@ -383,18 +383,18 @@
             <div class="dashboard-card p-4 sm:p-5">
               
               <!-- Card Header -->
-              <div class="flex items-start justify-between pb-3 border-b border-white/[0.06] mb-3">
+              <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-1 pb-3 border-b border-white/[0.06] mb-3">
                 <div>
                   <div class="flex items-center gap-2 mb-1">
                     <h3 class="text-sm font-bold text-white uppercase tracking-wider">Today's Workout</h3>
                     <span id="dash-workout-status-badge" class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
-                      &bull; Scheduled
+                      • Scheduled
                     </span>
                   </div>
                   <h4 id="dash-workout-title" class="text-base font-extrabold text-white">Upper Body A</h4>
-                  <p id="dash-workout-subtitle" class="text-xs text-gray-400 mt-0.5">Flat DB Press &bull; Lat Pulldown &bull; Shoulders &bull; Arms</p>
+                  <p id="dash-workout-subtitle" class="text-xs text-gray-400 mt-0.5">Flat DB Press • Lat Pulldown • Shoulders • Arms</p>
                 </div>
-                <span class="text-xs text-gray-400 font-mono">8:30 PM &bull; 75–90 min</span>
+                <span class="text-xs text-gray-400 font-mono mt-1 sm:mt-0">8:30 PM • 75–90 min</span>
               </div>
 
               <!-- Exercise List (Crossed with Square Demos directly!) -->
@@ -840,7 +840,7 @@
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 mt-3 text-xs">
             <div class="p-2.5 rounded bg-[#161B24] border border-white/[0.05]">
               <strong class="text-white block mb-0.5">Step 1: Increase Activity</strong>
-              <span class="text-gray-400 text-[11px]">Add 1,500–2,000 daily steps or 10 min extra low-impact walking.</span>
+              <span class="text-gray-400 text-[11px]">Add 15–20 min extra low-impact walking or daily activity.</span>
             </div>
             <div class="p-2.5 rounded bg-[#161B24] border border-white/[0.05]">
               <strong class="text-white block mb-0.5">Step 2: Moderate Food Intake</strong>
@@ -1064,6 +1064,6 @@
   <div id="toast-container" class="fixed top-16 right-4 z-50 space-y-2 pointer-events-none"></div>
 
   <!-- APPLICATION LOGIC ENGINE (Cache-busted) -->
-  <script src="./app.js?v=3.2.0"></script>
+  <script src="./app.js?v=3.3.0"></script>
 </body>
 </html>
