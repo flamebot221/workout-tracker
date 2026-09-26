@@ -372,6 +372,9 @@
 
         </div>
 
+        <!-- ACTIVE WORKOUT RECOVERY BANNER (Shown automatically if user left mid-workout) -->
+        <div id="active-session-banner-container" class="hidden"></div>
+
         <!-- MAIN 2-COLUMN SECTION: Today's Workout + Daily Goals & Checklist -->
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
 
@@ -404,7 +407,7 @@
 
               <!-- Bottom Actions -->
               <div class="pt-3 border-t border-white/[0.06] flex flex-col sm:flex-row items-center justify-between gap-3">
-                <button onclick="startTodayWorkoutSession()" class="w-full sm:w-auto px-5 py-2.5 rounded btn-gold flex items-center justify-center gap-2 text-xs font-extrabold tracking-wide shadow-md">
+                <button id="dash-start-workout-btn" onclick="startTodayWorkoutSession()" class="w-full sm:w-auto px-5 py-2.5 rounded btn-gold flex items-center justify-center gap-2 text-xs font-extrabold tracking-wide shadow-md">
                   <span>Start 8:30 PM Workout & Track Sets</span>
                   <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
                 </button>
@@ -677,16 +680,22 @@
               <div class="flex items-center gap-2 mb-1">
                 <span id="tracker-day-tag" class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">ACTIVE SESSION</span>
                 <span id="tracker-session-date" class="text-xs text-gray-400 font-mono">Today</span>
+                <span id="tracker-save-indicator" class="text-[10px] text-emerald-400 font-mono bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20 hidden">● Auto-saved</span>
               </div>
               <h2 id="tracker-title" class="text-lg font-black text-white">Logging Session</h2>
-              <p id="tracker-subtitle" class="text-xs text-gray-400">Record clean weight and reps. Rest properly between sets & exercises.</p>
+              <p id="tracker-subtitle" class="text-xs text-gray-400">Record clean weight and reps. All progress auto-saves continuously.</p>
             </div>
 
-            <!-- Save Session Button -->
-            <button onclick="saveActiveWorkoutSession()" class="px-5 py-2.5 rounded btn-gold text-xs font-extrabold shadow flex items-center gap-1.5 flex-shrink-0">
-              <span>Save & Complete Session</span>
-              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
-            </button>
+            <!-- Save & Reset Action Buttons -->
+            <div class="flex items-center gap-2 flex-shrink-0">
+              <button onclick="resetActiveWorkoutSession()" title="Reset session and start fresh" class="px-3 py-2.5 rounded btn-dark text-xs font-semibold text-gray-400 hover:text-white">
+                Reset
+              </button>
+              <button onclick="saveActiveWorkoutSession()" class="px-5 py-2.5 rounded btn-gold text-xs font-extrabold shadow flex items-center gap-1.5">
+                <span>Save & Complete Session</span>
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+              </button>
+            </div>
           </div>
 
           <!-- DEDICATED REST TIMER STATION (Between Sets & Workouts) -->
@@ -1064,6 +1073,6 @@
   <div id="toast-container" class="fixed top-16 right-4 z-50 space-y-2 pointer-events-none"></div>
 
   <!-- APPLICATION LOGIC ENGINE (Cache-busted) -->
-  <script src="./app.js?v=3.3.0"></script>
+  <script src="./app.js?v=3.4.0"></script>
 </body>
 </html>

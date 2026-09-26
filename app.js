@@ -1159,7 +1159,10 @@ const STORAGE_KEYS = {
   SLEEP: 'pumpd_sleep_logs_v2',
   SETTINGS: 'pumpd_settings_v2',
   TODAY_CHECKLIST: 'pumpd_today_checklist_v2',
-  MY_GOALS: 'pumpd_my_goals_v2'
+  MY_GOALS: 'pumpd_my_goals_v2',
+  ACTIVE_DRAFT: 'pumpd_active_session_draft_v2',
+  LAST_TAB: 'pumpd_last_active_tab_v2',
+  REST_TARGET: 'pumpd_rest_timer_target_v2'
 };
 
 // ----------------------------------------------------
@@ -1313,12 +1316,19 @@ function triggerHaptic(type = 'tap') {
 // ----------------------------------------------------
 // 6. REST STOPWATCH & COUNTDOWN (Square Floating Widget)
 // ----------------------------------------------------
-function startRestTimer(seconds, contextLabel = 'Rest between sets') {
-  cancelRestTimer();
-  AppState.timerTotal = seconds;
+function startRestTimer(seconds, contextLabel = 'Rest between sets', initialTotal) {
+  cancelRestTimer(false);
+  AppState.timerTotal = initialTotal || seconds;
   AppState.timerRemaining = seconds;
   AppState.timerContext = contextLabel;
   updateRestWidgetUI();
+
+  // Persist target timestamp so timer survives locking phone, switching apps, or tab reloads
+  saveStorage(STORAGE_KEYS.REST_TARGET, {
+    target: Date.now() + (seconds * 1000),
+    total: AppState.timerTotal,
+    context: contextLabel
+  });
 
   const widget = document.getElementById('floating-rest-widget');
   if (widget) widget.classList.remove('hidden');
@@ -1336,7 +1346,7 @@ function startRestTimer(seconds, contextLabel = 'Rest between sets') {
     }
 
     if (AppState.timerRemaining <= 0) {
-      cancelRestTimer();
+      cancelRestTimer(true);
       playDing();
       triggerHaptic('rest');
       showToast(`⏰ Rest complete: ${AppState.timerContext}! Ready for next set.`, 'success');
@@ -1344,13 +1354,27 @@ function startRestTimer(seconds, contextLabel = 'Rest between sets') {
   }, 1000);
 }
 
-function cancelRestTimer() {
+function cancelRestTimer(clearStorage = true) {
   if (AppState.timerInterval) {
     clearInterval(AppState.timerInterval);
     AppState.timerInterval = null;
   }
+  if (clearStorage) {
+    saveStorage(STORAGE_KEYS.REST_TARGET, null);
+  }
   const widget = document.getElementById('floating-rest-widget');
   if (widget) widget.classList.add('hidden');
+}
+
+function restoreRestTimerIfActive() {
+  const saved = loadStorage(STORAGE_KEYS.REST_TARGET, null);
+  if (!saved || !saved.target) return;
+  const remaining = Math.round((saved.target - Date.now()) / 1000);
+  if (remaining > 0) {
+    startRestTimer(remaining, saved.context, saved.total);
+  } else {
+    saveStorage(STORAGE_KEYS.REST_TARGET, null);
+  }
 }
 
 function adjustRestTimer(sec) {
@@ -1445,7 +1469,11 @@ function showToast(message, type = 'info') {
 // 9. NAVIGATION CONTROLLER (All Square Buttons)
 // ----------------------------------------------------
 function switchNavTab(tabName) {
+  if (AppState.activeNav === 'tracker' && tabName !== 'tracker') {
+    autoSaveWorkoutSession();
+  }
   AppState.activeNav = tabName;
+  saveStorage(STORAGE_KEYS.LAST_TAB, tabName);
 
   const views = {
     dashboard: document.getElementById('view-dashboard'),
@@ -1543,6 +1571,62 @@ function renderDashboardView() {
   const title = document.getElementById('dash-workout-title');
   const subtitle = document.getElementById('dash-workout-subtitle');
   const listContainer = document.getElementById('dash-exercise-list');
+
+  // Active Workout In-Progress Recovery Check
+  const logs = loadStorage(STORAGE_KEYS.LOGS, []);
+  const todayStr = new Date().toISOString().slice(0, 10);
+  const activeLog = logs.find(l => l.date === todayStr && l.inProgress && l.exercises?.some(e => e.sets?.some(s => s.completed || (s.weight !== '' && s.weight !== undefined) || (s.reps !== '' && s.reps !== undefined))));
+  const bannerContainer = document.getElementById('active-session-banner-container');
+  const startBtn = document.getElementById('dash-start-workout-btn');
+
+  if (activeLog && bannerContainer) {
+    const totalSets = activeLog.totalSets || activeLog.exercises.reduce((acc, e) => acc + (e.sets?.length || 0), 0);
+    const completedSets = activeLog.completedSets || activeLog.exercises.reduce((acc, e) => acc + (e.sets?.filter(s => s.completed)?.length || 0), 0);
+    const workoutDay = WORKOUT_DAYS.find(d => d.id === activeLog.dayId) || todayDay;
+
+    bannerContainer.innerHTML = `
+      <div class="dashboard-card p-4 border-2 border-amber-500/60 bg-amber-500/10 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-xl mb-4">
+        <div class="flex items-center gap-3">
+          <span class="w-3 h-3 rounded-sm bg-amber-400 animate-pulse flex-shrink-0"></span>
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="text-xs font-black text-amber-400 uppercase tracking-wider">⚡ WORKOUT IN PROGRESS</span>
+              <span class="text-[10px] text-gray-300 font-mono bg-black/40 px-2 py-0.5 rounded border border-white/10">${completedSets} / ${totalSets} sets logged</span>
+            </div>
+            <h3 class="text-sm font-bold text-white mt-1">${workoutDay.name}: ${workoutDay.title}</h3>
+            <p class="text-[11px] text-gray-300 mt-0.5">Session left off mid-workout. Tap Resume to continue tracking right where you left off.</p>
+          </div>
+        </div>
+        <div class="flex items-center gap-2 flex-shrink-0">
+          <button onclick="resetActiveWorkoutSession()" class="px-3 py-2 rounded btn-dark text-xs text-gray-400 hover:text-white">Discard</button>
+          <button onclick="resumeActiveWorkoutSession('${activeLog.dayId}')" class="px-5 py-2.5 rounded btn-gold text-xs font-extrabold shadow flex items-center gap-1.5">
+            <span>Resume Workout ➔</span>
+          </button>
+        </div>
+      </div>
+    `;
+    bannerContainer.classList.remove('hidden');
+
+    if (startBtn) {
+      startBtn.innerHTML = `
+        <span>⚡ Resume In-Progress Workout (${completedSets}/${totalSets} Sets Done)</span>
+        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+      `;
+      startBtn.onclick = () => resumeActiveWorkoutSession(activeLog.dayId);
+    }
+  } else {
+    if (bannerContainer) {
+      bannerContainer.innerHTML = '';
+      bannerContainer.classList.add('hidden');
+    }
+    if (startBtn) {
+      startBtn.innerHTML = `
+        <span>Start 8:30 PM Workout & Track Sets</span>
+        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+      `;
+      startBtn.onclick = () => startTodayWorkoutSession();
+    }
+  }
 
   if (title) title.innerText = `${todayDay.name}: ${todayDay.title}`;
   if (subtitle) subtitle.innerText = todayDay.subtitle;
@@ -1970,6 +2054,98 @@ function renderWorkoutsView() {
 // ----------------------------------------------------
 // 12. RENDER: VIEW 3 — TRACK SESSION (8:30 PM)
 // ----------------------------------------------------
+function autoSaveWorkoutSession() {
+  const container = document.getElementById('tracker-exercise-cards');
+  if (!container) return;
+
+  const day = WORKOUT_DAYS.find(d => d.id === AppState.currentDayId) || WORKOUT_DAYS[1];
+  if (!day) return;
+
+  const todayStr = new Date().toISOString().slice(0, 10);
+  const exerciseData = [];
+  let totalSets = 0;
+  let completedSets = 0;
+  let hasAnyInputOrCheck = false;
+
+  day.exercises.forEach(ex => {
+    const rows = container.querySelectorAll(`.set-row[data-exercise-id="${ex.id}"]`);
+    const sets = Array.from(rows).map(r => {
+      const weightRaw = r.querySelector('.input-weight')?.value?.trim();
+      const repsRaw = r.querySelector('.input-reps')?.value?.trim();
+      const isDone = r.querySelector('.btn-check-set')?.classList.contains('bg-emerald-500') || false;
+
+      totalSets++;
+      if (isDone) completedSets++;
+      if (weightRaw !== '' && weightRaw !== undefined) hasAnyInputOrCheck = true;
+      if (repsRaw !== '' && repsRaw !== undefined) hasAnyInputOrCheck = true;
+      if (isDone) hasAnyInputOrCheck = true;
+
+      return {
+        setNum: Number(r.dataset.setNum),
+        weight: (weightRaw !== '' && weightRaw !== undefined) ? Number(weightRaw) : '',
+        reps: (repsRaw !== '' && repsRaw !== undefined) ? Number(repsRaw) : '',
+        completed: isDone
+      };
+    });
+    exerciseData.push({ id: ex.id, name: ex.name, sets });
+  });
+
+  const logs = loadStorage(STORAGE_KEYS.LOGS, []);
+  const existingIdx = logs.findIndex(l => l.date === todayStr && l.dayId === day.id);
+
+  const entry = {
+    date: todayStr,
+    timestamp: logs[existingIdx]?.timestamp || new Date().toISOString(),
+    lastModified: new Date().toISOString(),
+    dayId: day.id,
+    dayName: day.name,
+    inProgress: true,
+    totalSets,
+    completedSets,
+    exercises: exerciseData
+  };
+
+  if (existingIdx >= 0) logs[existingIdx] = { ...logs[existingIdx], ...entry };
+  else logs.unshift(entry);
+
+  saveStorage(STORAGE_KEYS.LOGS, logs);
+
+  if (hasAnyInputOrCheck) {
+    saveStorage(STORAGE_KEYS.ACTIVE_DRAFT, {
+      dayId: day.id,
+      date: todayStr,
+      timestamp: Date.now(),
+      completedSets,
+      totalSets
+    });
+  }
+
+  const indicator = document.getElementById('tracker-save-indicator');
+  if (indicator) {
+    const now = new Date();
+    indicator.innerText = `● Auto-saved ${now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })}`;
+    indicator.classList.remove('hidden');
+  }
+}
+
+function resumeActiveWorkoutSession(dayId) {
+  if (dayId) AppState.currentDayId = dayId;
+  switchNavTab('tracker');
+  showToast('⚡ Resumed your workout session right where you left off!', 'success');
+}
+
+function resetActiveWorkoutSession() {
+  if (!confirm('Are you sure you want to reset and clear today\'s in-progress workout sets?')) return;
+  const logs = loadStorage(STORAGE_KEYS.LOGS, []);
+  const todayStr = new Date().toISOString().slice(0, 10);
+  const filtered = logs.filter(l => !(l.date === todayStr && l.dayId === AppState.currentDayId));
+  saveStorage(STORAGE_KEYS.LOGS, filtered);
+  saveStorage(STORAGE_KEYS.ACTIVE_DRAFT, null);
+  showToast('In-progress workout session cleared.', 'info');
+  renderDashboardView();
+  if (AppState.activeNav === 'tracker') renderTrackerView();
+}
+
 function renderTrackerView() {
   const day = WORKOUT_DAYS.find(d => d.id === AppState.currentDayId) || WORKOUT_DAYS[1];
   const tag = document.getElementById('tracker-day-tag');
@@ -1996,8 +2172,8 @@ function renderTrackerView() {
     let setsRowsHtml = '';
     for (let s = 1; s <= setsCount; s++) {
       const prevSet = existingLog?.exercises?.find(e => e.id === ex.id)?.sets?.find(st => st.setNum === s);
-      const prevWeight = prevSet?.weight || '';
-      const prevReps = prevSet?.reps || '';
+      const prevWeight = (prevSet?.weight !== undefined && prevSet?.weight !== null) ? prevSet.weight : '';
+      const prevReps = (prevSet?.reps !== undefined && prevSet?.reps !== null) ? prevSet.reps : '';
       const isDone = prevSet?.completed || false;
 
       setsRowsHtml += `
@@ -2068,7 +2244,13 @@ function renderTrackerView() {
     }
   });
 
-  // Attach button events
+  // Attach live auto-save input listeners across all weight & reps fields
+  container.querySelectorAll('.input-weight, .input-reps').forEach(input => {
+    input.addEventListener('input', () => autoSaveWorkoutSession());
+    input.addEventListener('change', () => autoSaveWorkoutSession());
+  });
+
+  // Attach button events with immediate auto-save
   container.querySelectorAll('.btn-check-set').forEach(btn => {
     btn.onclick = (e) => {
       const row = e.target.closest('.set-row');
@@ -2106,6 +2288,9 @@ function renderTrackerView() {
         }`;
         banner.classList.remove('hidden');
       }
+
+      // Immediate auto-save to storage
+      autoSaveWorkoutSession();
     };
   });
 }
@@ -2114,20 +2299,31 @@ function saveActiveWorkoutSession() {
   const container = document.getElementById('tracker-exercise-cards');
   if (!container) return;
 
-  const day = WORKOUT_DAYS.find(d => d.id === AppState.currentDayId);
+  const day = WORKOUT_DAYS.find(d => d.id === AppState.currentDayId) || WORKOUT_DAYS[1];
   if (!day) return;
 
   const todayStr = new Date().toISOString().slice(0, 10);
   const exerciseData = [];
+  let totalSets = 0;
+  let completedSets = 0;
 
   day.exercises.forEach(ex => {
     const rows = container.querySelectorAll(`.set-row[data-exercise-id="${ex.id}"]`);
-    const sets = Array.from(rows).map(r => ({
-      setNum: Number(r.dataset.setNum),
-      weight: Number(r.querySelector('.input-weight').value) || 0,
-      reps: Number(r.querySelector('.input-reps').value) || 0,
-      completed: r.querySelector('.btn-check-set').classList.contains('bg-emerald-500')
-    }));
+    const sets = Array.from(rows).map(r => {
+      const weightVal = r.querySelector('.input-weight')?.value?.trim();
+      const repsVal = r.querySelector('.input-reps')?.value?.trim();
+      const isDone = r.querySelector('.btn-check-set')?.classList.contains('bg-emerald-500') || false;
+
+      totalSets++;
+      if (isDone) completedSets++;
+
+      return {
+        setNum: Number(r.dataset.setNum),
+        weight: (weightVal !== '' && weightVal !== undefined) ? Number(weightVal) : '',
+        reps: (repsVal !== '' && repsVal !== undefined) ? Number(repsVal) : '',
+        completed: isDone
+      };
+    });
     exerciseData.push({ id: ex.id, name: ex.name, sets });
   });
 
@@ -2136,9 +2332,13 @@ function saveActiveWorkoutSession() {
 
   const entry = {
     date: todayStr,
-    timestamp: new Date().toISOString(),
+    timestamp: logs[existingIdx]?.timestamp || new Date().toISOString(),
+    completedAt: new Date().toISOString(),
     dayId: day.id,
     dayName: day.name,
+    inProgress: false,
+    totalSets,
+    completedSets,
     exercises: exerciseData
   };
 
@@ -2146,8 +2346,19 @@ function saveActiveWorkoutSession() {
   else logs.unshift(entry);
 
   saveStorage(STORAGE_KEYS.LOGS, logs);
+  saveStorage(STORAGE_KEYS.ACTIVE_DRAFT, null);
+
+  // Auto-check "8:30 PM Workout Session" in Today's Transformation Checklist!
+  let todayChecklist = getTodayChecklistState();
+  if (!todayChecklist.includes('chk_workout')) {
+    todayChecklist.push('chk_workout');
+    saveTodayChecklistState(todayChecklist);
+    renderTodayChecklist();
+  }
+
   triggerHaptic('success');
-  showToast('🎉 Workout session successfully saved!', 'success');
+  playDing();
+  showToast('🎉 Workout session successfully finished & logged!', 'success');
   switchNavTab('dashboard');
 }
 
@@ -2637,11 +2848,27 @@ function forceAppRefresh() {
 }
 
 // ----------------------------------------------------
-// 20. INITIALIZATION
+// 20. INITIALIZATION & ACCIDENTAL CLOSE RECOVERY
 // ----------------------------------------------------
 document.addEventListener('DOMContentLoaded', () => {
-  renderDashboardView();
   renderProgressView();
+
+  const lastTab = loadStorage(STORAGE_KEYS.LAST_TAB, 'dashboard');
+  const logs = loadStorage(STORAGE_KEYS.LOGS, []);
+  const todayStr = new Date().toISOString().slice(0, 10);
+  const activeLog = logs.find(l => l.date === todayStr && l.inProgress && l.exercises?.some(e => e.sets?.some(s => s.completed || (s.weight !== '' && s.weight !== undefined) || (s.reps !== '' && s.reps !== undefined))));
+
+  // If user closed or reloaded mid-workout (within last 8 hours) or was on tracker, auto-resume where they left off!
+  if (activeLog && (lastTab === 'tracker' || (Date.now() - new Date(activeLog.lastModified || activeLog.timestamp).getTime() < 8 * 60 * 60 * 1000))) {
+    AppState.currentDayId = activeLog.dayId;
+    switchNavTab('tracker');
+    showToast('⚡ Automatically resumed your in-progress workout session!', 'success');
+  } else {
+    switchNavTab(lastTab === 'workouts' || lastTab === 'progress' || lastTab === 'library' ? lastTab : 'dashboard');
+  }
+
+  // Restore active rest countdown if phone was locked or app was minimized
+  restoreRestTimerIfActive();
 
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('./sw.js').then((reg) => {
@@ -2657,5 +2884,27 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       });
     }).catch(() => {});
+  }
+});
+
+// Auto-save on accidental close, app minimizing, locking phone, or tab switching
+document.addEventListener('visibilitychange', () => {
+  if (AppState.activeNav === 'tracker') {
+    autoSaveWorkoutSession();
+  }
+  if (document.visibilityState === 'visible') {
+    restoreRestTimerIfActive();
+  }
+});
+
+window.addEventListener('pagehide', () => {
+  if (AppState.activeNav === 'tracker') {
+    autoSaveWorkoutSession();
+  }
+});
+
+window.addEventListener('beforeunload', () => {
+  if (AppState.activeNav === 'tracker') {
+    autoSaveWorkoutSession();
   }
 });
