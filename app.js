@@ -568,15 +568,9 @@ const WORKOUT_DAYS = [
     exercises: [makeExercise('ex_sunday_run', 'Easy Run / Walk', 1, 25, 30, 0, 'Outdoor route or treadmill', 'cardio', 'Start with a 5-minute brisk walk. Alternate 1-minute easy jogs with 2-minute walks, then cool down.', { trackType: 'run', minDuration: 25, maxDuration: 30, target: '25–30 minutes; easy pace' })]
   },
   {
-    id: 'mon', name: 'Monday', title: 'Easy Run / Walk', subtitle: 'Short easy session before the gym week', badge: 'Run',
-    time: '20–25 min', muscles: [], warmup: '5 min brisk walk, included in the session.',
-    cardio: 'Repeat easy 1-minute jog + 2-minute walk intervals for one fewer round than Sunday. Walk instead if your legs feel tired.',
-    exercises: [makeExercise('ex_monday_run', 'Easy Run / Walk', 1, 20, 25, 0, 'Outdoor route or treadmill', 'cardio', 'Keep the whole session conversational; no sprinting or hard intervals.', { trackType: 'run', minDuration: 20, maxDuration: 25, target: '20–25 minutes; easy pace' })]
-  },
-  {
-    id: 'tue', name: 'Tuesday', title: 'Upper 1', subtitle: 'Chest, shoulders, triceps + core', badge: 'Push + Core',
-    time: '8:30 PM • 75–90 min', muscles: [{ id: 'chest', role: 'Primary' }, { id: 'shoulders', role: 'Primary' }, { id: 'triceps', role: 'Secondary' }, { id: 'abs', role: 'Core' }],
-    warmup: '5–8 min easy bike, shoulder movement, then gradual bench-press warm-up sets.', cardio: 'Main work: stop most compound sets with about 2 good reps left; rest 2–3 min on main lifts and 60–90 sec on accessories.',
+    id: 'mon', name: 'Monday', title: 'Upper 1', subtitle: 'Evening gym: chest, shoulders, triceps + core', badge: 'Push + Core',
+    time: '8:30 PM • 75–90 min gym', muscles: [{ id: 'chest', role: 'Primary' }, { id: 'shoulders', role: 'Primary' }, { id: 'triceps', role: 'Secondary' }, { id: 'abs', role: 'Core' }],
+    warmup: '5–8 min easy bike, shoulder movement, then gradual bench-press warm-up sets.', cardio: 'Optional morning run/walk: 20–25 easy minutes using 1 min jog + 2 min walk intervals. If you skip the run, just do the evening gym session. Keep the run conversational so it does not affect lifting.',
     exercises: [
       makeExercise('ex_barbell_bench', 'Barbell Bench Press', 3, 6, 10, 150, 'Bench press station + barbell', 'chest', 'Set feet firmly, shoulder blades against the bench; lower under control.', { demoId: 'ex_db_flat_bench' }),
       makeExercise('ex_incline_db_press', 'Incline Dumbbell Press', 3, 8, 12, 120, 'Dumbbells + adjustable bench', 'chest', 'Use a low incline; lower smoothly and keep wrists stacked over elbows.', { demoId: 'ex_incline_db_bench' }),
@@ -587,7 +581,7 @@ const WORKOUT_DAYS = [
     ]
   },
   {
-    id: 'wed', name: 'Wednesday', title: 'Legs 1', subtitle: 'Quad emphasis + core', badge: 'Legs A',
+    id: 'tue', name: 'Tuesday', title: 'Legs 1', subtitle: 'Quad emphasis + core', badge: 'Legs A',
     time: '8:30 PM • 75–90 min', muscles: [{ id: 'quadriceps', role: 'Primary' }, { id: 'glutes', role: 'Secondary' }, { id: 'calves', role: 'Secondary' }, { id: 'abs', role: 'Core' }],
     warmup: '5–8 min easy bike, then light squat and leg-press warm-up sets.', cardio: 'Main work: use controlled reps and keep 2 reps in reserve on squats and leg press.',
     exercises: [
@@ -600,7 +594,7 @@ const WORKOUT_DAYS = [
     ]
   },
   {
-    id: 'thu', name: 'Thursday', title: 'Upper 2', subtitle: 'Back, rear delts, biceps + core', badge: 'Pull + Core',
+    id: 'wed', name: 'Wednesday', title: 'Upper 2', subtitle: 'Back, rear delts, biceps + core', badge: 'Pull + Core',
     time: '8:30 PM • 75–90 min', muscles: [{ id: 'lats', role: 'Primary' }, { id: 'back', role: 'Primary' }, { id: 'rear-shoulders', role: 'Secondary' }, { id: 'biceps', role: 'Secondary' }, { id: 'obliques', role: 'Core' }],
     warmup: '5–8 min easy bike, then light pulldown and row warm-up sets.', cardio: 'Main work: use full controlled range; stop most sets with 1–2 good reps left.',
     exercises: [
@@ -612,6 +606,10 @@ const WORKOUT_DAYS = [
       makeExercise('ex_hammer_curl', 'Dumbbell Hammer Curl', 2, 10, 15, 60, 'Dumbbells', 'biceps', 'Keep palms facing inward and avoid swinging.', { demoId: 'ex_hammer_curl' }),
       makeExercise('ex_pallof_press', 'Pallof Press', 3, 10, 12, 60, 'Functional trainer + handle', 'obliques', 'Resist rotation as you press out; complete reps on each side.', { isPerLeg: true, demoId: 'ex_pallof_press' })
     ]
+  },
+  {
+    id: 'thu', name: 'Thursday', title: 'Rest & Recovery', subtitle: 'Full rest day', badge: 'Rest',
+    time: 'Recovery', muscles: [], warmup: 'No scheduled gym session today.', cardio: 'Take a full rest day; an easy walk or light mobility is optional.', exercises: []
   },
   {
     id: 'fri', name: 'Friday', title: 'Legs 2', subtitle: 'Hamstrings and glutes + core', badge: 'Legs B',
@@ -2273,10 +2271,11 @@ function renderTrackerView() {
   if (title) title.innerText = `${day.title}`;
   if (subtitle) subtitle.innerText = `${day.time} • ${day.subtitle}`;
   const runSession = day.exercises[0]?.trackType === 'run';
+  const restSession = day.exercises.length === 0;
   const warmupCard = document.getElementById('warmup-timer-card');
   const cardioCard = document.getElementById('cardio-timer-card');
   const warmupText = document.getElementById('tracker-warmup-text');
-  if (warmupCard) warmupCard.classList.toggle('hidden', runSession);
+  if (warmupCard) warmupCard.classList.toggle('hidden', runSession || restSession);
   if (cardioCard) cardioCard.classList.add('hidden');
   if (warmupText) warmupText.innerText = day.warmup;
 
