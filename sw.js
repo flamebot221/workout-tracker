@@ -1,10 +1,10 @@
 // Service Worker for myfit 12-Week Transformation PWA
-// Version 3.4.0 - Auto-save mid-workout recovery, real-time rest timer sync, Network-First
-const CACHE_NAME = 'myfit-workout-v3.4.0';
+// Version 3.5.0 - Theme Controller (Dark Mode default & Creamy Light Mode), Network-First
+const CACHE_NAME = 'myfit-workout-v3.5.0';
 const STATIC_ASSETS = [
   './',
   './index.html',
-  './app.js?v=3.4.0',
+  './app.js?v=3.5.0',
   './manifest.json',
   './icon.svg',
   './hero_mountain_banner.jpg',

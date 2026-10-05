@@ -64,6 +64,19 @@
       }
     }
   </script>
+  <script>
+    (function() {
+      try {
+        var t = localStorage.getItem('pumpd_theme_mode_v2');
+        if (t && t.indexOf('light') !== -1) {
+          document.documentElement.classList.remove('dark');
+          document.documentElement.classList.add('light');
+        } else {
+          document.documentElement.classList.add('dark');
+        }
+      } catch(e) {}
+    })();
+  </script>
 
   <style>
     body {
@@ -175,6 +188,234 @@
     /* Scrollbar */
     .no-scrollbar::-webkit-scrollbar { display: none; }
     .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+    /* ========================================================
+       CREAMY LIGHT MODE (Warm luxury ivory & cream)
+       Activated when html does NOT have .dark (or has .light)
+       Dark mode remains 100% untouched as the default!
+       ======================================================== */
+    html:not(.dark) {
+      color-scheme: light;
+    }
+
+    html:not(.dark) body {
+      background-color: #F8F5EE !important;
+      color: #1E1B18 !important;
+    }
+
+    html:not(.dark) aside {
+      background-color: #F2EDE2 !important;
+      border-right-color: rgba(180, 165, 145, 0.35) !important;
+    }
+
+    html:not(.dark) header {
+      background-color: rgba(248, 245, 238, 0.95) !important;
+      border-bottom-color: rgba(180, 165, 145, 0.35) !important;
+    }
+
+    html:not(.dark) #mobile-bottom-nav {
+      background-color: rgba(248, 245, 238, 0.97) !important;
+      border-top-color: rgba(180, 165, 145, 0.35) !important;
+    }
+
+    html:not(.dark) .dashboard-card {
+      background-color: #FFFFFF !important;
+      border: 1px solid rgba(210, 200, 185, 0.6) !important;
+      box-shadow: 0 1px 3px rgba(60, 50, 40, 0.04);
+    }
+
+    html:not(.dark) .dashboard-card-interactive {
+      background-color: #FFFFFF !important;
+      border: 1px solid rgba(210, 200, 185, 0.6) !important;
+      box-shadow: 0 1px 2px rgba(60, 50, 40, 0.03);
+    }
+    html:not(.dark) .dashboard-card-interactive:active {
+      border-color: #D99026 !important;
+    }
+
+    html:not(.dark) .btn-gold {
+      background-color: #D99026 !important;
+      color: #FFFFFF !important;
+      box-shadow: 0 2px 4px rgba(217, 144, 38, 0.25);
+    }
+    html:not(.dark) .btn-gold:hover {
+      background-color: #C6821E !important;
+    }
+
+    html:not(.dark) .btn-dark {
+      background-color: #EFE9DE !important;
+      color: #2C2723 !important;
+      border: 1px solid rgba(190, 178, 160, 0.45) !important;
+    }
+    html:not(.dark) .btn-dark:hover {
+      background-color: #E5DFC0 !important;
+      color: #1A1815 !important;
+    }
+
+    html:not(.dark) .square-checkbox {
+      background-color: #FFFFFF !important;
+      border-color: rgba(180, 165, 145, 0.6) !important;
+    }
+    html:not(.dark) .square-checkbox.checked {
+      background-color: #10B981 !important;
+      border-color: #10B981 !important;
+      color: #FFFFFF !important;
+    }
+
+    /* Inputs in Creamy Mode */
+    html:not(.dark) input,
+    html:not(.dark) .input-weight,
+    html:not(.dark) .input-reps,
+    html:not(.dark) #global-search-input {
+      background-color: #FAF7F0 !important;
+      color: #1E1B18 !important;
+      border-color: rgba(195, 185, 170, 0.6) !important;
+    }
+    html:not(.dark) input::placeholder,
+    html:not(.dark) #global-search-input::placeholder {
+      color: #9C9283 !important;
+    }
+    html:not(.dark) input:focus,
+    html:not(.dark) .input-weight:focus,
+    html:not(.dark) .input-reps:focus,
+    html:not(.dark) #global-search-input:focus {
+      background-color: #FFFFFF !important;
+      border-color: #D99026 !important;
+    }
+
+    /* Typography Overrides */
+    html:not(.dark) .text-white {
+      color: #1E1B18 !important;
+    }
+    html:not(.dark) .text-gray-200 {
+      color: #2D2721 !important;
+    }
+    html:not(.dark) .text-gray-300 {
+      color: #4A433A !important;
+    }
+    html:not(.dark) .text-gray-400 {
+      color: #6E6559 !important;
+    }
+    html:not(.dark) .text-gray-500 {
+      color: #8E8476 !important;
+    }
+
+    /* Background Mapping for Creamy Palette */
+    html:not(.dark) .bg-\[\#0C0E12\] {
+      background-color: #F8F5EE !important;
+    }
+    html:not(.dark) .bg-\[\#13171F\] {
+      background-color: #FFFFFF !important;
+    }
+    html:not(.dark) .bg-\[\#161B24\] {
+      background-color: #F2EDE2 !important;
+    }
+    html:not(.dark) .bg-\[\#1D222E\] {
+      background-color: #E8E2D5 !important;
+    }
+    html:not(.dark) .bg-white\/\[0\.03\],
+    html:not(.dark) .bg-white\/\[0\.04\],
+    html:not(.dark) .bg-white\/\[0\.05\],
+    html:not(.dark) .bg-white\/10 {
+      background-color: rgba(190, 178, 160, 0.15) !important;
+    }
+    html:not(.dark) .bg-black\/85,
+    html:not(.dark) .bg-black\/75,
+    html:not(.dark) .bg-black\/60,
+    html:not(.dark) .bg-black\/40,
+    html:not(.dark) .bg-black\/25 {
+      background-color: rgba(248, 245, 238, 0.92) !important;
+      color: #1E1B18 !important;
+    }
+
+    /* Border Utility Overrides */
+    html:not(.dark) .border-white\/\[0\.04\],
+    html:not(.dark) .border-white\/\[0\.05\],
+    html:not(.dark) .border-white\/\[0\.06\],
+    html:not(.dark) .border-white\/\[0\.07\],
+    html:not(.dark) .border-white\/\[0\.08\],
+    html:not(.dark) .border-white\/\[0\.09\],
+    html:not(.dark) .border-white\/10,
+    html:not(.dark) .border-white\/15,
+    html:not(.dark) .border-white\/20,
+    html:not(.dark) .border-white\/25 {
+      border-color: rgba(190, 178, 160, 0.35) !important;
+    }
+
+    /* Banners in Creamy Mode */
+    html:not(.dark) .hero-banner {
+      background: linear-gradient(to right, rgba(248, 245, 238, 0.97) 0%, rgba(248, 245, 238, 0.85) 45%, rgba(248, 245, 238, 0.55) 100%),
+                  url('./hero_mountain_banner.jpg') !important;
+      background-size: cover !important;
+      background-position: center !important;
+      border: 1px solid rgba(210, 200, 185, 0.6) !important;
+    }
+    html:not(.dark) .hero-banner h1,
+    html:not(.dark) .hero-banner h2 {
+      color: #1E1B18 !important;
+    }
+    html:not(.dark) .hero-banner p {
+      color: #8C5E1E !important;
+    }
+
+    html:not(.dark) .quote-banner {
+      background: linear-gradient(to right, rgba(242, 237, 226, 0.97) 0%, rgba(242, 237, 226, 0.85) 100%),
+                  url('./quote_card_banner.jpg') !important;
+      background-size: cover !important;
+      background-position: center !important;
+      border: 1px solid rgba(210, 200, 185, 0.6) !important;
+    }
+    html:not(.dark) .quote-banner h4,
+    html:not(.dark) .quote-banner p {
+      color: #1E1B18 !important;
+    }
+
+    /* Floating Rest Widget in Creamy Mode */
+    html:not(.dark) #floating-rest-widget {
+      background-color: #FFFFFF !important;
+      border-color: #D99026 !important;
+      box-shadow: 0 10px 25px rgba(60, 50, 40, 0.15) !important;
+    }
+    html:not(.dark) #floating-rest-widget #floating-rest-display {
+      color: #1E1B18 !important;
+    }
+    html:not(.dark) #floating-rest-widget #floating-rest-context {
+      color: #5C554B !important;
+    }
+    html:not(.dark) #floating-rest-widget .bg-\[\#0C0E12\] {
+      background-color: #EFE9DE !important;
+    }
+
+    /* Modals in Creamy Mode */
+    html:not(.dark) #exercise-demo-modal .dashboard-card,
+    html:not(.dark) #plan-overview-modal .dashboard-card {
+      background-color: #F8F5EE !important;
+      border-color: rgba(210, 200, 185, 0.7) !important;
+    }
+
+    /* Active Nav Items in Creamy Mode */
+    html:not(.dark) [id^="desk-nav-"].text-\[\#E5A93C\],
+    html:not(.dark) [id^="mob-nav-"].text-\[\#E5A93C\] {
+      color: #D99026 !important;
+      background-color: rgba(217, 144, 38, 0.12) !important;
+      border-color: rgba(217, 144, 38, 0.35) !important;
+    }
+
+    /* Checklist & Alert states */
+    html:not(.dark) .bg-emerald-950\/15 {
+      background-color: rgba(16, 185, 129, 0.08) !important;
+    }
+    html:not(.dark) .line-through {
+      color: #8E8476 !important;
+    }
+    html:not(.dark) .bg-amber-950\/70 {
+      background-color: #FFF8E1 !important;
+      color: #B78103 !important;
+    }
+    html:not(.dark) .bg-emerald-950\/70 {
+      background-color: #E8F5E9 !important;
+      color: #1B5E20 !important;
+    }
   </style>
 </head>
 
@@ -225,7 +466,14 @@
     </div>
 
     <!-- Sidebar Footer -->
-    <div class="pt-4 border-t border-white/[0.07]">
+    <div class="pt-4 border-t border-white/[0.07] space-y-3">
+      <button onclick="toggleTheme()" class="w-full flex items-center justify-between px-3 py-2 rounded btn-dark text-xs font-semibold">
+        <span class="flex items-center gap-2">
+          <span id="desk-theme-icon">☀️</span>
+          <span id="desk-theme-label">Creamy Mode</span>
+        </span>
+        <span class="text-[10px] text-amber-400 font-mono">Toggle</span>
+      </button>
       <p class="text-[11px] text-gray-500 font-medium">Goal: 94.5 &rarr; <span class="text-emerald-400 font-bold">85.0 kg</span><br><span class="text-gray-300 font-bold">Consistency Wins.</span></p>
     </div>
   </aside>
@@ -281,6 +529,12 @@
         <button onclick="forceAppRefresh()" title="Reload newest version & clear cache" class="flex items-center gap-1.5 text-[11px] font-semibold px-2 py-1.5 rounded bg-[#161B24] border border-white/[0.08] text-gray-300 hover:text-amber-400 hover:border-amber-400/40 transition-all">
           <span class="text-xs">🔄</span>
           <span class="text-[10.5px] hidden sm:inline">Sync</span>
+        </button>
+
+        <!-- Theme Toggle: Dark (Default) / Creamy Light Mode -->
+        <button id="btn-theme-toggle" onclick="toggleTheme()" title="Switch Theme (Dark / Creamy Light)" class="flex items-center gap-1.5 text-[11px] font-semibold px-2.5 py-1.5 rounded bg-[#161B24] border border-white/[0.08] text-gray-300 hover:text-amber-400 hover:border-amber-400/40 transition-all">
+          <span id="theme-toggle-icon" class="text-xs">☀️</span>
+          <span id="theme-toggle-text" class="text-[10.5px] hidden sm:inline">Light</span>
         </button>
 
         <!-- User Badge -->
@@ -397,7 +651,7 @@
                   <h4 id="dash-workout-title" class="text-base font-extrabold text-white">Upper Body A</h4>
                   <p id="dash-workout-subtitle" class="text-xs text-gray-400 mt-0.5">Flat DB Press • Lat Pulldown • Shoulders • Arms</p>
                 </div>
-                <span class="text-xs text-gray-400 font-mono mt-1 sm:mt-0">8:30 PM • 75–90 min</span>
+                <span id="dash-workout-time" class="text-xs text-gray-400 font-mono mt-1 sm:mt-0">8:30 PM • 75–90 min</span>
               </div>
 
               <!-- Exercise List (Crossed with Square Demos directly!) -->
@@ -559,38 +813,38 @@
             <div class="dashboard-card p-4">
               <div class="flex items-center justify-between mb-2.5">
                 <h3 class="text-xs font-bold text-white uppercase tracking-wider">Weekly Schedule Consistency</h3>
-                <span class="text-xs font-black text-emerald-400 font-mono">5 Training Days</span>
+                <span class="text-xs font-black text-emerald-400 font-mono">5 Gym + 2 Run Days</span>
               </div>
 
-              <!-- Day Dots Indicator (Mon - Sun) -->
+              <!-- Fixed weekly split -->
               <div class="grid grid-cols-7 gap-1 text-center font-mono">
                 <div class="flex flex-col items-center gap-1">
                   <span class="text-[10px] text-gray-400">Mon</span>
-                  <span class="w-3.5 h-3.5 rounded-sm bg-emerald-500 flex items-center justify-center text-[9px] text-black font-bold">✓</span>
+                  <span class="text-[8px] text-cyan-400 font-bold">RUN</span>
                 </div>
                 <div class="flex flex-col items-center gap-1">
                   <span class="text-[10px] text-gray-400">Tue</span>
-                  <span class="w-3.5 h-3.5 rounded-sm bg-emerald-500 flex items-center justify-center text-[9px] text-black font-bold">✓</span>
+                  <span class="text-[8px] text-emerald-400 font-bold">GYM</span>
                 </div>
                 <div class="flex flex-col items-center gap-1">
                   <span class="text-[10px] text-gray-400">Wed</span>
-                  <span class="w-3.5 h-3.5 rounded-sm bg-cyan-500 flex items-center justify-center text-[9px] text-black font-bold">🏃</span>
+                  <span class="text-[8px] text-emerald-400 font-bold">GYM</span>
                 </div>
                 <div class="flex flex-col items-center gap-1">
                   <span class="text-[10px] text-gray-400">Thu</span>
-                  <span class="w-3.5 h-3.5 rounded-sm bg-emerald-500 flex items-center justify-center text-[9px] text-black font-bold">✓</span>
+                  <span class="text-[8px] text-emerald-400 font-bold">GYM</span>
                 </div>
                 <div class="flex flex-col items-center gap-1">
                   <span class="text-[10px] text-gray-400">Fri</span>
-                  <span class="w-3.5 h-3.5 rounded-sm bg-emerald-500 flex items-center justify-center text-[9px] text-black font-bold">✓</span>
+                  <span class="text-[8px] text-emerald-400 font-bold">GYM</span>
                 </div>
                 <div class="flex flex-col items-center gap-1">
                   <span class="text-[10px] text-gray-400">Sat</span>
-                  <span class="w-3.5 h-3.5 rounded-sm bg-cyan-500 flex items-center justify-center text-[9px] text-black font-bold">🏃</span>
+                  <span class="text-[8px] text-emerald-400 font-bold">GYM</span>
                 </div>
                 <div class="flex flex-col items-center gap-1">
                   <span class="text-[10px] text-gray-400">Sun</span>
-                  <span class="w-3.5 h-3.5 rounded-sm border border-white/20 bg-[#161B24]"></span>
+                  <span class="text-[8px] text-cyan-400 font-bold">RUN</span>
                 </div>
               </div>
             </div>
@@ -646,14 +900,14 @@
           <!-- Warmup and Cardio info -->
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-5">
             <div class="p-3 rounded bg-[#161B24] border border-white/[0.05] text-xs">
-              <span class="font-bold text-amber-400 flex items-center gap-1.5 mb-1">
+                <span id="prog-warmup-title" class="font-bold text-amber-400 flex items-center gap-1.5 mb-1">
                 <span>🚴</span> 8-Min Bike Warm-Up
               </span>
               <p id="prog-warmup-text" class="text-gray-300 text-[11px] leading-relaxed"></p>
             </div>
 
             <div class="p-3 rounded bg-[#161B24] border border-white/[0.05] text-xs">
-              <span class="font-bold text-emerald-400 flex items-center gap-1.5 mb-1">
+                <span id="prog-cardio-title" class="font-bold text-emerald-400 flex items-center gap-1.5 mb-1">
                 <span>🏃</span> 12–15 Min Cardio
               </span>
               <p id="prog-cardio-text" class="text-gray-300 text-[11px] leading-relaxed"></p>
@@ -683,7 +937,7 @@
                 <span id="tracker-save-indicator" class="text-[10px] text-emerald-400 font-mono bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20 hidden">● Auto-saved</span>
               </div>
               <h2 id="tracker-title" class="text-lg font-black text-white">Logging Session</h2>
-              <p id="tracker-subtitle" class="text-xs text-gray-400">Record clean weight and reps. All progress auto-saves continuously.</p>
+              <p id="tracker-subtitle" class="text-xs text-gray-400">Log the metric that matches each exercise. Progress auto-saves continuously.</p>
             </div>
 
             <!-- Save & Reset Action Buttons -->
@@ -736,12 +990,12 @@
         </div>
 
         <!-- 8-Minute Warmup Counter Bar -->
-        <div class="dashboard-card p-4 flex items-center justify-between gap-3 bg-[#161B24]">
+        <div id="warmup-timer-card" class="dashboard-card p-4 flex items-center justify-between gap-3 bg-[#161B24]">
           <div class="flex items-center gap-3">
             <span class="text-xl">🚴</span>
             <div>
-              <h4 class="text-xs font-bold text-white">8-Minute Stationary Bike Warm-Up</h4>
-              <p class="text-[11px] text-gray-400">Moderate pace. Replaces decline presses & weighted side sit-ups.</p>
+              <h4 id="tracker-warmup-title" class="text-xs font-bold text-white">8-Minute Exercise Bike Warm-Up</h4>
+              <p id="tracker-warmup-text" class="text-[11px] text-gray-400">Easy to moderate pace, followed by movement-specific warm-up sets.</p>
             </div>
           </div>
 
@@ -757,7 +1011,7 @@
         </div>
 
         <!-- 12-15 Min Cardio Stopwatch -->
-        <div class="dashboard-card p-4 flex items-center justify-between gap-3 bg-[#161B24]">
+        <div id="cardio-timer-card" class="dashboard-card p-4 flex items-center justify-between gap-3 bg-[#161B24]">
           <div class="flex items-center gap-3">
             <span class="text-xl">🏃</span>
             <div>
@@ -776,7 +1030,7 @@
         <div class="p-4 dashboard-card flex flex-col sm:flex-row items-center justify-between gap-3">
           <div>
             <h4 class="text-xs font-bold text-white">Ready to Finish?</h4>
-            <p class="text-[11px] text-gray-400">Saves your weight, reps, and marks today's routine completed.</p>
+            <p class="text-[11px] text-gray-400">Saves each exercise's relevant log and marks this session complete.</p>
           </div>
 
           <button onclick="saveActiveWorkoutSession()" class="w-full sm:w-auto px-6 py-3 rounded btn-gold text-xs font-extrabold shadow-lg">
@@ -906,7 +1160,7 @@
   <!-- ======================================================== -->
   <!-- 4. MOBILE BOTTOM APP BAR (Square Buttons for Android) -->
   <!-- ======================================================== -->
-  <nav class="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-[#0C0E12]/95 backdrop-blur-xl border-t border-white/[0.08] px-3 py-2">
+  <nav id="mobile-bottom-nav" class="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-[#0C0E12]/95 backdrop-blur-xl border-t border-white/[0.08] px-3 py-2">
     <div class="max-w-md mx-auto grid grid-cols-5 gap-1.5 text-center">
       
       <!-- Nav Button 1: Dashboard -->
@@ -1073,6 +1327,6 @@
   <div id="toast-container" class="fixed top-16 right-4 z-50 space-y-2 pointer-events-none"></div>
 
   <!-- APPLICATION LOGIC ENGINE (Cache-busted) -->
-  <script src="./app.js?v=3.4.0"></script>
+  <script src="./app.js?v=3.5.0"></script>
 </body>
 </html>

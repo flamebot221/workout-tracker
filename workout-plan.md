@@ -1,123 +1,101 @@
-# Your 12-week repeatable workout plan
+# Repeatable weekly workout plan
 
-## Target and rules
-
-- **Starting point:** 94.5 kg at 175 cm. **Target:** 85 kg in 12 weeks.
-- A 9.5 kg loss in 12 weeks averages about **0.8 kg per week**. Aim for 0.5–0.8 kg/week; slower is still progress, especially if strength is improving.
-- Train on the same schedule every week for all 12 weeks. The exercises do **not** rotate; only the weight or reps progress.
-- Fat cannot be lost from one chosen area. Losing overall body fat will reduce chest, waist, thigh and face fat over time. If firm chest tissue remains after reaching a leaner weight, discuss it with a clinician.
+Built around the gym equipment you confirmed: dumbbells, barbells, EZ curl bar, plates, trap/hex bar, flat and adjustable benches, preacher curl bench, power/squat rack, Smith machine, bench press station, functional trainer and attachments, lat pulldown, seated cable row, plate-loaded shoulder press, 45-degree leg press, leg extension, leg curl, exercise bike, and heavy bag. Your requested weekly structure is five gym days, three upper-body/core days, two leg days, and two running days.
 
 ## Weekly schedule
 
-| Day | Session | Time |
-| --- | --- | --- |
-| Monday | Upper body A + easy cardio | 75–90 min |
-| Tuesday | Lower body A + easy cardio | 75–90 min |
-| Wednesday | Cardio + core | 60–75 min |
-| Thursday | Upper body B + easy cardio | 75–90 min |
-| Friday | Lower body B + easy cardio | 75–90 min |
-| Saturday | Cardio + core | 60–75 min |
-| Sunday | Rest; optional easy walk and mobility | — |
+| Day | Training |
+| --- | --- |
+| Sunday | Easy run/walk |
+| Monday | Easy run/walk |
+| Tuesday | Upper 1 — chest, shoulders, triceps + core |
+| Wednesday | Legs 1 — quads/glutes + core |
+| Thursday | Upper 2 — back, rear delts, biceps + core |
+| Friday | Legs 2 — hamstrings/glutes + core |
+| Saturday | Upper 3 — balanced upper body + core |
 
-Start at 8:30 pm as planned. Finish cardio at least 10 minutes before leaving so you can cool down properly.
+This is seven active days, so the runs are intentionally easy and short at first. Keep them conversational and do not add sprint intervals. If your legs are still sore or unusually tired on Monday, replace that run with a brisk walk. Keep at least one full rest day when fatigue or pain makes recovery necessary; move the missed workout forward rather than doubling up.
 
-## Every strength day
+## Effort and progression
 
-1. **Warm up (8 minutes):** easy-to-moderate stationary bike, then one light practice set before the first two lifts.
-2. Do the exercises below in order. Rest **90–120 seconds** after the first four exercises and **60–75 seconds** after smaller exercises.
-3. **Cardio (12–15 minutes):** bike, incline treadmill walk, or elliptical at a pace where you can speak short sentences.
-4. **Cool down (3–5 minutes):** easy walk/bike and relaxed breathing.
+- Warm up for 5–8 minutes with easy movement, then do 2–4 gradually heavier practice sets for the first main lift. Warm-up sets do not count as work sets.
+- For the main barbell/dumbbell lifts, finish most sets with **2 reps in reserve (RIR)**—you could do about two more clean reps. On accessories, the final set may finish with **1–2 RIR**. Do not take compound lifts to failure.
+- Rest 2–3 minutes after main lifts and 60–90 seconds after accessories. Take longer if needed to keep form and reps consistent.
+- Use double progression: stay within the written rep range; when you hit the top of the range on every set with good form, raise the load by the smallest amount next time and work up again.
+- Weeks 1–2: use 3 RIR while learning movements. From week 3, use the effort targets above. If performance declines for several workouts, soreness lingers, or sleep worsens, reduce each exercise by one set for a week.
+- The exercise bike is the warm-up option. The heavy bag is available, but is not scheduled as extra conditioning because the week already includes two runs and five gym sessions.
 
-Use a weight that leaves about **two good reps in reserve** on each set. Sharp pain, joint pain, dizziness, or chest pain means stop that exercise and get help rather than pushing through it.
+## Sunday — easy run/walk
 
-## Monday — Upper A
+Total: about 25–30 minutes. Start with 5 minutes brisk walking, then repeat **1 minute easy jog + 2 minutes walk** for 6–8 rounds, and finish with 5 minutes easy walking. Keep the effort conversational; if this is already easy, gradually add jogging time while keeping total time similar.
+
+## Monday — easy run/walk
+
+Total: about 20–25 minutes. Repeat the same run/walk pattern as Sunday but do one fewer round, or brisk-walk if your legs have not recovered. No speed work. Increase only one run at a time, and only after the current duration feels comfortable for two weeks.
+
+## Tuesday — upper 1: chest, shoulders, triceps + core
 
 | Exercise | Sets × reps |
 | --- | --- |
-| Dumbbell flat bench press | 3 × 8–12 |
-| Lat pulldown | 3 × 8–12 |
-| Seated dumbbell shoulder press | 3 × 8–12 |
-| Chest-supported row or seated cable row | 3 × 8–12 |
-| Cable triceps pressdown | 2 × 10–15 |
-| Dumbbell biceps curl | 2 × 10–15 |
+| Barbell bench press | 3 × 6–10 |
+| Incline dumbbell press | 3 × 8–12 |
+| Plate-loaded shoulder press | 3 × 8–12 |
+| Cable lateral raise | 3 × 12–20 |
+| Rope/cable triceps pushdown | 3 × 10–15 |
+| Cable crunch | 3 × 10–15 |
 
-## Tuesday — Lower A
-
-| Exercise | Sets × reps |
-| --- | --- |
-| Leg press | 3 × 8–12 |
-| Dumbbell Romanian deadlift | 3 × 8–12 |
-| Walking lunge | 2 × 10–12 per leg |
-| Seated or lying leg curl | 3 × 10–15 |
-| Standing calf raise | 3 × 12–15 |
-| Front plank | 3 × 30–60 sec |
-
-## Wednesday — Cardio + core
-
-1. **Bike / elliptical / incline walk: 35 minutes** at a steady, conversational pace.
-2. Do 3 rounds, resting 45–60 seconds between movements:
-   - Dead bug: 10 reps per side
-   - Side plank: 25–40 seconds per side
-   - Pallof press: 12 reps per side
-3. Finish with 5–10 minutes of easy walking and light hip/chest/lat mobility.
-
-## Thursday — Upper B
+## Wednesday — legs 1: quad emphasis + core
 
 | Exercise | Sets × reps |
 | --- | --- |
-| Incline dumbbell bench press | 3 × 8–12 |
+| Barbell squat in rack | 3 × 6–10 |
+| 45-degree leg press | 3 × 8–12 |
+| Dumbbell Bulgarian split squat | 2 × 8–10 per leg |
+| Leg extension | 2 × 10–15 |
+| Standing dumbbell or Smith calf raise | 3 × 10–15 |
+| Plank | 3 × 30–60 sec |
+
+## Thursday — upper 2: back, rear delts, biceps + core
+
+| Exercise | Sets × reps |
+| --- | --- |
+| Lat pulldown | 4 × 8–12 |
 | Seated cable row | 3 × 8–12 |
-| Assisted pull-up or neutral-grip lat pulldown | 3 × 8–12 |
-| Dumbbell lateral raise | 3 × 12–15 |
-| Face pull | 2 × 12–15 |
-| Overhead cable triceps extension | 2 × 10–15 |
-| Hammer curl | 2 × 10–15 |
+| Chest-supported dumbbell row | 3 × 8–12 |
+| Cable face pull | 3 × 12–20 |
+| EZ-bar curl | 3 × 8–12 |
+| Dumbbell hammer curl | 2 × 10–15 |
+| Pallof press | 3 × 10–12 per side |
 
-## Friday — Lower B
+## Friday — legs 2: hamstrings/glutes emphasis + core
 
 | Exercise | Sets × reps |
 | --- | --- |
-| Goblet squat or hack squat machine | 3 × 8–12 |
-| Hip thrust machine or barbell hip thrust | 3 × 8–12 |
-| Bulgarian split squat | 2 × 8–10 per leg |
-| Leg extension | 2 × 12–15 |
-| Seated leg curl | 2 × 10–15 |
-| Seated calf raise | 3 × 12–15 |
-| Reverse crunch | 3 × 10–15 |
+| Trap/hex-bar deadlift | 3 × 6–8 |
+| Barbell hip thrust | 3 × 8–12 |
+| Seated/lying leg curl attachment | 3 × 10–15 |
+| Dumbbell reverse lunge | 2 × 8–10 per leg |
+| Standing dumbbell or Smith calf raise | 3 × 10–15 |
+| Reverse crunch on mat or abdominal bench | 3 × 10–15 |
 
-## Saturday — Cardio + core
+## Saturday — upper 3: balanced upper body + core
 
-1. **Bike / elliptical / incline walk: 40 minutes** at a steady, conversational pace.
-2. Do 3 rounds, resting 45–60 seconds between movements:
-   - Bird dog: 10 reps per side
-   - Side plank: 25–40 seconds per side
-   - Cable wood chop: 12 reps per side
-3. 5 minutes very easy pace to finish.
+| Exercise | Sets × reps |
+| --- | --- |
+| Incline barbell or Smith press | 3 × 8–12 |
+| One-arm dumbbell row | 3 × 8–12 per side |
+| Cable chest press | 2 × 10–15 |
+| Cable rear-delt fly | 3 × 12–20 |
+| Preacher curl (EZ bar or dumbbells) | 2 × 10–15 |
+| Overhead cable triceps extension | 2 × 10–15 |
+| Side plank | 3 × 25–45 sec per side |
 
-## How to progress without changing the routine
+## Fuel and hydration for the 8:30 pm workout
 
-Keep a note of every exercise: weight, reps, and sets.
+- Have a normal meal 2–3 hours beforehand with carbohydrates and protein, for example rice/roti with chicken, eggs, paneer/tofu, or dal and curd.
+- If hungry 30–60 minutes before training, have a small, easy snack such as a banana with yogurt/curd or toast with a little peanut butter. Avoid a heavy, greasy meal right before training.
+- Drink water through the day and bring water to sip during the session. For workouts under roughly 60–90 minutes in normal conditions, most people do not need a sports drink or electrolyte product.
+- Because you train late, avoid caffeine/pre-workout in the evening if it delays sleep. Caffeine can disturb sleep; sleep and a regular pre-workout meal are more useful for your training energy than a stimulant. Avoid energy drinks and unverified “fat burner” or pre-workout blends.
+- You do not need BCAAs or special intra-workout supplements. A protein-rich meal after training is enough; it can simply be dinner if that fits your routine.
 
-- Begin in week 1 with weights you can control cleanly at the **low end** of the listed rep range.
-- Each time you repeat an exercise, add **one rep per set** while form remains solid.
-- Once every set reaches the top of its rep range, add the smallest available weight next time (usually 1–2.5 kg total for upper body and 2.5–5 kg for lower body) and return to the low end of the range.
-- If you miss the lower end of the rep range twice in a row, reduce the load by 5–10% and rebuild.
-- In week 7, keep the exact same exercises but do **one fewer set per exercise**. Resume normal sets in week 8. This planned lighter week helps you stay consistent for all 12 weeks.
-
-## Changes from your current warm-up
-
-Your existing bike work is useful, but the leg extensions, decline presses, weighted side crunches, stairs, and weighted sit-ups are no longer a daily warm-up. They either belong in the planned sessions above or are replaced with more balanced core work. This avoids repeatedly training chest and abs while neglecting back, hamstrings, and overall recovery.
-
-## Nutrition and recovery: required for the fat-loss goal
-
-- Eat a consistent calorie deficit of roughly **500–700 kcal/day**. Do not crash diet.
-- Eat **140–170 g protein/day**, spread across 3–4 meals. Build meals around eggs, chicken/fish, dairy/curd, paneer/tofu, dal, soy, or protein powder if useful.
-- Include vegetables/fruit daily, choose mostly minimally processed foods, and limit liquid calories, frequent fried snacks, and alcohol.
-- Walk **8,000–10,000 steps/day**. This is as important as gym cardio for maintaining your deficit.
-- Sleep **7–9 hours**. Since you train late, avoid caffeine late in the evening and have a simple protein-rich dinner or post-workout meal.
-
-## Weekly check-in
-
-Weigh yourself 3–4 mornings each week after using the bathroom; use the weekly average, not a single reading. Also measure waist at navel level and take front/side photos every two weeks.
-
-After two full weeks, if your weekly average is not dropping at least about 0.25 kg and adherence is good, first add 1,500–2,000 daily steps or reduce food by about 150–200 kcal/day. If you are losing more than about 1 kg/week for two weeks and feel run-down, add a little food back.
+If you have a chronic condition, take medication that affects exercise or caffeine, or have been inactive, check with a healthcare professional before progressing to vigorous running or very hard training. Stop for chest pain, faintness, unusual breathlessness, or sharp joint pain.

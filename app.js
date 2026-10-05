@@ -4,7 +4,7 @@
 // ----------------------------------------------------
 // 1. DATA STRUCTURES & EXERCISE REPOSITORY
 // ----------------------------------------------------
-const WORKOUT_DAYS = [
+const PREVIOUS_WORKOUT_DAYS = [
   {
     id: 'mon',
     name: 'Monday',
@@ -553,6 +553,92 @@ const WORKOUT_DAYS = [
     warmup: 'No lifting today. Your body grows and adapts during deep rest.',
     cardio: '25–35 min relaxed walk to enhance active blood flow and recovery.',
     exercises: []
+  }
+];
+
+const makeExercise = (id, name, sets, minReps, maxReps, rest, equipment, primaryMuscle, cues, options = {}) => ({
+  id, name, sets, minReps, maxReps, rest, equipment, primaryMuscle, cues, ...options
+});
+
+const WORKOUT_DAYS = [
+  {
+    id: 'sun', name: 'Sunday', title: 'Easy Run / Walk', subtitle: 'Easy aerobic base', badge: 'Run',
+    time: '25–30 min', muscles: [], warmup: '5 min brisk walk, included in the session.',
+    cardio: 'Then repeat 1 min easy jog + 2 min walk for 6–8 rounds; finish with 5 min easy walking. Keep it conversational.',
+    exercises: [makeExercise('ex_sunday_run', 'Easy Run / Walk', 1, 25, 30, 0, 'Outdoor route or treadmill', 'cardio', 'Start with a 5-minute brisk walk. Alternate 1-minute easy jogs with 2-minute walks, then cool down.', { trackType: 'run', minDuration: 25, maxDuration: 30, target: '25–30 minutes; easy pace' })]
+  },
+  {
+    id: 'mon', name: 'Monday', title: 'Easy Run / Walk', subtitle: 'Short easy session before the gym week', badge: 'Run',
+    time: '20–25 min', muscles: [], warmup: '5 min brisk walk, included in the session.',
+    cardio: 'Repeat easy 1-minute jog + 2-minute walk intervals for one fewer round than Sunday. Walk instead if your legs feel tired.',
+    exercises: [makeExercise('ex_monday_run', 'Easy Run / Walk', 1, 20, 25, 0, 'Outdoor route or treadmill', 'cardio', 'Keep the whole session conversational; no sprinting or hard intervals.', { trackType: 'run', minDuration: 20, maxDuration: 25, target: '20–25 minutes; easy pace' })]
+  },
+  {
+    id: 'tue', name: 'Tuesday', title: 'Upper 1', subtitle: 'Chest, shoulders, triceps + core', badge: 'Push + Core',
+    time: '8:30 PM • 75–90 min', muscles: [{ id: 'chest', role: 'Primary' }, { id: 'shoulders', role: 'Primary' }, { id: 'triceps', role: 'Secondary' }, { id: 'abs', role: 'Core' }],
+    warmup: '5–8 min easy bike, shoulder movement, then gradual bench-press warm-up sets.', cardio: 'Main work: stop most compound sets with about 2 good reps left; rest 2–3 min on main lifts and 60–90 sec on accessories.',
+    exercises: [
+      makeExercise('ex_barbell_bench', 'Barbell Bench Press', 3, 6, 10, 150, 'Bench press station + barbell', 'chest', 'Set feet firmly, shoulder blades against the bench; lower under control.', { demoId: 'ex_db_flat_bench' }),
+      makeExercise('ex_incline_db_press', 'Incline Dumbbell Press', 3, 8, 12, 120, 'Dumbbells + adjustable bench', 'chest', 'Use a low incline; lower smoothly and keep wrists stacked over elbows.', { demoId: 'ex_incline_db_bench' }),
+      makeExercise('ex_plate_shoulder_press', 'Plate-Loaded Shoulder Press', 3, 8, 12, 120, 'Plate-loaded shoulder press', 'shoulders', 'Set handles around shoulder height and press without arching your lower back.', { demoId: 'ex_seated_db_press' }),
+      makeExercise('ex_cable_lateral_raise', 'Cable Lateral Raise', 3, 12, 20, 75, 'Functional trainer + handle', 'shoulders', 'Raise to about shoulder height with a controlled lowering phase.', { demoId: 'ex_db_lateral_raise' }),
+      makeExercise('ex_rope_pushdown', 'Cable Triceps Pushdown', 3, 10, 15, 75, 'Functional trainer + rope/bar', 'triceps', 'Keep elbows close to your sides and avoid rocking.', { demoId: 'ex_cable_triceps_pressdown' }),
+      makeExercise('ex_cable_crunch', 'Cable Crunch', 3, 10, 15, 75, 'Functional trainer + rope', 'abs', 'Curl ribs toward hips; avoid pulling the rope with your arms.', { demoId: 'ex_pallof_press' })
+    ]
+  },
+  {
+    id: 'wed', name: 'Wednesday', title: 'Legs 1', subtitle: 'Quad emphasis + core', badge: 'Legs A',
+    time: '8:30 PM • 75–90 min', muscles: [{ id: 'quadriceps', role: 'Primary' }, { id: 'glutes', role: 'Secondary' }, { id: 'calves', role: 'Secondary' }, { id: 'abs', role: 'Core' }],
+    warmup: '5–8 min easy bike, then light squat and leg-press warm-up sets.', cardio: 'Main work: use controlled reps and keep 2 reps in reserve on squats and leg press.',
+    exercises: [
+      makeExercise('ex_barbell_squat', 'Barbell Squat', 3, 6, 10, 150, 'Power/squat rack + barbell', 'quadriceps', 'Brace before each rep; squat only as deep as you can control without pain.', { demoId: 'ex_goblet_squat' }),
+      makeExercise('ex_leg_press', '45-Degree Leg Press', 3, 8, 12, 120, '45-degree leg press', 'quadriceps', 'Keep hips and lower back against the pad; use a comfortable controlled depth.', { demoId: 'ex_leg_press' }),
+      makeExercise('ex_bulgarian_split_squat', 'Dumbbell Bulgarian Split Squat', 2, 8, 10, 90, 'Adjustable bench + dumbbells', 'quadriceps', 'Use a stable stance and controlled range; reps are per leg.', { isPerLeg: true, demoId: 'ex_bulgarian_split_squat' }),
+      makeExercise('ex_leg_extension', 'Leg Extension', 2, 10, 15, 75, 'Leg-extension machine', 'quadriceps', 'Extend smoothly and lower the stack under control.', { demoId: 'ex_leg_extension' }),
+      makeExercise('ex_standing_calf_raise', 'Standing Calf Raise', 3, 10, 15, 60, 'Smith machine or dumbbells', 'calves', 'Pause in a comfortable stretch and rise fully onto the balls of your feet.', { demoId: 'ex_standing_calf_raise' }),
+      makeExercise('ex_front_plank', 'Front Plank', 3, 30, 60, 60, 'Floor space', 'abs', 'Brace and keep a straight line from head to heels; stop when your position breaks.', { trackType: 'hold', durationUnit: 'sec', target: '30–60 seconds', demoId: 'ex_front_plank' })
+    ]
+  },
+  {
+    id: 'thu', name: 'Thursday', title: 'Upper 2', subtitle: 'Back, rear delts, biceps + core', badge: 'Pull + Core',
+    time: '8:30 PM • 75–90 min', muscles: [{ id: 'lats', role: 'Primary' }, { id: 'back', role: 'Primary' }, { id: 'rear-shoulders', role: 'Secondary' }, { id: 'biceps', role: 'Secondary' }, { id: 'obliques', role: 'Core' }],
+    warmup: '5–8 min easy bike, then light pulldown and row warm-up sets.', cardio: 'Main work: use full controlled range; stop most sets with 1–2 good reps left.',
+    exercises: [
+      makeExercise('ex_lat_pulldown', 'Lat Pulldown', 4, 8, 12, 120, 'Lat-pulldown station', 'lats', 'Pull elbows down; avoid swinging or pulling behind your neck.', { demoId: 'ex_lat_pulldown' }),
+      makeExercise('ex_seated_cable_row', 'Seated Cable Row', 3, 8, 12, 120, 'Seated cable row', 'back', 'Sit tall, pull toward your torso, and return without rounding your back.', { demoId: 'ex_seated_cable_row' }),
+      makeExercise('ex_chest_supported_row', 'Chest-Supported Dumbbell Row', 3, 8, 12, 90, 'Dumbbells + adjustable bench', 'back', 'Set bench to a low incline; keep chest supported and row without jerking.', { demoId: 'ex_chest_supp_row' }),
+      makeExercise('ex_face_pull', 'Cable Face Pull', 3, 12, 20, 75, 'Functional trainer + rope', 'rear-shoulders', 'Pull the rope toward eye level with elbows high and controlled.', { demoId: 'ex_face_pull' }),
+      makeExercise('ex_ez_preacher_curl', 'EZ-Bar Preacher Curl', 3, 8, 12, 75, 'EZ curl bar + preacher bench', 'biceps', 'Keep upper arms supported and lower the bar under control.', { demoId: 'ex_ez_bar_curl' }),
+      makeExercise('ex_hammer_curl', 'Dumbbell Hammer Curl', 2, 10, 15, 60, 'Dumbbells', 'biceps', 'Keep palms facing inward and avoid swinging.', { demoId: 'ex_hammer_curl' }),
+      makeExercise('ex_pallof_press', 'Pallof Press', 3, 10, 12, 60, 'Functional trainer + handle', 'obliques', 'Resist rotation as you press out; complete reps on each side.', { isPerLeg: true, demoId: 'ex_pallof_press' })
+    ]
+  },
+  {
+    id: 'fri', name: 'Friday', title: 'Legs 2', subtitle: 'Hamstrings and glutes + core', badge: 'Legs B',
+    time: '8:30 PM • 75–90 min', muscles: [{ id: 'hamstrings', role: 'Primary' }, { id: 'glutes', role: 'Primary' }, { id: 'quadriceps', role: 'Secondary' }, { id: 'calves', role: 'Secondary' }, { id: 'abs', role: 'Core' }],
+    warmup: '5–8 min easy bike, then gradually load the trap/hex bar for practice sets.', cardio: 'Keep the trap-bar deadlift controlled and submaximal; no max-effort attempts.',
+    exercises: [
+      makeExercise('ex_trap_bar_deadlift', 'Trap/Hex-Bar Deadlift', 3, 6, 8, 150, 'Trap/hex bar + plates', 'hamstrings', 'Brace, push through the floor, and finish standing tall without leaning back.'),
+      makeExercise('ex_hip_thrust', 'Barbell Hip Thrust', 3, 8, 12, 120, 'Barbell + flat bench', 'glutes', 'Keep ribs down and finish with hips extended, not your lower back.', { demoId: 'ex_hip_thrust' }),
+      makeExercise('ex_seated_leg_curl', 'Leg Curl', 3, 10, 15, 75, 'Leg-curl machine', 'hamstrings', 'Curl smoothly and control the return.', { demoId: 'ex_seated_leg_curl' }),
+      makeExercise('ex_reverse_lunge', 'Dumbbell Reverse Lunge', 2, 8, 10, 90, 'Dumbbells', 'glutes', 'Step back under control and keep the front foot planted; reps are per leg.', { isPerLeg: true, demoId: 'ex_walking_lunge' }),
+      makeExercise('ex_seated_calf_raise', 'Smith Calf Raise', 3, 10, 15, 60, 'Smith machine', 'calves', 'Use a stable foot position and avoid bouncing.', { demoId: 'ex_seated_calf_raise' }),
+      makeExercise('ex_reverse_crunch', 'Reverse Crunch', 3, 10, 15, 60, 'Floor space or bench', 'abs', 'Curl hips gently off the floor; avoid swinging.', { weighted: false, demoId: 'ex_reverse_crunch' })
+    ]
+  },
+  {
+    id: 'sat', name: 'Saturday', title: 'Upper 3', subtitle: 'Balanced upper body + core', badge: 'Upper Mix',
+    time: '8:30 PM • 75–90 min', muscles: [{ id: 'chest', role: 'Primary' }, { id: 'back', role: 'Primary' }, { id: 'shoulders', role: 'Secondary' }, { id: 'arms', role: 'Secondary' }, { id: 'obliques', role: 'Core' }],
+    warmup: '5–8 min easy bike, then light incline-press and row warm-up sets.', cardio: 'Balanced upper-body session; keep 2 reps in reserve on presses and rows.',
+    exercises: [
+      makeExercise('ex_incline_barbell_press', 'Incline Barbell Press', 3, 8, 12, 120, 'Barbell + adjustable bench + rack', 'chest', 'Use safety arms or a spotter; lower under control to the upper chest.', { demoId: 'ex_incline_db_bench' }),
+      makeExercise('ex_one_arm_db_row', 'One-Arm Dumbbell Row', 3, 8, 12, 90, 'Dumbbell + flat bench', 'back', 'Brace on the bench and row toward your hip without twisting.', { isPerLeg: true, demoId: 'ex_chest_supp_row' }),
+      makeExercise('ex_cable_chest_press', 'Cable Chest Press', 2, 10, 15, 75, 'Functional trainer + handles', 'chest', 'Stand in a stable staggered stance and press forward smoothly.', { demoId: 'ex_cable_triceps_pressdown' }),
+      makeExercise('ex_cable_rear_delt_fly', 'Cable Rear-Delt Fly', 3, 12, 20, 75, 'Functional trainer + handles', 'rear-shoulders', 'Use light resistance and move arms out without shrugging.', { demoId: 'ex_face_pull' }),
+      makeExercise('ex_preacher_curl', 'Preacher Curl', 2, 10, 15, 60, 'Preacher bench + EZ bar or dumbbells', 'biceps', 'Keep upper arms supported and avoid forcing the bottom stretch.', { demoId: 'ex_ez_bar_curl' }),
+      makeExercise('ex_overhead_triceps', 'Overhead Cable Triceps Extension', 2, 10, 15, 60, 'Functional trainer + rope', 'triceps', 'Keep elbows comfortably pointed forward and extend without arching.', { demoId: 'ex_overhead_triceps_ext' }),
+      makeExercise('ex_side_plank', 'Side Plank', 3, 25, 45, 60, 'Floor space', 'obliques', 'Keep hips stacked and body straight; stop when your position breaks.', { trackType: 'hold', durationUnit: 'sec', isPerLeg: true, target: '25–45 seconds per side', demoId: 'ex_side_plank' })
+    ]
   }
 ];
 
@@ -1204,11 +1290,23 @@ const EXERCISE_IMAGES = {
 };
 
 function getExerciseThumbnailUrl(exerciseId) {
-  const paths = EXERCISE_IMAGES[exerciseId];
+  const scheduledExercise = WORKOUT_DAYS.flatMap(day => day.exercises).find(ex => ex.id === exerciseId);
+  if (scheduledExercise?.trackType === 'run') return './icon.svg';
+  const paths = EXERCISE_IMAGES[exerciseId] || EXERCISE_IMAGES[scheduledExercise?.demoId];
   if (paths && paths.length > 0) {
     return `https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/${paths[0]}`;
   }
-  return 'https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Dumbbell_Bench_Press/0.jpg';
+  return './icon.svg';
+}
+
+function getExerciseTargetText(ex, setsCount = ex.sets) {
+  if (ex.trackType === 'run') return ex.target || `${ex.minDuration}–${ex.maxDuration} minutes`;
+  if (ex.trackType === 'hold') return `${setsCount} sets × ${ex.target || `${ex.minReps}–${ex.maxReps} seconds`}`;
+  return `${setsCount} sets × ${ex.minReps}–${ex.maxReps}${ex.isPerLeg ? ' per side' : ''} reps`;
+}
+
+function hasLoggedSetValue(set) {
+  return Boolean(set?.completed || ['weight', 'reps', 'duration', 'durationLeft', 'durationRight', 'distance'].some(key => set?.[key] !== '' && set?.[key] !== undefined && set?.[key] !== null));
 }
 
 // ----------------------------------------------------
@@ -1417,7 +1515,7 @@ function checkDoubleProgression(exerciseId, workingSets) {
   const day = WORKOUT_DAYS.find(d => d.exercises.some(e => e.id === exerciseId));
   if (!day) return null;
   const ex = day.exercises.find(e => e.id === exerciseId);
-  if (!ex || !workingSets || workingSets.length === 0) return null;
+  if (!ex || ex.trackType === 'run' || ex.trackType === 'hold' || ex.weighted === false || !workingSets || workingSets.length === 0) return null;
 
   const validSets = workingSets.filter(s => s.completed && Number(s.reps) > 0);
   const targetCount = AppState.isWeek7Deload ? Math.max(1, ex.sets - 1) : ex.sets;
@@ -1575,7 +1673,7 @@ function renderDashboardView() {
   // Active Workout In-Progress Recovery Check
   const logs = loadStorage(STORAGE_KEYS.LOGS, []);
   const todayStr = new Date().toISOString().slice(0, 10);
-  const activeLog = logs.find(l => l.date === todayStr && l.inProgress && l.exercises?.some(e => e.sets?.some(s => s.completed || (s.weight !== '' && s.weight !== undefined) || (s.reps !== '' && s.reps !== undefined))));
+  const activeLog = logs.find(l => l.date === todayStr && l.inProgress && l.exercises?.some(e => e.sets?.some(hasLoggedSetValue)));
   const bannerContainer = document.getElementById('active-session-banner-container');
   const startBtn = document.getElementById('dash-start-workout-btn');
 
@@ -1591,7 +1689,7 @@ function renderDashboardView() {
           <div>
             <div class="flex items-center gap-2">
               <span class="text-xs font-black text-amber-400 uppercase tracking-wider">⚡ WORKOUT IN PROGRESS</span>
-              <span class="text-[10px] text-gray-300 font-mono bg-black/40 px-2 py-0.5 rounded border border-white/10">${completedSets} / ${totalSets} sets logged</span>
+              <span class="text-[10px] text-gray-300 font-mono bg-black/40 px-2 py-0.5 rounded border border-white/10">${completedSets} / ${totalSets} items logged</span>
             </div>
             <h3 class="text-sm font-bold text-white mt-1">${workoutDay.name}: ${workoutDay.title}</h3>
             <p class="text-[11px] text-gray-300 mt-0.5">Session left off mid-workout. Tap Resume to continue tracking right where you left off.</p>
@@ -1609,7 +1707,7 @@ function renderDashboardView() {
 
     if (startBtn) {
       startBtn.innerHTML = `
-        <span>⚡ Resume In-Progress Workout (${completedSets}/${totalSets} Sets Done)</span>
+        <span>⚡ Resume In-Progress Session (${completedSets}/${totalSets} Done)</span>
         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
       `;
       startBtn.onclick = () => resumeActiveWorkoutSession(activeLog.dayId);
@@ -1630,6 +1728,9 @@ function renderDashboardView() {
 
   if (title) title.innerText = `${todayDay.name}: ${todayDay.title}`;
   if (subtitle) subtitle.innerText = todayDay.subtitle;
+  const dashTime = document.getElementById('dash-workout-time');
+  if (dashTime) dashTime.innerText = todayDay.time;
+  if (startBtn && !activeLog) startBtn.innerHTML = `<span>${todayDay.exercises[0]?.trackType === 'run' ? 'Start Run & Track Time' : 'Start Workout & Track Sets'}</span><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>`;
 
   if (listContainer) {
     listContainer.innerHTML = '';
@@ -1671,7 +1772,7 @@ function renderDashboardView() {
                 ${ex.name}
               </div>
               <div class="text-[10.5px] text-gray-400 mt-0.5 flex items-center gap-1.5 flex-wrap">
-                <span class="text-amber-400/90 font-mono font-semibold">${ex.sets} sets &times; ${ex.minReps}–${ex.maxReps}</span>
+                <span class="text-amber-400/90 font-mono font-semibold">${getExerciseTargetText(ex)}</span>
                 <span class="text-gray-600">&bull;</span>
                 <span class="uppercase text-[9.5px] px-1 py-0.2 rounded bg-white/[0.05] text-gray-300 font-mono">${ex.primaryMuscle}</span>
               </div>
@@ -1722,8 +1823,6 @@ function toggleDashExerciseDone(exerciseId, el) {
       name: exDef?.name || exerciseId,
       sets: Array.from({ length: setsCount }, (_, i) => ({
         setNum: i + 1,
-        weight: 0,
-        reps: exDef?.minReps || 10,
         completed: true
       }))
     };
@@ -1983,6 +2082,8 @@ function renderWorkoutsView() {
   const subtitle = document.getElementById('prog-day-subtitle');
   const warmup = document.getElementById('prog-warmup-text');
   const cardio = document.getElementById('prog-cardio-text');
+  const warmupTitle = document.getElementById('prog-warmup-title');
+  const cardioTitle = document.getElementById('prog-cardio-title');
   const exList = document.getElementById('prog-exercises-list');
 
   if (badge) badge.innerText = `${day.name.toUpperCase()} • ${day.badge}`;
@@ -1991,6 +2092,9 @@ function renderWorkoutsView() {
   if (subtitle) subtitle.innerText = day.subtitle;
   if (warmup) warmup.innerText = day.warmup;
   if (cardio) cardio.innerText = day.cardio;
+  const runSession = day.exercises[0]?.trackType === 'run';
+  if (warmupTitle) warmupTitle.innerText = runSession ? '5-Min Walk Warm-Up' : '5–8 Min Bike Warm-Up';
+  if (cardioTitle) cardioTitle.innerText = runSession ? 'Run / Walk Prescription' : 'Session Guidance';
 
   if (exList) {
     exList.innerHTML = '';
@@ -2024,9 +2128,9 @@ function renderWorkoutsView() {
                   <h4 class="text-xs font-extrabold text-white hover:text-amber-400 cursor-pointer" onclick="openExerciseDemo('${ex.id}')">${ex.name}</h4>
                 </div>
                 <div class="text-[11px] text-gray-400 flex flex-wrap items-center gap-2 mt-1">
-                  <span class="text-amber-400 font-mono font-bold">${setsCount} Sets &times; ${ex.minReps}–${ex.maxReps}</span>
+                <span class="text-amber-400 font-mono font-bold">${getExerciseTargetText(ex, setsCount)}</span>
                   <span class="text-gray-600">&bull;</span>
-                  <span>Rest: ${ex.rest}s</span>
+                  ${ex.rest ? `<span>Rest: ${ex.rest}s</span>` : ''}
                   <span class="text-gray-600">&bull;</span>
                   <span class="text-gray-400">${ex.equipment}</span>
                 </div>
@@ -2072,18 +2176,30 @@ function autoSaveWorkoutSession() {
     const sets = Array.from(rows).map(r => {
       const weightRaw = r.querySelector('.input-weight')?.value?.trim();
       const repsRaw = r.querySelector('.input-reps')?.value?.trim();
+      const durationRaw = r.querySelector('.input-duration')?.value?.trim();
+      const durationLeftRaw = r.querySelector('.input-duration-left')?.value?.trim();
+      const durationRightRaw = r.querySelector('.input-duration-right')?.value?.trim();
+      const distanceRaw = r.querySelector('.input-distance')?.value?.trim();
       const isDone = r.querySelector('.btn-check-set')?.classList.contains('bg-emerald-500') || false;
 
       totalSets++;
       if (isDone) completedSets++;
       if (weightRaw !== '' && weightRaw !== undefined) hasAnyInputOrCheck = true;
       if (repsRaw !== '' && repsRaw !== undefined) hasAnyInputOrCheck = true;
+      if (durationRaw !== '' && durationRaw !== undefined) hasAnyInputOrCheck = true;
+      if (durationLeftRaw !== '' && durationLeftRaw !== undefined) hasAnyInputOrCheck = true;
+      if (durationRightRaw !== '' && durationRightRaw !== undefined) hasAnyInputOrCheck = true;
+      if (distanceRaw !== '' && distanceRaw !== undefined) hasAnyInputOrCheck = true;
       if (isDone) hasAnyInputOrCheck = true;
 
       return {
         setNum: Number(r.dataset.setNum),
         weight: (weightRaw !== '' && weightRaw !== undefined) ? Number(weightRaw) : '',
         reps: (repsRaw !== '' && repsRaw !== undefined) ? Number(repsRaw) : '',
+        duration: (durationRaw !== '' && durationRaw !== undefined) ? Number(durationRaw) : '',
+        durationLeft: (durationLeftRaw !== '' && durationLeftRaw !== undefined) ? Number(durationLeftRaw) : '',
+        durationRight: (durationRightRaw !== '' && durationRightRaw !== undefined) ? Number(durationRightRaw) : '',
+        distance: (distanceRaw !== '' && distanceRaw !== undefined) ? Number(distanceRaw) : '',
         completed: isDone
       };
     });
@@ -2155,7 +2271,14 @@ function renderTrackerView() {
 
   if (tag) tag.innerText = `${day.name.toUpperCase()} • ${day.badge}`;
   if (title) title.innerText = `${day.title}`;
-  if (subtitle) subtitle.innerText = `8:30 PM • ${day.subtitle}`;
+  if (subtitle) subtitle.innerText = `${day.time} • ${day.subtitle}`;
+  const runSession = day.exercises[0]?.trackType === 'run';
+  const warmupCard = document.getElementById('warmup-timer-card');
+  const cardioCard = document.getElementById('cardio-timer-card');
+  const warmupText = document.getElementById('tracker-warmup-text');
+  if (warmupCard) warmupCard.classList.toggle('hidden', runSession);
+  if (cardioCard) cardioCard.classList.add('hidden');
+  if (warmupText) warmupText.innerText = day.warmup;
 
   if (!container) return;
   container.innerHTML = '';
@@ -2174,21 +2297,33 @@ function renderTrackerView() {
       const prevSet = existingLog?.exercises?.find(e => e.id === ex.id)?.sets?.find(st => st.setNum === s);
       const prevWeight = (prevSet?.weight !== undefined && prevSet?.weight !== null) ? prevSet.weight : '';
       const prevReps = (prevSet?.reps !== undefined && prevSet?.reps !== null) ? prevSet.reps : '';
+      const prevDuration = (prevSet?.duration !== undefined && prevSet?.duration !== null) ? prevSet.duration : '';
+      const prevDurationLeft = (prevSet?.durationLeft !== undefined && prevSet?.durationLeft !== null) ? prevSet.durationLeft : '';
+      const prevDurationRight = (prevSet?.durationRight !== undefined && prevSet?.durationRight !== null) ? prevSet.durationRight : '';
+      const prevDistance = (prevSet?.distance !== undefined && prevSet?.distance !== null) ? prevSet.distance : '';
       const isDone = prevSet?.completed || false;
+
+      let logFieldsHtml = '';
+      if (ex.trackType === 'run') {
+        logFieldsHtml = `
+          <div class="relative flex-1"><input type="number" min="0" step="1" placeholder="minutes" value="${prevDuration}" class="input-duration w-full py-2 px-2.5 rounded bg-[#0C0E12] border border-white/10 text-white font-mono font-bold text-center text-xs focus:outline-none focus:border-amber-400" /><span class="absolute right-2 top-2 text-[9px] text-gray-500 pointer-events-none">MIN</span></div>
+          <div class="relative flex-1"><input type="number" min="0" step="0.1" placeholder="km (optional)" value="${prevDistance}" class="input-distance w-full py-2 px-2.5 rounded bg-[#0C0E12] border border-white/10 text-white font-mono font-bold text-center text-xs focus:outline-none focus:border-amber-400" /><span class="absolute right-2 top-2 text-[9px] text-gray-500 pointer-events-none">KM</span></div>`;
+      } else if (ex.trackType === 'hold') {
+        logFieldsHtml = ex.isPerLeg
+          ? `<div class="relative flex-1"><input type="number" min="0" step="1" placeholder="left sec" value="${prevDurationLeft}" class="input-duration-left w-full py-2 px-2.5 rounded bg-[#0C0E12] border border-white/10 text-white font-mono font-bold text-center text-xs focus:outline-none focus:border-amber-400" /><span class="absolute right-2 top-2 text-[9px] text-gray-500 pointer-events-none">L SEC</span></div><div class="relative flex-1"><input type="number" min="0" step="1" placeholder="right sec" value="${prevDurationRight}" class="input-duration-right w-full py-2 px-2.5 rounded bg-[#0C0E12] border border-white/10 text-white font-mono font-bold text-center text-xs focus:outline-none focus:border-amber-400" /><span class="absolute right-2 top-2 text-[9px] text-gray-500 pointer-events-none">R SEC</span></div>`
+          : `<div class="relative flex-1"><input type="number" min="0" step="1" placeholder="seconds" value="${prevDuration}" class="input-duration w-full py-2 px-2.5 rounded bg-[#0C0E12] border border-white/10 text-white font-mono font-bold text-center text-xs focus:outline-none focus:border-amber-400" /><span class="absolute right-2 top-2 text-[9px] text-gray-500 pointer-events-none">SEC</span></div>`;
+      } else if (ex.weighted === false) {
+        logFieldsHtml = `<div class="relative flex-1"><input type="number" min="0" step="1" placeholder="reps${ex.isPerLeg ? '/side' : ''}" value="${prevReps}" class="input-reps w-full py-2 px-2.5 rounded bg-[#0C0E12] border border-white/10 text-white font-mono font-bold text-center text-xs focus:outline-none focus:border-amber-400" /><span class="absolute right-2 top-2 text-[9px] text-gray-500 pointer-events-none">REPS</span></div>`;
+      } else {
+        logFieldsHtml = `
+          <div class="relative flex-1"><input type="number" min="0" step="0.5" placeholder="kg" value="${prevWeight}" class="input-weight w-full py-2 px-2.5 rounded bg-[#0C0E12] border border-white/10 text-white font-mono font-bold text-center text-xs focus:outline-none focus:border-amber-400" /><span class="absolute right-2 top-2 text-[9px] text-gray-500 pointer-events-none">KG</span></div>
+          <div class="relative flex-1"><input type="number" min="0" step="1" placeholder="reps${ex.isPerLeg ? '/side' : ''}" value="${prevReps}" class="input-reps w-full py-2 px-2.5 rounded bg-[#0C0E12] border border-white/10 text-white font-mono font-bold text-center text-xs focus:outline-none focus:border-amber-400" /><span class="absolute right-2 top-2 text-[9px] text-gray-500 pointer-events-none">REPS</span></div>`;
+      }
 
       setsRowsHtml += `
         <div class="set-row flex items-center gap-2 py-2 border-b border-white/[0.04] last:border-b-0 text-xs" data-exercise-id="${ex.id}" data-set-num="${s}">
           <span class="w-6 font-mono font-bold text-gray-400">#${s}</span>
-          <div class="flex-1 flex items-center gap-2">
-            <div class="relative flex-1">
-              <input type="number" step="0.5" placeholder="kg" value="${prevWeight}" class="input-weight w-full py-2 px-2.5 rounded bg-[#0C0E12] border border-white/10 text-white font-mono font-bold text-center text-xs focus:outline-none focus:border-amber-400" />
-              <span class="absolute right-2 top-2 text-[9px] text-gray-500 pointer-events-none">KG</span>
-            </div>
-            <div class="relative flex-1">
-              <input type="number" placeholder="reps" value="${prevReps}" class="input-reps w-full py-2 px-2.5 rounded bg-[#0C0E12] border border-white/10 text-white font-mono font-bold text-center text-xs focus:outline-none focus:border-amber-400" />
-              <span class="absolute right-2 top-2 text-[9px] text-gray-500 pointer-events-none">REPS</span>
-            </div>
-          </div>
+          <div class="flex-1 flex items-center gap-2">${logFieldsHtml}</div>
           <!-- Square Set Completion Button -->
           <button class="btn-check-set w-9 h-9 rounded flex items-center justify-center text-xs font-bold transition-all ${
             isDone ? 'bg-emerald-500 text-black font-extrabold' : 'btn-dark'
@@ -2211,7 +2346,7 @@ function renderTrackerView() {
             <h4 class="text-xs font-extrabold text-white flex items-center gap-1.5">
               <span>${ex.name}</span>
             </h4>
-            <span class="text-[10px] text-amber-400 font-mono font-semibold">${ex.minReps}–${ex.maxReps} Rep Target • ${ex.rest}s rest</span>
+            <span class="text-[10px] text-amber-400 font-mono font-semibold">${getExerciseTargetText(ex, setsCount)}${ex.rest ? ` • ${ex.rest}s rest` : ''}</span>
           </div>
         </div>
 
@@ -2245,7 +2380,7 @@ function renderTrackerView() {
   });
 
   // Attach live auto-save input listeners across all weight & reps fields
-  container.querySelectorAll('.input-weight, .input-reps').forEach(input => {
+  container.querySelectorAll('.input-weight, .input-reps, .input-duration, .input-duration-left, .input-duration-right, .input-distance').forEach(input => {
     input.addEventListener('input', () => autoSaveWorkoutSession());
     input.addEventListener('change', () => autoSaveWorkoutSession());
   });
@@ -2263,7 +2398,7 @@ function renderTrackerView() {
         triggerHaptic('tap');
 
         const ex = day.exercises.find(e => e.id === exId);
-        if (ex) startRestTimer(ex.rest, `${ex.name} — Set #${setNum} complete`);
+        if (ex?.rest > 0) startRestTimer(ex.rest, `${ex.name} — Set #${setNum} complete`);
       } else {
         btn.className = 'btn-check-set w-9 h-9 rounded flex items-center justify-center text-xs font-bold btn-dark transition-all';
       }
@@ -2272,8 +2407,8 @@ function renderTrackerView() {
       const allRows = container.querySelectorAll(`.set-row[data-exercise-id="${exId}"]`);
       const workingSets = Array.from(allRows).map(r => ({
         setNum: Number(r.dataset.setNum),
-        weight: Number(r.querySelector('.input-weight').value) || 0,
-        reps: Number(r.querySelector('.input-reps').value) || 0,
+        weight: Number(r.querySelector('.input-weight')?.value) || 0,
+        reps: Number(r.querySelector('.input-reps')?.value) || 0,
         completed: r.querySelector('.btn-check-set').classList.contains('bg-emerald-500')
       }));
 
@@ -2312,6 +2447,10 @@ function saveActiveWorkoutSession() {
     const sets = Array.from(rows).map(r => {
       const weightVal = r.querySelector('.input-weight')?.value?.trim();
       const repsVal = r.querySelector('.input-reps')?.value?.trim();
+      const durationVal = r.querySelector('.input-duration')?.value?.trim();
+      const durationLeftVal = r.querySelector('.input-duration-left')?.value?.trim();
+      const durationRightVal = r.querySelector('.input-duration-right')?.value?.trim();
+      const distanceVal = r.querySelector('.input-distance')?.value?.trim();
       const isDone = r.querySelector('.btn-check-set')?.classList.contains('bg-emerald-500') || false;
 
       totalSets++;
@@ -2321,6 +2460,10 @@ function saveActiveWorkoutSession() {
         setNum: Number(r.dataset.setNum),
         weight: (weightVal !== '' && weightVal !== undefined) ? Number(weightVal) : '',
         reps: (repsVal !== '' && repsVal !== undefined) ? Number(repsVal) : '',
+        duration: (durationVal !== '' && durationVal !== undefined) ? Number(durationVal) : '',
+        durationLeft: (durationLeftVal !== '' && durationLeftVal !== undefined) ? Number(durationLeftVal) : '',
+        durationRight: (durationRightVal !== '' && durationRightVal !== undefined) ? Number(durationRightVal) : '',
+        distance: (distanceVal !== '' && distanceVal !== undefined) ? Number(distanceVal) : '',
         completed: isDone
       };
     });
@@ -2593,8 +2736,13 @@ function openExerciseDemo(exerciseId) {
   });
 
   if (!foundEx) return;
+  if (foundEx.trackType === 'run') {
+    showToast('Follow the run/walk intervals shown in this workout card.', 'info');
+    return;
+  }
 
-  const demoData = EXERCISE_DEMOS[exerciseId] || {
+  const demoId = foundEx.demoId || exerciseId;
+  const demoData = EXERCISE_DEMOS[demoId] || {
     videoId: 'Cfp23zvkAfI',
     setup: ['Adjust your stance and maintain clean posture.', 'Engage core and set your baseline alignment.'],
     execution: ['Perform smooth controlled reps with 2–3s eccentric tempo.', 'Breathe rhythmically.'],
@@ -2626,7 +2774,7 @@ function openExerciseDemo(exerciseId) {
   }
 
   // Setup Motion Images
-  const rawPaths = EXERCISE_IMAGES[exerciseId] || ['Dumbbell_Bench_Press/0.jpg', 'Dumbbell_Bench_Press/1.jpg'];
+  const rawPaths = EXERCISE_IMAGES[exerciseId] || EXERCISE_IMAGES[demoId] || ['Dumbbell_Bench_Press/0.jpg', 'Dumbbell_Bench_Press/1.jpg'];
   demoCurrentImages = rawPaths.map(p => `https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/${p}`);
   demoImageIndex = 0;
   demoMotionActive = true;
@@ -2848,15 +2996,76 @@ function forceAppRefresh() {
 }
 
 // ----------------------------------------------------
+// 19B. THEME CONTROLLER (Dark Mode default & Creamy Light Mode)
+// ----------------------------------------------------
+const THEME_STORAGE_KEY = 'pumpd_theme_mode_v2';
+
+function getStoredTheme() {
+  try {
+    let t = localStorage.getItem(THEME_STORAGE_KEY);
+    if (!t) return 'dark';
+    if (t.startsWith('"') && t.endsWith('"')) t = JSON.parse(t);
+    return t === 'light' ? 'light' : 'dark';
+  } catch(e) {
+    return 'dark';
+  }
+}
+
+function applyTheme(theme, showNotice = false) {
+  const isLight = theme === 'light';
+  const html = document.documentElement;
+  const themeMeta = document.querySelector('meta[name="theme-color"]');
+  const toggleBtnIcon = document.getElementById('theme-toggle-icon');
+  const toggleBtnText = document.getElementById('theme-toggle-text');
+  const deskThemeIcon = document.getElementById('desk-theme-icon');
+  const deskThemeLabel = document.getElementById('desk-theme-label');
+
+  if (isLight) {
+    html.classList.remove('dark');
+    html.classList.add('light');
+    if (themeMeta) themeMeta.setAttribute('content', '#F8F5EE');
+    if (toggleBtnIcon) toggleBtnIcon.innerText = '🌙';
+    if (toggleBtnText) toggleBtnText.innerText = 'Dark';
+    if (deskThemeIcon) deskThemeIcon.innerText = '🌙';
+    if (deskThemeLabel) deskThemeLabel.innerText = 'Dark Mode';
+    localStorage.setItem(THEME_STORAGE_KEY, 'light');
+    if (showNotice) showToast('☀️ Creamy Light Mode activated', 'info');
+  } else {
+    html.classList.remove('light');
+    html.classList.add('dark');
+    if (themeMeta) themeMeta.setAttribute('content', '#0C0E12');
+    if (toggleBtnIcon) toggleBtnIcon.innerText = '☀️';
+    if (toggleBtnText) toggleBtnText.innerText = 'Light';
+    if (deskThemeIcon) deskThemeIcon.innerText = '☀️';
+    if (deskThemeLabel) deskThemeLabel.innerText = 'Creamy Mode';
+    localStorage.setItem(THEME_STORAGE_KEY, 'dark');
+    if (showNotice) showToast('🌙 Obsidian Dark Mode activated', 'info');
+  }
+}
+
+function toggleTheme() {
+  const current = getStoredTheme();
+  const next = current === 'dark' ? 'light' : 'dark';
+  applyTheme(next, true);
+  triggerHaptic('tap');
+}
+
+function initTheme() {
+  const saved = getStoredTheme();
+  applyTheme(saved, false);
+}
+
+// ----------------------------------------------------
 // 20. INITIALIZATION & ACCIDENTAL CLOSE RECOVERY
 // ----------------------------------------------------
 document.addEventListener('DOMContentLoaded', () => {
+  initTheme();
   renderProgressView();
 
   const lastTab = loadStorage(STORAGE_KEYS.LAST_TAB, 'dashboard');
   const logs = loadStorage(STORAGE_KEYS.LOGS, []);
   const todayStr = new Date().toISOString().slice(0, 10);
-  const activeLog = logs.find(l => l.date === todayStr && l.inProgress && l.exercises?.some(e => e.sets?.some(s => s.completed || (s.weight !== '' && s.weight !== undefined) || (s.reps !== '' && s.reps !== undefined))));
+  const activeLog = logs.find(l => l.date === todayStr && l.inProgress && l.exercises?.some(e => e.sets?.some(hasLoggedSetValue)));
 
   // If user closed or reloaded mid-workout (within last 8 hours) or was on tracker, auto-resume where they left off!
   if (activeLog && (lastTab === 'tracker' || (Date.now() - new Date(activeLog.lastModified || activeLog.timestamp).getTime() < 8 * 60 * 60 * 1000))) {
