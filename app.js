@@ -577,7 +577,7 @@ const WORKOUT_DAYS = [
       makeExercise('ex_plate_shoulder_press', 'Plate-Loaded Shoulder Press', 3, 8, 12, 120, 'Plate-loaded shoulder press', 'shoulders', 'Set handles around shoulder height and press without arching your lower back.', { demoId: 'ex_seated_db_press' }),
       makeExercise('ex_cable_lateral_raise', 'Cable Lateral Raise', 3, 12, 20, 75, 'Functional trainer + handle', 'shoulders', 'Raise to about shoulder height with a controlled lowering phase.', { demoId: 'ex_db_lateral_raise' }),
       makeExercise('ex_rope_pushdown', 'Cable Triceps Pushdown', 3, 10, 15, 75, 'Functional trainer + rope/bar', 'triceps', 'Keep elbows close to your sides and avoid rocking.', { demoId: 'ex_cable_triceps_pressdown' }),
-      makeExercise('ex_cable_crunch', 'Cable Crunch', 3, 10, 15, 75, 'Functional trainer + rope', 'abs', 'Curl ribs toward hips; avoid pulling the rope with your arms.', { demoId: 'ex_pallof_press' })
+      makeExercise('ex_cable_crunch', 'Cable Crunch', 3, 10, 15, 75, 'Functional trainer + rope', 'abs', 'Curl ribs toward hips; avoid pulling the rope with your arms.', { demoId: 'ex_cable_crunch' })
     ]
   },
   {
@@ -631,8 +631,8 @@ const WORKOUT_DAYS = [
     exercises: [
       makeExercise('ex_incline_barbell_press', 'Incline Barbell Press', 3, 8, 12, 120, 'Barbell + adjustable bench + rack', 'chest', 'Use safety arms or a spotter; lower under control to the upper chest.', { demoId: 'ex_incline_db_bench' }),
       makeExercise('ex_one_arm_db_row', 'One-Arm Dumbbell Row', 3, 8, 12, 90, 'Dumbbell + flat bench', 'back', 'Brace on the bench and row toward your hip without twisting.', { isPerLeg: true, demoId: 'ex_chest_supp_row' }),
-      makeExercise('ex_cable_chest_press', 'Cable Chest Press', 2, 10, 15, 75, 'Functional trainer + handles', 'chest', 'Stand in a stable staggered stance and press forward smoothly.', { demoId: 'ex_cable_triceps_pressdown' }),
-      makeExercise('ex_cable_rear_delt_fly', 'Cable Rear-Delt Fly', 3, 12, 20, 75, 'Functional trainer + handles', 'rear-shoulders', 'Use light resistance and move arms out without shrugging.', { demoId: 'ex_face_pull' }),
+      makeExercise('ex_cable_chest_press', 'Cable Chest Press', 2, 10, 15, 75, 'Functional trainer + handles', 'chest', 'Stand in a stable staggered stance and press forward smoothly.', { demoId: 'ex_cable_chest_press' }),
+      makeExercise('ex_cable_rear_delt_fly', 'Cable Rear-Delt Fly', 3, 12, 20, 75, 'Functional trainer + handles', 'rear-shoulders', 'Use light resistance and move arms out without shrugging.', { demoId: 'ex_cable_rear_delt_fly' }),
       makeExercise('ex_preacher_curl', 'Preacher Curl', 2, 10, 15, 60, 'Preacher bench + EZ bar or dumbbells', 'biceps', 'Keep upper arms supported and avoid forcing the bottom stretch.', { demoId: 'ex_ez_bar_curl' }),
       makeExercise('ex_overhead_triceps', 'Overhead Cable Triceps Extension', 2, 10, 15, 60, 'Functional trainer + rope', 'triceps', 'Keep elbows comfortably pointed forward and extend without arching.', { demoId: 'ex_overhead_triceps_ext' }),
       makeExercise('ex_side_plank', 'Side Plank', 3, 25, 45, 60, 'Floor space', 'obliques', 'Keep hips stacked and body straight; stop when your position breaks.', { trackType: 'hold', durationUnit: 'sec', isPerLeg: true, target: '25–45 seconds per side', demoId: 'ex_side_plank' })
@@ -1153,6 +1153,91 @@ const EXERCISE_DEMOS = {
     ],
     mistakes: ['Pulling solely with arms instead of rotating through core and hips.'],
     breathing: 'Exhale on the downward chop; inhale on the controlled return.'
+  },
+  'ex_cable_crunch': {
+    videoId: '2fbuje_t7XE',
+    setup: [
+      'Kneel facing a high cable pulley with a rope attachment held beside your head.',
+      'Keep hips back over your heels, elbows bent, and spine neutral.'
+    ],
+    execution: [
+      'Brace your abdomen and curl your ribs toward your pelvis.',
+      'Move through your trunk rather than pulling the rope down with your arms.',
+      'Return slowly until your torso is tall without letting the weight stack slam.'
+    ],
+    mistakes: [
+      'Using the hips to rock backward and forward instead of flexing the trunk.',
+      'Pulling with the arms or tucking the chin aggressively.'
+    ],
+    breathing: 'Exhale as you crunch down; inhale as you return upright.'
+  },
+  'ex_ez_bar_curl': {
+    videoId: 'kwG2ipFRgfo',
+    setup: [
+      'Set the preacher pad so your upper arms rest securely with armpits near the top edge.',
+      'Grip the EZ bar just outside shoulder width and keep wrists neutral.'
+    ],
+    execution: [
+      'Curl the bar without lifting your upper arms from the pad.',
+      'Squeeze the biceps near the top, then lower slowly until elbows are almost straight.',
+      'Use a controlled range and stop before the bottom position causes elbow discomfort.'
+    ],
+    mistakes: [
+      'Bouncing out of the bottom stretch or locking the elbows forcefully.',
+      'Lifting the shoulders or upper arms off the pad to move more weight.'
+    ],
+    breathing: 'Exhale as you curl; inhale as you lower the bar.'
+  },
+  'ex_trap_bar_deadlift': {
+    videoId: '3rT7R2w0t8M',
+    setup: [
+      'Stand centered inside the trap bar with feet about hip width and handles aligned over your mid-foot.',
+      'Hinge down, brace your trunk, and keep your chest and hips moving together.'
+    ],
+    execution: [
+      'Push the floor away while keeping the bar close and your spine neutral.',
+      'Stand tall by extending hips and knees together; do not lean back at lockout.',
+      'Lower the bar by hinging at the hips, then bend the knees once it passes them.'
+    ],
+    mistakes: [
+      'Rounding the lower back or starting with the hips too low.',
+      'Jerking the bar from the floor or hyperextending the back at the top.'
+    ],
+    breathing: 'Inhale and brace before each rep; exhale after standing tall.'
+  },
+  'ex_cable_chest_press': {
+    videoId: 'uXG3sEKKm3g',
+    setup: [
+      'Set both pulleys around mid-chest height and use single handles.',
+      'Stand in a stable staggered stance with handles beside your chest.'
+    ],
+    execution: [
+      'Press the handles forward and slightly inward while keeping shoulders down.',
+      'Pause briefly with arms extended without locking the elbows hard.',
+      'Return under control until the chest is comfortably stretched.'
+    ],
+    mistakes: [
+      'Allowing the shoulders to roll forward or the torso to twist.',
+      'Using a stance that is too narrow and losing balance during the press.'
+    ],
+    breathing: 'Exhale as you press; inhale as you return the handles.'
+  },
+  'ex_cable_rear_delt_fly': {
+    videoId: 'eGjt4lk6g34',
+    setup: [
+      'Set pulleys around shoulder height and stand centered between them.',
+      'Hold the opposite cable handles with arms crossed lightly in front of you.'
+    ],
+    execution: [
+      'Open your arms out and back using the rear delts, keeping a soft elbow bend.',
+      'Stop when arms reach the line of your torso and squeeze briefly.',
+      'Return slowly without letting the cables pull your shoulders forward.'
+    ],
+    mistakes: [
+      'Shrugging or bending the elbows to turn the movement into a row.',
+      'Using excessive weight or swinging the torso.'
+    ],
+    breathing: 'Exhale as you open the arms; inhale as you return.'
   }
 };
 
@@ -1253,6 +1338,23 @@ const STORAGE_KEYS = {
 // 3. EXERCISE DEMONSTRATION IMAGE REGISTRY
 // ----------------------------------------------------
 const EXERCISE_IMAGES = {
+  'ex_barbell_bench': ['Barbell_Bench_Press_-_Medium_Grip/0.jpg', 'Barbell_Bench_Press_-_Medium_Grip/1.jpg'],
+  'ex_incline_db_press': ['Incline_Dumbbell_Press/0.jpg', 'Incline_Dumbbell_Press/1.jpg'],
+  'ex_plate_shoulder_press': ['Barbell_Shoulder_Press/0.jpg', 'Barbell_Shoulder_Press/1.jpg'],
+  'ex_cable_lateral_raise': ['Side_Lateral_Raise/0.jpg', 'Side_Lateral_Raise/1.jpg'],
+  'ex_rope_pushdown': ['Triceps_Pushdown/0.jpg', 'Triceps_Pushdown/1.jpg'],
+  'ex_cable_crunch': ['Cable_Crunch/0.jpg', 'Cable_Crunch/1.jpg'],
+  'ex_barbell_squat': ['Barbell_Squat/0.jpg', 'Barbell_Squat/1.jpg'],
+  'ex_chest_supported_row': ['Dumbbell_Incline_Row/0.jpg', 'Dumbbell_Incline_Row/1.jpg'],
+  'ex_ez_preacher_curl': ['Preacher_Curl/0.jpg', 'Preacher_Curl/1.jpg'],
+  'ex_trap_bar_deadlift': ['Trap_Bar_Deadlift/0.jpg', 'Trap_Bar_Deadlift/1.jpg'],
+  'ex_reverse_lunge': ['Dumbbell_Rear_Lunge/0.jpg', 'Dumbbell_Rear_Lunge/1.jpg'],
+  'ex_incline_barbell_press': ['Barbell_Incline_Bench_Press_-_Medium_Grip/0.jpg', 'Barbell_Incline_Bench_Press_-_Medium_Grip/1.jpg'],
+  'ex_one_arm_db_row': ['One-Arm_Dumbbell_Row/0.jpg', 'One-Arm_Dumbbell_Row/1.jpg'],
+  'ex_cable_chest_press': ['Cable_Chest_Press/0.jpg', 'Cable_Chest_Press/1.jpg'],
+  'ex_cable_rear_delt_fly': ['Bent_Over_Dumbbell_Rear_Delt_Raise_With_Head_On_Bench/0.jpg', 'Bent_Over_Dumbbell_Rear_Delt_Raise_With_Head_On_Bench/1.jpg'],
+  'ex_preacher_curl': ['Preacher_Curl/0.jpg', 'Preacher_Curl/1.jpg'],
+  'ex_overhead_triceps': ['Cable_Rope_Overhead_Triceps_Extension/0.jpg', 'Cable_Rope_Overhead_Triceps_Extension/1.jpg'],
   'ex_db_flat_bench': ['Dumbbell_Bench_Press/0.jpg', 'Dumbbell_Bench_Press/1.jpg'],
   'ex_lat_pulldown': ['Wide-Grip_Lat_Pulldown/0.jpg', 'Wide-Grip_Lat_Pulldown/1.jpg'],
   'ex_seated_db_press': ['Seated_Dumbbell_Press/0.jpg', 'Seated_Dumbbell_Press/1.jpg'],
@@ -2584,6 +2686,7 @@ function renderLibraryView(muscleFilter = 'all') {
 
   WORKOUT_DAYS.forEach(day => {
     day.exercises.forEach(ex => {
+      if (ex.trackType === 'run') return;
       if (!seen.has(ex.id)) {
         seen.add(ex.id);
         allExercises.push(ex);
