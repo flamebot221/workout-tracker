@@ -453,6 +453,11 @@
           <span>Track Session</span>
         </button>
 
+        <button id="desk-nav-diet" onclick="switchNavTab('diet')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded text-gray-400 hover:text-white hover:bg-white/[0.03] border border-transparent transition-all text-left">
+          <span class="text-base">🍽️</span>
+          <span>Diet Log</span>
+        </button>
+
         <button id="desk-nav-progress" onclick="switchNavTab('progress')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded text-gray-400 hover:text-white hover:bg-white/[0.03] border border-transparent transition-all text-left">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
           <span>Progress & Logs</span>
@@ -813,7 +818,7 @@
             <div class="dashboard-card p-4">
               <div class="flex items-center justify-between mb-2.5">
                 <h3 class="text-xs font-bold text-white uppercase tracking-wider">Weekly Schedule Consistency</h3>
-                <span class="text-xs font-black text-emerald-400 font-mono">5 Gym + Run Options</span>
+                <span class="text-xs font-black text-emerald-400 font-mono">6 Gym + 2 Run Options</span>
               </div>
 
               <!-- Fixed weekly split -->
@@ -832,7 +837,7 @@
                 </div>
                 <div class="flex flex-col items-center gap-1">
                   <span class="text-[10px] text-gray-400">Thu</span>
-                  <span class="text-[8px] text-gray-400 font-bold">REST</span>
+                  <span class="text-[8px] text-emerald-400 font-bold">CORE + BIKE</span>
                 </div>
                 <div class="flex flex-col items-center gap-1">
                   <span class="text-[10px] text-gray-400">Fri</span>
@@ -1041,7 +1046,82 @@
       </div>
 
       <!-- ======================================================== -->
-      <!-- TAB 4: PROGRESS & LOGS (Weigh-ins, Rolling Avg, Waist) -->
+      <!-- TAB 4: DIET LOG (Daily Food, Calories & Macros) -->
+      <!-- ======================================================== -->
+      <div id="view-diet" class="hidden space-y-5">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div>
+            <h2 class="text-xl font-black text-white tracking-tight">Diet Log</h2>
+            <p class="text-xs text-gray-400">Log portions you actually ate. Estimates update by amount and save automatically.</p>
+          </div>
+          <div class="flex items-center gap-2">
+            <label for="diet-date" class="text-xs text-gray-400">Day</label>
+            <input id="diet-date" type="date" onchange="renderDietView()" class="bg-[#0C0E12] border border-white/[0.08] text-xs text-white px-3 py-2 rounded focus:outline-none focus:border-amber-400" />
+            <button onclick="exportDietLogs()" class="px-3 py-2 rounded btn-dark text-xs font-semibold">Export</button>
+          </div>
+        </div>
+
+        <div class="dashboard-card p-4 sm:p-5">
+          <div class="flex items-start justify-between gap-3 mb-4">
+            <div>
+              <h3 class="text-xs font-bold text-white uppercase tracking-wider">Daily totals</h3>
+              <p class="text-[11px] text-gray-400 mt-1">Targets: 1,800–2,000 kcal • at least 150 g protein</p>
+            </div>
+            <span id="diet-save-status" class="text-[10px] text-emerald-400 font-mono">Saved on this device</span>
+          </div>
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+            <div class="p-3 rounded bg-[#161B24] border border-white/[0.06]"><span class="text-[10px] text-gray-400 uppercase">Calories</span><div id="diet-total-calories" class="text-lg font-black text-white font-mono">0 kcal</div><div id="diet-calorie-status" class="text-[10px] text-gray-400 mt-1">0–2,000 kcal</div></div>
+            <div class="p-3 rounded bg-[#161B24] border border-white/[0.06]"><span class="text-[10px] text-gray-400 uppercase">Protein</span><div id="diet-total-protein" class="text-lg font-black text-cyan-400 font-mono">0 g</div><div id="diet-protein-status" class="text-[10px] text-gray-400 mt-1">150 g target</div></div>
+            <div class="p-3 rounded bg-[#161B24] border border-white/[0.06]"><span class="text-[10px] text-gray-400 uppercase">Carbs</span><div id="diet-total-carbs" class="text-lg font-black text-amber-400 font-mono">0 g</div><div class="text-[10px] text-gray-500 mt-1">Estimated total</div></div>
+            <div class="p-3 rounded bg-[#161B24] border border-white/[0.06]"><span class="text-[10px] text-gray-400 uppercase">Fat</span><div id="diet-total-fat" class="text-lg font-black text-rose-300 font-mono">0 g</div><div class="text-[10px] text-gray-500 mt-1">Estimated total</div></div>
+          </div>
+          <p class="text-[10px] text-gray-500 mt-3">Nutrition is approximate and varies by brand, recipe, and cooked/dry weight. Measure cooking oil separately.</p>
+        </div>
+
+        <div id="diet-history" class="flex flex-wrap items-center gap-2 text-xs"></div>
+
+        <div class="dashboard-card p-4 sm:p-5 space-y-3">
+          <div>
+            <h3 class="text-xs font-bold text-white uppercase tracking-wider">Add food you ate</h3>
+            <p class="text-[11px] text-gray-400 mt-1">Choose a meal, food, and amount. Each entry is saved as you add or edit it.</p>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-4 gap-2">
+            <select id="diet-meal-select" class="bg-[#0C0E12] border border-white/[0.08] text-xs text-white px-3 py-2.5 rounded focus:outline-none focus:border-amber-400">
+              <option value="breakfast">Breakfast</option><option value="lunch">Lunch</option><option value="workout">Post-workout</option><option value="dinner">Dinner</option><option value="snack">Snack / Other</option>
+            </select>
+            <select id="diet-food-select" onchange="updateDietFoodFields()" class="bg-[#0C0E12] border border-white/[0.08] text-xs text-white px-3 py-2.5 rounded focus:outline-none focus:border-amber-400"></select>
+            <div class="flex gap-2">
+              <input id="diet-food-amount" type="number" min="0" step="any" placeholder="Amount" class="min-w-0 w-full bg-[#0C0E12] border border-white/[0.08] text-xs text-white px-3 py-2.5 rounded focus:outline-none focus:border-amber-400" />
+              <span id="diet-food-unit" class="self-center text-xs text-gray-400">g</span>
+            </div>
+            <button onclick="addDietFood()" class="px-4 py-2.5 rounded btn-gold text-xs font-bold">Add Food</button>
+          </div>
+          <div id="diet-custom-food-fields" class="hidden grid grid-cols-2 sm:grid-cols-6 gap-2 p-3 rounded bg-[#161B24] border border-white/[0.06]">
+            <input id="diet-custom-name" type="text" placeholder="Food name" class="col-span-2 bg-[#0C0E12] border border-white/[0.08] text-xs text-white px-3 py-2 rounded focus:outline-none focus:border-amber-400" />
+            <label class="text-[10px] text-gray-400">Unit<select id="diet-custom-unit" onchange="updateDietFoodFields()" class="mt-1 w-full bg-[#0C0E12] border border-white/[0.08] text-xs text-white px-2 py-2 rounded"><option value="g">g</option><option value="ml">ml</option></select></label>
+            <label class="text-[10px] text-gray-400">kcal / 100 g<input id="diet-custom-calories" type="number" min="0" step="any" placeholder="kcal" class="mt-1 w-full bg-[#0C0E12] border border-white/[0.08] text-xs text-white px-2 py-2 rounded" /></label>
+            <label class="text-[10px] text-gray-400">Protein<input id="diet-custom-protein" type="number" min="0" step="any" placeholder="g" class="mt-1 w-full bg-[#0C0E12] border border-white/[0.08] text-xs text-white px-2 py-2 rounded" /></label>
+            <label class="text-[10px] text-gray-400">Carbs<input id="diet-custom-carbs" type="number" min="0" step="any" placeholder="g" class="mt-1 w-full bg-[#0C0E12] border border-white/[0.08] text-xs text-white px-2 py-2 rounded" /></label>
+            <label class="text-[10px] text-gray-400">Fat<input id="diet-custom-fat" type="number" min="0" step="any" placeholder="g" class="mt-1 w-full bg-[#0C0E12] border border-white/[0.08] text-xs text-white px-2 py-2 rounded" /></label>
+            <p class="col-span-full text-[10px] text-gray-500">Enter the nutrition per 100 g (or 100 ml for liquids, using its own label). Your custom food is kept for future logs.</p>
+          </div>
+          <div class="flex flex-col sm:flex-row gap-2 sm:items-center">
+            <select id="diet-template-select" class="bg-[#0C0E12] border border-white/[0.08] text-xs text-white px-3 py-2 rounded focus:outline-none focus:border-amber-400">
+              <option value="breakfast">Planned breakfast — overnight oats</option>
+              <option value="lunch_chicken">Planned lunch — chicken</option><option value="lunch_soya">Planned lunch — soya</option><option value="lunch_chickpeas">Planned lunch — chickpeas</option><option value="lunch_rajma">Planned lunch — rajma</option><option value="lunch_dal">Planned lunch — dal</option>
+              <option value="shake">Planned post-workout shake</option><option value="dinner">Planned dinner</option>
+            </select>
+            <button onclick="addDietPlannedMeal()" class="px-3 py-2 rounded btn-dark text-xs font-semibold">Add planned meal portions</button>
+            <span class="text-[10px] text-gray-500">Quick-add counts as eaten; you can edit or remove any item.</span>
+          </div>
+        </div>
+
+        <div id="diet-meal-list" class="space-y-4"></div>
+        <div class="dashboard-card p-4 text-[11px] text-gray-400">Your entries are stored in this browser on this device. Export periodically for a backup; clearing browser/site data removes local logs.</div>
+      </div>
+
+      <!-- ======================================================== -->
+      <!-- TAB 5: PROGRESS & LOGS (Weigh-ins, Rolling Avg, Waist) -->
       <!-- ======================================================== -->
       <div id="view-progress" class="hidden space-y-5">
         
@@ -1123,7 +1203,7 @@
       </div>
 
       <!-- ======================================================== -->
-      <!-- TAB 5: EXERCISE LIBRARY (Searchable with Motion Demos) -->
+      <!-- TAB 6: EXERCISE LIBRARY (Searchable with Motion Demos) -->
       <!-- ======================================================== -->
       <div id="view-library" class="hidden space-y-5">
         
@@ -1161,7 +1241,7 @@
   <!-- 4. MOBILE BOTTOM APP BAR (Square Buttons for Android) -->
   <!-- ======================================================== -->
   <nav id="mobile-bottom-nav" class="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-[#0C0E12]/95 backdrop-blur-xl border-t border-white/[0.08] px-3 py-2">
-    <div class="max-w-md mx-auto grid grid-cols-5 gap-1.5 text-center">
+    <div class="max-w-md mx-auto grid grid-cols-6 gap-1 text-center">
       
       <!-- Nav Button 1: Dashboard -->
       <button id="mob-nav-dashboard" onclick="switchNavTab('dashboard')" class="flex flex-col items-center justify-center p-1.5 rounded text-[#E5A93C] bg-[#E5A93C]/10 transition-colors">
@@ -1179,6 +1259,11 @@
       <button id="mob-nav-tracker" onclick="switchNavTab('tracker')" class="flex flex-col items-center justify-center p-1.5 rounded text-gray-400 hover:text-white transition-colors">
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>
         <span class="text-[10px] font-medium mt-0.5">Track</span>
+      </button>
+
+      <button id="mob-nav-diet" onclick="switchNavTab('diet')" class="flex flex-col items-center justify-center p-1.5 rounded text-gray-400 hover:text-white transition-colors">
+        <span class="text-sm">🍽️</span>
+        <span class="text-[10px] font-medium mt-0.5">Diet</span>
       </button>
 
       <!-- Nav Button 4: Progress -->
@@ -1327,6 +1412,6 @@
   <div id="toast-container" class="fixed top-16 right-4 z-50 space-y-2 pointer-events-none"></div>
 
   <!-- APPLICATION LOGIC ENGINE (Cache-busted) -->
-  <script src="./app.js?v=3.5.0"></script>
+  <script src="./app.js?v=3.6.0"></script>
 </body>
 </html>

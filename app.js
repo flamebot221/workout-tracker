@@ -604,12 +604,17 @@ const WORKOUT_DAYS = [
       makeExercise('ex_face_pull', 'Cable Face Pull', 3, 12, 20, 75, 'Functional trainer + rope', 'rear-shoulders', 'Pull the rope toward eye level with elbows high and controlled.', { demoId: 'ex_face_pull' }),
       makeExercise('ex_ez_preacher_curl', 'EZ-Bar Preacher Curl', 3, 8, 12, 75, 'EZ curl bar + preacher bench', 'biceps', 'Keep upper arms supported and lower the bar under control.', { demoId: 'ex_ez_bar_curl' }),
       makeExercise('ex_hammer_curl', 'Dumbbell Hammer Curl', 2, 10, 15, 60, 'Dumbbells', 'biceps', 'Keep palms facing inward and avoid swinging.', { demoId: 'ex_hammer_curl' }),
-      makeExercise('ex_pallof_press', 'Pallof Press', 3, 10, 12, 60, 'Functional trainer + handle', 'obliques', 'Resist rotation as you press out; complete reps on each side.', { isPerLeg: true, demoId: 'ex_pallof_press' })
+      makeExercise('ex_dead_bug', 'Dead Bug', 3, 8, 10, 60, 'Floor space', 'abs', 'Keep your lower back gently against the floor; extend the opposite arm and leg slowly, then switch sides.', { isPerLeg: true, weighted: false, demoId: 'ex_dead_bug' })
     ]
   },
   {
-    id: 'thu', name: 'Thursday', title: 'Rest & Recovery', subtitle: 'Full rest day', badge: 'Rest',
-    time: 'Recovery', muscles: [], warmup: 'No scheduled gym session today.', cardio: 'Take a full rest day; an easy walk or light mobility is optional.', exercises: []
+    id: 'thu', name: 'Thursday', title: 'Core + Easy Conditioning', subtitle: 'Low-fatigue trunk stability and recovery', badge: 'Core + Cardio',
+    time: '30–40 min', muscles: [{ id: 'abs', role: 'Core' }, { id: 'obliques', role: 'Core' }, { id: 'back', role: 'Stability' }],
+    warmup: '5 min very easy bike, then a few gentle hip and shoulder movements.', cardio: 'Keep this session easy: 15–20 min conversational pace on the exercise bike, then controlled core work. It should leave you feeling better, not tired, before Friday legs.',
+    exercises: [
+      makeExercise('ex_bird_dog', 'Bird Dog', 2, 8, 10, 45, 'Floor space', 'back', 'On hands and knees, reach opposite arm and leg; pause briefly without letting your hips twist.', { isPerLeg: true, weighted: false, demoId: 'ex_bird_dog' }),
+      makeExercise('ex_front_plank_thu', 'Front Plank', 2, 20, 35, 45, 'Floor space', 'abs', 'Brace gently and keep a straight line from head to heels; end the hold before your lower back sags.', { trackType: 'hold', durationUnit: 'sec', target: '20–35 seconds', demoId: 'ex_front_plank' })
+    ]
   },
   {
     id: 'fri', name: 'Friday', title: 'Legs 2', subtitle: 'Hamstrings and glutes + core', badge: 'Legs B',
@@ -621,7 +626,7 @@ const WORKOUT_DAYS = [
       makeExercise('ex_seated_leg_curl', 'Leg Curl', 3, 10, 15, 75, 'Leg-curl machine', 'hamstrings', 'Curl smoothly and control the return.', { demoId: 'ex_seated_leg_curl' }),
       makeExercise('ex_reverse_lunge', 'Dumbbell Reverse Lunge', 2, 8, 10, 90, 'Dumbbells', 'glutes', 'Step back under control and keep the front foot planted; reps are per leg.', { isPerLeg: true, demoId: 'ex_walking_lunge' }),
       makeExercise('ex_seated_calf_raise', 'Smith Calf Raise', 3, 10, 15, 60, 'Smith machine', 'calves', 'Use a stable foot position and avoid bouncing.', { demoId: 'ex_seated_calf_raise' }),
-      makeExercise('ex_reverse_crunch', 'Reverse Crunch', 3, 10, 15, 60, 'Floor space or bench', 'abs', 'Curl hips gently off the floor; avoid swinging.', { weighted: false, demoId: 'ex_reverse_crunch' })
+      makeExercise('ex_crunch', 'Basic Crunch', 3, 10, 15, 60, 'Floor space', 'abs', 'Lie on your back with knees bent; gently curl your shoulders toward your hips, then lower with control. Avoid pulling your neck.', { weighted: false, demoId: 'ex_crunch' })
     ]
   },
   {
@@ -1069,6 +1074,12 @@ const EXERCISE_DEMOS = {
     mistakes: ['Bouncing fast without pauses.'],
     breathing: 'Exhale as you rise onto toes; inhale into stretch.'
   },
+  'ex_crunch': {
+    setup: ['Lie on your back with knees bent and feet flat on the floor.', 'Rest your hands lightly across your chest or beside your head; do not pull on your neck.'],
+    execution: ['Gently brace your abdomen and curl your shoulders toward your hips.', 'Pause briefly, then lower your shoulders with control.'],
+    mistakes: ['Pulling on the neck or using momentum to sit all the way up.'],
+    breathing: 'Exhale as you curl up; inhale as you lower.'
+  },
   'ex_reverse_crunch': {
     videoId: '7r3t_oV9G7Q',
     setup: [
@@ -1330,6 +1341,8 @@ const STORAGE_KEYS = {
   TODAY_CHECKLIST: 'pumpd_today_checklist_v2',
   MY_GOALS: 'pumpd_my_goals_v2',
   ACTIVE_DRAFT: 'pumpd_active_session_draft_v2',
+  DIET_LOGS: 'pumpd_diet_logs_v1',
+  DIET_CUSTOM_FOODS: 'pumpd_diet_custom_foods_v1',
   LAST_TAB: 'pumpd_last_active_tab_v2',
   REST_TARGET: 'pumpd_rest_timer_target_v2'
 };
@@ -1677,6 +1690,7 @@ function switchNavTab(tabName) {
     dashboard: document.getElementById('view-dashboard'),
     workouts: document.getElementById('view-workouts'),
     tracker: document.getElementById('view-tracker'),
+    diet: document.getElementById('view-diet'),
     progress: document.getElementById('view-progress'),
     library: document.getElementById('view-library')
   };
@@ -1689,7 +1703,7 @@ function switchNavTab(tabName) {
   });
 
   // Desktop sidebar buttons
-  const deskNavs = ['dashboard', 'workouts', 'tracker', 'progress', 'library'];
+  const deskNavs = ['dashboard', 'workouts', 'tracker', 'diet', 'progress', 'library'];
   deskNavs.forEach(id => {
     const btn = document.getElementById(`desk-nav-${id}`);
     if (btn) {
@@ -1702,7 +1716,7 @@ function switchNavTab(tabName) {
   });
 
   // Mobile bottom bar buttons
-  const mobNavs = ['dashboard', 'workouts', 'tracker', 'progress', 'library'];
+  const mobNavs = ['dashboard', 'workouts', 'tracker', 'diet', 'progress', 'library'];
   mobNavs.forEach(id => {
     const btn = document.getElementById(`mob-nav-${id}`);
     if (btn) {
@@ -1719,10 +1733,278 @@ function switchNavTab(tabName) {
   if (tabName === 'dashboard') renderDashboardView();
   else if (tabName === 'workouts') renderWorkoutsView();
   else if (tabName === 'tracker') renderTrackerView();
+  else if (tabName === 'diet') renderDietView();
   else if (tabName === 'progress') renderProgressView();
   else if (tabName === 'library') renderLibraryView('all');
 
   window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ----------------------------------------------------
+// 9A. DIET LOG (Portion-based approximate nutrition)
+// ----------------------------------------------------
+const DIET_TARGETS = { minCalories: 1800, maxCalories: 2000, protein: 150 };
+const DIET_MEALS = [
+  { id: 'breakfast', label: 'Breakfast' },
+  { id: 'lunch', label: 'Lunch' },
+  { id: 'workout', label: 'Post-workout' },
+  { id: 'dinner', label: 'Dinner' },
+  { id: 'snack', label: 'Snack / Other' }
+];
+// Approximate values per 100 g or 100 ml. These are estimates, not lab values;
+// use the package label in the custom-food form when it is available.
+const DIET_FOODS = {
+  oats: { name: 'Oats', unit: 'g', calories: 380, protein: 13, carbs: 68, fat: 7 },
+  milk: { name: 'Toned milk', unit: 'ml', calories: 50, protein: 3.3, carbs: 4.8, fat: 3 },
+  sattu: { name: 'Sattu', unit: 'g', calories: 375, protein: 22.5, carbs: 58, fat: 5 },
+  banana: { name: 'Banana (peeled)', unit: 'g', calories: 89, protein: 1.1, carbs: 22.8, fat: 0.3 },
+  rice: { name: 'Cooked rice', unit: 'g', calories: 130, protein: 2.7, carbs: 28.2, fat: 0.3 },
+  vegetables: { name: 'Mixed vegetables', unit: 'g', calories: 45, protein: 2.5, carbs: 8, fat: 0.5 },
+  curd: { name: 'Curd', unit: 'g', calories: 60, protein: 3.5, carbs: 4.7, fat: 3 },
+  chicken: { name: 'Chicken breast (cooked)', unit: 'g', calories: 165, protein: 31, carbs: 0, fat: 3.6 },
+  soya: { name: 'Soya chunks (dry)', unit: 'g', calories: 345, protein: 52, carbs: 33, fat: 0.5 },
+  chickpeas: { name: 'Chickpeas (cooked)', unit: 'g', calories: 164, protein: 8.9, carbs: 27.4, fat: 2.6 },
+  rajma: { name: 'Rajma (cooked)', unit: 'g', calories: 127, protein: 8.7, carbs: 22.8, fat: 0.5 },
+  dal: { name: 'Mixed dal (cooked)', unit: 'g', calories: 116, protein: 7.5, carbs: 19, fat: 0.4 },
+  peanuts: { name: 'Peanuts', unit: 'g', calories: 567, protein: 25.8, carbs: 16.1, fat: 49.2 },
+  potato: { name: 'Potatoes (boiled)', unit: 'g', calories: 87, protein: 1.9, carbs: 20.1, fat: 0.1 },
+  oil: { name: 'Cooking oil', unit: 'g', calories: 884, protein: 0, carbs: 0, fat: 100 }
+};
+
+function localDateKey(date = new Date()) {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+}
+
+function getSelectedDietDate() {
+  const input = document.getElementById('diet-date');
+  return input?.value || localDateKey();
+}
+
+function getDietLogs() {
+  const logs = loadStorage(STORAGE_KEYS.DIET_LOGS, {});
+  return logs && typeof logs === 'object' && !Array.isArray(logs) ? logs : {};
+}
+
+function saveDietLogs(logs) {
+  saveStorage(STORAGE_KEYS.DIET_LOGS, logs);
+  const status = document.getElementById('diet-save-status');
+  if (status) status.innerText = 'Saved on this device';
+}
+
+function getDietFoodsForSelect() {
+  const custom = loadStorage(STORAGE_KEYS.DIET_CUSTOM_FOODS, []);
+  return [
+    ...Object.entries(DIET_FOODS).map(([id, food]) => ({ id, ...food })),
+    ...(Array.isArray(custom) ? custom : []).map(food => ({ ...food, id: `custom:${food.id}` }))
+  ];
+}
+
+function escapeDietText(value) {
+  return String(value).replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[char]));
+}
+
+function updateDietFoodFields() {
+  const select = document.getElementById('diet-food-select');
+  const customFields = document.getElementById('diet-custom-food-fields');
+  const unitLabel = document.getElementById('diet-food-unit');
+  if (!select || !customFields) return;
+  const isNewCustom = select.value === '__custom__';
+  customFields.classList.toggle('hidden', !isNewCustom);
+  const food = getDietFoodsForSelect().find(item => item.id === select.value);
+  const customUnit = document.getElementById('diet-custom-unit')?.value || 'g';
+  if (unitLabel) unitLabel.innerText = isNewCustom ? customUnit : (food?.unit || 'g');
+  const amount = document.getElementById('diet-food-amount');
+  if (amount) amount.placeholder = `Amount (${isNewCustom ? customUnit : (food?.unit || 'g')})`;
+}
+
+function renderDietView() {
+  const dateInput = document.getElementById('diet-date');
+  if (!dateInput) return;
+  if (!dateInput.value) dateInput.value = localDateKey();
+  const selectedDate = dateInput.value;
+  const allLogs = getDietLogs();
+  const dayLog = allLogs[selectedDate] || { entries: [] };
+  const entries = Array.isArray(dayLog.entries) ? dayLog.entries : [];
+  const foods = getDietFoodsForSelect();
+  const foodSelect = document.getElementById('diet-food-select');
+  if (foodSelect) {
+    const previous = foodSelect.value;
+    foodSelect.innerHTML = '<option value="">Choose a food…</option>' + foods.map(food => `<option value="${escapeDietText(food.id)}">${escapeDietText(food.name)} (${food.unit})</option>`).join('') + '<option value="__custom__">+ Add a custom food…</option>';
+    if (Array.from(foodSelect.options).some(option => option.value === previous)) foodSelect.value = previous;
+    updateDietFoodFields();
+  }
+
+  const totals = entries.reduce((sum, entry) => {
+    sum.calories += Number(entry.calories) || 0;
+    sum.protein += Number(entry.protein) || 0;
+    sum.carbs += Number(entry.carbs) || 0;
+    sum.fat += Number(entry.fat) || 0;
+    return sum;
+  }, { calories: 0, protein: 0, carbs: 0, fat: 0 });
+  const setText = (id, value) => { const element = document.getElementById(id); if (element) element.innerText = value; };
+  setText('diet-total-calories', `${Math.round(totals.calories)} kcal`);
+  setText('diet-total-protein', `${totals.protein.toFixed(1)} g`);
+  setText('diet-total-carbs', `${totals.carbs.toFixed(1)} g`);
+  setText('diet-total-fat', `${totals.fat.toFixed(1)} g`);
+  setText('diet-calorie-status', totals.calories < DIET_TARGETS.minCalories
+    ? `${Math.round(DIET_TARGETS.minCalories - totals.calories)} kcal to 1,800 minimum`
+    : totals.calories <= DIET_TARGETS.maxCalories
+      ? `${Math.round(DIET_TARGETS.maxCalories - totals.calories)} kcal to 2,000 upper target`
+      : `${Math.round(totals.calories - DIET_TARGETS.maxCalories)} kcal above 2,000 target`);
+  setText('diet-protein-status', totals.protein >= DIET_TARGETS.protein
+    ? `${(totals.protein - DIET_TARGETS.protein).toFixed(1)} g above 150 g target`
+    : `${(DIET_TARGETS.protein - totals.protein).toFixed(1)} g to 150 g target`);
+
+  const history = document.getElementById('diet-history');
+  if (history) {
+    const dates = Object.keys(allLogs).filter(date => allLogs[date]?.entries?.length).sort((a, b) => b.localeCompare(a)).slice(0, 7);
+    history.innerHTML = dates.length ? `<span class="text-gray-400">Recent logged days:</span> ${dates.map(date => `<button onclick="selectDietDate('${date}')" class="px-2.5 py-1 rounded btn-dark ${date === selectedDate ? 'text-amber-400' : 'text-gray-300'}">${date === localDateKey() ? 'Today' : new Date(`${date}T12:00:00`).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}</button>`).join('')}` : '<span class="text-gray-500">Your logged days will appear here for quick review.</span>';
+  }
+
+  const list = document.getElementById('diet-meal-list');
+  if (!list) return;
+  list.innerHTML = DIET_MEALS.map(meal => {
+    const mealEntries = entries.filter(entry => entry.meal === meal.id);
+    const mealTotals = mealEntries.reduce((sum, entry) => {
+      sum.calories += Number(entry.calories) || 0;
+      sum.protein += Number(entry.protein) || 0;
+      sum.carbs += Number(entry.carbs) || 0;
+      sum.fat += Number(entry.fat) || 0;
+      return sum;
+    }, { calories: 0, protein: 0, carbs: 0, fat: 0 });
+    const rows = mealEntries.length ? mealEntries.map(entry => `
+      <div class="grid grid-cols-1 sm:grid-cols-[minmax(0,1fr)_125px_minmax(145px,auto)_auto] gap-2 items-center py-2 border-b border-white/[0.05] last:border-0">
+        <div class="min-w-0"><div class="text-xs font-semibold text-white truncate">${escapeDietText(entry.name)}</div><div class="text-[10px] text-gray-500">${Math.round(entry.calories)} kcal • P ${entry.protein.toFixed(1)} • C ${entry.carbs.toFixed(1)} • F ${entry.fat.toFixed(1)} g</div></div>
+        <div class="flex items-center gap-1"><input type="number" min="0.1" step="any" value="${entry.amount}" onchange="updateDietEntryAmount('${entry.id}', this.value)" aria-label="Amount of ${escapeDietText(entry.name)}" class="w-full bg-[#0C0E12] border border-white/[0.08] text-xs text-white px-2 py-1.5 rounded focus:outline-none focus:border-amber-400" /><span class="text-[10px] text-gray-400">${escapeDietText(entry.unit)}</span></div>
+        <div class="text-[10px] text-gray-400">Protein ${entry.protein.toFixed(1)} g</div>
+        <button onclick="removeDietEntry('${entry.id}')" aria-label="Remove ${escapeDietText(entry.name)}" class="px-2 py-1.5 rounded btn-dark text-[10px] text-rose-300">Remove</button>
+      </div>`).join('') : '<p class="py-3 text-[11px] text-gray-500">No food logged for this meal yet.</p>';
+    return `<section class="dashboard-card p-4"><div class="flex items-center justify-between gap-2 pb-2 border-b border-white/[0.06]"><h3 class="text-xs font-bold text-white uppercase tracking-wider">${meal.label}</h3><span class="text-[10px] text-gray-400 font-mono">${Math.round(mealTotals.calories)} kcal • P ${mealTotals.protein.toFixed(1)} g</span></div><div>${rows}</div></section>`;
+  }).join('');
+}
+
+function selectDietDate(date) {
+  const input = document.getElementById('diet-date');
+  if (input) input.value = date;
+  renderDietView();
+}
+
+function nutritionForAmount(food, amount) {
+  const scale = Number(amount) / 100;
+  return {
+    calories: (Number(food.calories) || 0) * scale,
+    protein: (Number(food.protein) || 0) * scale,
+    carbs: (Number(food.carbs) || 0) * scale,
+    fat: (Number(food.fat) || 0) * scale
+  };
+}
+
+function storeDietEntry(meal, food, amount) {
+  const logs = getDietLogs();
+  const date = getSelectedDietDate();
+  const dayLog = logs[date] || { date, entries: [] };
+  const nutrition = nutritionForAmount(food, amount);
+  dayLog.entries.push({ id: `food_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`, meal, foodId: food.id, name: food.name, amount: Number(amount), unit: food.unit, base: { calories: food.calories, protein: food.protein, carbs: food.carbs, fat: food.fat }, ...nutrition });
+  dayLog.updatedAt = new Date().toISOString();
+  logs[date] = dayLog;
+  saveDietLogs(logs);
+}
+
+function addDietFood() {
+  const meal = document.getElementById('diet-meal-select')?.value || 'snack';
+  const foodId = document.getElementById('diet-food-select')?.value;
+  const amount = Number(document.getElementById('diet-food-amount')?.value);
+  if (!foodId) return showToast('Choose a food to log.', 'info');
+  if (!Number.isFinite(amount) || amount <= 0) return showToast('Enter a portion amount greater than zero.', 'info');
+
+  let food;
+  if (foodId === '__custom__') {
+    const name = document.getElementById('diet-custom-name')?.value.trim();
+    const macroInputs = ['diet-custom-calories', 'diet-custom-protein', 'diet-custom-carbs', 'diet-custom-fat'].map(id => document.getElementById(id)?.value.trim() ?? '');
+    const [calories, protein, carbs, fat] = macroInputs.map(Number);
+    if (!name || macroInputs.some(value => value === '') || ![calories, protein, carbs, fat].every(value => Number.isFinite(value) && value >= 0)) {
+      return showToast('Enter a food name and its nutrition per 100 g/ml.', 'info');
+    }
+    const customId = `custom_${Date.now()}`;
+    food = { id: customId, name, unit: document.getElementById('diet-custom-unit')?.value || 'g', calories, protein, carbs, fat };
+    const customFoods = loadStorage(STORAGE_KEYS.DIET_CUSTOM_FOODS, []);
+    saveStorage(STORAGE_KEYS.DIET_CUSTOM_FOODS, [...(Array.isArray(customFoods) ? customFoods : []), food]);
+  } else {
+    food = getDietFoodsForSelect().find(item => item.id === foodId);
+  }
+  if (!food) return showToast('That food could not be found. Please choose it again.', 'error');
+  storeDietEntry(meal, food, amount);
+  const amountInput = document.getElementById('diet-food-amount');
+  if (amountInput) amountInput.value = '';
+  if (foodId === '__custom__') {
+    ['diet-custom-name', 'diet-custom-calories', 'diet-custom-protein', 'diet-custom-carbs', 'diet-custom-fat'].forEach(id => { const input = document.getElementById(id); if (input) input.value = ''; });
+    const select = document.getElementById('diet-food-select');
+    if (select) select.value = `custom:${food.id}`;
+  }
+  renderDietView();
+  showToast(`${food.name} added and saved.`, 'success');
+}
+
+const DIET_PRESETS = {
+  breakfast: { meal: 'breakfast', foods: [['oats', 50], ['milk', 300], ['sattu', 40], ['banana', 118]] },
+  lunch_chicken: { meal: 'lunch', foods: [['rice', 175], ['vegetables', 200], ['curd', 150], ['chicken', 200]] },
+  lunch_soya: { meal: 'lunch', foods: [['rice', 175], ['vegetables', 200], ['curd', 150], ['soya', 100]] },
+  lunch_chickpeas: { meal: 'lunch', foods: [['rice', 175], ['vegetables', 200], ['curd', 150], ['chickpeas', 275]] },
+  lunch_rajma: { meal: 'lunch', foods: [['rice', 175], ['vegetables', 200], ['curd', 150], ['rajma', 275]] },
+  lunch_dal: { meal: 'lunch', foods: [['rice', 175], ['vegetables', 200], ['curd', 150], ['dal', 325]] },
+  shake: { meal: 'workout', foods: [['milk', 400], ['sattu', 60], ['peanuts', 10]] },
+  dinner: { meal: 'dinner', foods: [['soya', 50], ['potato', 200], ['vegetables', 150]] }
+};
+
+function addDietPlannedMeal() {
+  const key = document.getElementById('diet-template-select')?.value;
+  const preset = DIET_PRESETS[key];
+  if (!preset) return;
+  preset.foods.forEach(([foodId, amount]) => storeDietEntry(preset.meal, { id: foodId, ...DIET_FOODS[foodId] }, amount));
+  const mealSelect = document.getElementById('diet-meal-select');
+  if (mealSelect) mealSelect.value = preset.meal;
+  renderDietView();
+  showToast('Planned portions added to this day’s log. Adjust amounts to match what you ate.', 'success');
+}
+
+function updateDietEntryAmount(entryId, amountValue) {
+  const amount = Number(amountValue);
+  if (!Number.isFinite(amount) || amount <= 0) return showToast('Use an amount greater than zero.', 'info');
+  const logs = getDietLogs();
+  const date = getSelectedDietDate();
+  const entry = logs[date]?.entries?.find(item => item.id === entryId);
+  if (!entry) return;
+  entry.amount = amount;
+  Object.assign(entry, nutritionForAmount(entry.base || {}, amount));
+  logs[date].updatedAt = new Date().toISOString();
+  saveDietLogs(logs);
+  renderDietView();
+}
+
+function removeDietEntry(entryId) {
+  const logs = getDietLogs();
+  const date = getSelectedDietDate();
+  if (!logs[date]) return;
+  logs[date].entries = logs[date].entries.filter(item => item.id !== entryId);
+  logs[date].updatedAt = new Date().toISOString();
+  saveDietLogs(logs);
+  renderDietView();
+}
+
+function exportDietLogs() {
+  const backup = { exportedAt: new Date().toISOString(), logs: getDietLogs(), customFoods: loadStorage(STORAGE_KEYS.DIET_CUSTOM_FOODS, []) };
+  const blob = new Blob([JSON.stringify(backup, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = `diet-log-backup-${localDateKey()}.json`;
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+  URL.revokeObjectURL(url);
 }
 
 // ----------------------------------------------------
@@ -3175,7 +3457,7 @@ document.addEventListener('DOMContentLoaded', () => {
     switchNavTab('tracker');
     showToast('⚡ Automatically resumed your in-progress workout session!', 'success');
   } else {
-    switchNavTab(lastTab === 'workouts' || lastTab === 'progress' || lastTab === 'library' ? lastTab : 'dashboard');
+    switchNavTab(['workouts', 'diet', 'progress', 'library'].includes(lastTab) ? lastTab : 'dashboard');
   }
 
   // Restore active rest countdown if phone was locked or app was minimized
