@@ -1743,7 +1743,7 @@ function switchNavTab(tabName) {
 // ----------------------------------------------------
 // 9A. DIET LOG (Portion-based approximate nutrition)
 // ----------------------------------------------------
-const DIET_TARGETS = { minCalories: 1800, maxCalories: 2000, protein: 150 };
+const DIET_TARGETS = { minCalories: 1900, maxCalories: 2200, protein: 150 };
 const DIET_MEALS = [
   { id: 'breakfast', label: 'Breakfast' },
   { id: 'lunch', label: 'Lunch' },
@@ -1758,10 +1758,14 @@ const DIET_FOODS = {
   milk: { name: 'Toned milk', unit: 'ml', calories: 50, protein: 3.3, carbs: 4.8, fat: 3 },
   sattu: { name: 'Sattu', unit: 'g', calories: 375, protein: 22.5, carbs: 58, fat: 5 },
   banana: { name: 'Banana (peeled)', unit: 'g', calories: 89, protein: 1.1, carbs: 22.8, fat: 0.3 },
+  apple: { name: 'Apple', unit: 'g', calories: 52, protein: 0.3, carbs: 13.8, fat: 0.2 },
   rice: { name: 'Cooked rice', unit: 'g', calories: 130, protein: 2.7, carbs: 28.2, fat: 0.3 },
   vegetables: { name: 'Mixed vegetables', unit: 'g', calories: 45, protein: 2.5, carbs: 8, fat: 0.5 },
+  sweetPotato: { name: 'Sweet potato (boiled)', unit: 'g', calories: 86, protein: 1.6, carbs: 20.1, fat: 0.1 },
   curd: { name: 'Curd', unit: 'g', calories: 60, protein: 3.5, carbs: 4.7, fat: 3 },
+  egg: { name: 'Whole egg (edible portion)', unit: 'g', calories: 143, protein: 12.6, carbs: 0.7, fat: 9.5 },
   chicken: { name: 'Chicken breast (cooked)', unit: 'g', calories: 165, protein: 31, carbs: 0, fat: 3.6 },
+  whey: { name: 'Whey protein powder (typical)', unit: 'g', calories: 400, protein: 80, carbs: 8, fat: 6 },
   soya: { name: 'Soya chunks (dry)', unit: 'g', calories: 345, protein: 52, carbs: 33, fat: 0.5 },
   chickpeas: { name: 'Chickpeas (cooked)', unit: 'g', calories: 164, protein: 8.9, carbs: 27.4, fat: 2.6 },
   rajma: { name: 'Rajma (cooked)', unit: 'g', calories: 127, protein: 8.7, carbs: 22.8, fat: 0.5 },
@@ -1949,14 +1953,11 @@ function addDietFood() {
 }
 
 const DIET_PRESETS = {
-  breakfast: { meal: 'breakfast', foods: [['oats', 50], ['milk', 300], ['sattu', 40], ['banana', 118]] },
-  lunch_chicken: { meal: 'lunch', foods: [['rice', 175], ['vegetables', 200], ['curd', 150], ['chicken', 200]] },
-  lunch_soya: { meal: 'lunch', foods: [['rice', 175], ['vegetables', 200], ['curd', 150], ['soya', 100]] },
-  lunch_chickpeas: { meal: 'lunch', foods: [['rice', 175], ['vegetables', 200], ['curd', 150], ['chickpeas', 275]] },
-  lunch_rajma: { meal: 'lunch', foods: [['rice', 175], ['vegetables', 200], ['curd', 150], ['rajma', 275]] },
-  lunch_dal: { meal: 'lunch', foods: [['rice', 175], ['vegetables', 200], ['curd', 150], ['dal', 325]] },
-  shake: { meal: 'workout', foods: [['milk', 400], ['sattu', 60], ['peanuts', 10]] },
-  dinner: { meal: 'dinner', foods: [['soya', 50], ['potato', 200], ['vegetables', 150]] }
+  breakfast: { meal: 'breakfast', foods: [['oats', 50], ['milk', 250], ['banana', 118], ['apple', 180]] },
+  lunch_chickpeas_soya: { meal: 'lunch', foods: [['chickpeas', 150], ['sweetPotato', 200], ['soya', 30], ['vegetables', 200]] },
+  dinner_soya: { meal: 'dinner', foods: [['rice', 150], ['curd', 100], ['egg', 100], ['soya', 60], ['vegetables', 200]] },
+  dinner_chicken: { meal: 'dinner', foods: [['rice', 150], ['curd', 100], ['egg', 100], ['chicken', 180], ['vegetables', 200]] },
+  shake: { meal: 'workout', foods: [['whey', 30], ['milk', 250], ['sattu', 30]] }
 };
 
 function addDietPlannedMeal() {
