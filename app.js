@@ -562,85 +562,85 @@ const makeExercise = (id, name, sets, minReps, maxReps, rest, equipment, primary
 
 const WORKOUT_DAYS = [
   {
-    id: 'sun', name: 'Sunday', title: 'Easy Run / Walk', subtitle: 'Easy aerobic base', badge: 'Run',
-    time: '25–30 min', muscles: [], warmup: '5 min brisk walk, included in the session.',
-    cardio: 'Then repeat 1 min easy jog + 2 min walk for 6–8 rounds; finish with 5 min easy walking. Keep it conversational.',
-    exercises: [makeExercise('ex_sunday_run', 'Easy Run / Walk', 1, 25, 30, 0, 'Outdoor route or treadmill', 'cardio', 'Start with a 5-minute brisk walk. Alternate 1-minute easy jogs with 2-minute walks, then cool down.', { trackType: 'run', minDuration: 25, maxDuration: 30, target: '25–30 minutes; easy pace' })]
+    id: 'sun', name: 'Sunday', title: 'Rest & Full Recovery', subtitle: 'Central nervous system & muscle rebuild', badge: 'Rest',
+    time: 'Recovery', muscles: [], warmup: 'No lifting today. Muscle protein synthesis and recovery accelerate during deep rest.',
+    cardio: 'Optional: 20–30 min relaxed recovery walk for active blood flow and lymphatic drainage.',
+    exercises: []
   },
   {
-    id: 'mon', name: 'Monday', title: 'Upper 1', subtitle: 'Evening gym: chest, shoulders, triceps + core', badge: 'Push + Core',
-    time: '8:30 PM • 75–90 min gym', muscles: [{ id: 'chest', role: 'Primary' }, { id: 'shoulders', role: 'Primary' }, { id: 'triceps', role: 'Secondary' }, { id: 'abs', role: 'Core' }],
-    warmup: '5–8 min easy bike, shoulder movement, then gradual bench-press warm-up sets.', cardio: 'Optional morning run/walk: 20–25 easy minutes using 1 min jog + 2 min walk intervals. If you skip the run, just do the evening gym session. Keep the run conversational so it does not affect lifting.',
+    id: 'mon', name: 'Monday', title: 'Upper Body', subtitle: 'Incline Bench, Flyes, Pull-Up Progression, Pendlay Rows & Arms', badge: 'Upper Body',
+    time: '8:30 PM • 75–90 min', muscles: [{ id: 'chest', role: 'Primary' }, { id: 'lats', role: 'Primary' }, { id: 'back', role: 'Primary' }, { id: 'shoulders', role: 'Secondary' }, { id: 'triceps', role: 'Secondary' }, { id: 'biceps', role: 'Secondary' }],
+    warmup: '5–8 min easy bike + dynamic shoulder mobility + 2–3 progressive warm-up sets for Incline Barbell Press.',
+    cardio: 'Optional: 10–15 min post-workout stationary bike or brisk incline walk (conversational pace).',
     exercises: [
-      makeExercise('ex_barbell_bench', 'Barbell Bench Press', 3, 6, 10, 150, 'Bench press station + barbell', 'chest', 'Set feet firmly, shoulder blades against the bench; lower under control.', { demoId: 'ex_db_flat_bench' }),
-      makeExercise('ex_incline_db_press', 'Incline Dumbbell Press', 3, 8, 12, 120, 'Dumbbells + adjustable bench', 'chest', 'Use a low incline; lower smoothly and keep wrists stacked over elbows.', { demoId: 'ex_incline_db_bench' }),
-      makeExercise('ex_plate_shoulder_press', 'Plate-Loaded Shoulder Press', 3, 8, 12, 120, 'Plate-loaded shoulder press', 'shoulders', 'Set handles around shoulder height and press without arching your lower back.', { demoId: 'ex_seated_db_press' }),
-      makeExercise('ex_cable_lateral_raise', 'Cable Lateral Raise', 3, 12, 20, 75, 'Functional trainer + handle', 'shoulders', 'Raise to about shoulder height with a controlled lowering phase.', { demoId: 'ex_db_lateral_raise' }),
-      makeExercise('ex_rope_pushdown', 'Cable Triceps Pushdown', 3, 10, 15, 75, 'Functional trainer + rope/bar', 'triceps', 'Keep elbows close to your sides and avoid rocking.', { demoId: 'ex_cable_triceps_pressdown' }),
-      makeExercise('ex_cable_crunch', 'Cable Crunch', 3, 10, 15, 75, 'Functional trainer + rope', 'abs', 'Curl ribs toward hips; avoid pulling the rope with your arms.', { demoId: 'ex_cable_crunch' })
+      makeExercise('ex_incline_barbell_press', 'Incline Barbell Bench Press', 3, 6, 8, 150, 'Barbell + 15–30° Incline Bench', 'chest', 'Jeff Nippard: 15–30° incline. Scapulae retracted, 2–3s controlled descent touching upper chest below collarbone. Drive up without excessive elbow flare.', { demoId: 'ex_incline_barbell_press' }),
+      makeExercise('ex_seated_cable_fly', 'Seated Cable Fly / Pec Deck', 2, 10, 12, 90, 'Cable Station / Pec Deck', 'chest', 'Jeff Nippard: Handles at mid-chest level. Keep shoulders pinned back to pad. Pause 1s in deep lengthened stretch, squeeze inner chest across.', { demoId: 'ex_pec_deck_fly' }),
+      makeExercise('ex_lat_pulldown_prog', 'Lat Pulldown (Pull-Up Progression)', 3, 6, 8, 120, 'Lat Pulldown Station', 'lats', 'Jeff Nippard: Pull-up strength builder! Torso slight 10–15° lean. Depress scapulae, drive elbows into hip pockets. Slow 2–3s negative to full stretch.', { demoId: 'ex_lat_pulldown' }),
+      makeExercise('ex_cable_lateral_raise_mon', 'High Cable / DB Lateral Raise', 2, 8, 10, 75, 'Functional Trainer / DBs', 'shoulders', 'Jeff Nippard: Pulley at hip height. Scoop the weight outward 20° forward in scapular plane. Controlled lowering phase.', { demoId: 'ex_cable_lateral_raise' }),
+      makeExercise('ex_pendlay_row', 'Pendlay Row', 2, 8, 10, 120, 'Barbell + Plates', 'back', 'Jeff Nippard: Torso strictly parallel to floor, neutral spine, dead stop on floor every rep. Explosively pull bar to lower sternum without hip heave.', { demoId: 'ex_pendlay_row' }),
+      makeExercise('ex_overhead_cable_triceps', 'Cable Overhead Triceps Extension', 2, 8, 10, 75, 'Cable Station + Rope', 'triceps', 'Jeff Nippard: Lengthened long-head overload. Lean forward 30°, let rope stretch behind head, lock out forearms under control.', { demoId: 'ex_overhead_triceps_ext' }),
+      makeExercise('ex_bayesian_preacher_curl', 'Bayesian Curl / Preacher Curl', 2, 8, 10, 75, 'Cable Pulley or Preacher Bench', 'biceps', 'Jeff Nippard: Face away from low cable with shoulder extended behind torso (Bayesian) or preacher bench. Keep upper arm stable, curl with zero shoulder momentum.', { demoId: 'ex_bayesian_curl' })
     ]
   },
   {
-    id: 'tue', name: 'Tuesday', title: 'Legs 1', subtitle: 'Quad emphasis + core', badge: 'Legs A',
-    time: '8:30 PM • 75–90 min', muscles: [{ id: 'quadriceps', role: 'Primary' }, { id: 'glutes', role: 'Secondary' }, { id: 'calves', role: 'Secondary' }, { id: 'abs', role: 'Core' }],
-    warmup: '5–8 min easy bike, then light squat and leg-press warm-up sets.', cardio: 'Main work: use controlled reps and keep 2 reps in reserve on squats and leg press.',
+    id: 'tue', name: 'Tuesday', title: 'Lower Body (Legs 1)', subtitle: 'Seated Curl, Smith Squat, RDL, Extension & Calves', badge: 'Legs 1',
+    time: '8:30 PM • 75–90 min', muscles: [{ id: 'hamstrings', role: 'Primary' }, { id: 'quadriceps', role: 'Primary' }, { id: 'calves', role: 'Secondary' }],
+    warmup: '5–8 min easy bike + leg swings + warm-up sets on Seated Leg Curl.',
+    cardio: 'Keep cardio minimal today to allow full lower-body recovery and intense lifting.',
     exercises: [
-      makeExercise('ex_barbell_squat', 'Barbell Squat', 3, 6, 10, 150, 'Power/squat rack + barbell', 'quadriceps', 'Brace before each rep; squat only as deep as you can control without pain.', { demoId: 'ex_goblet_squat' }),
-      makeExercise('ex_leg_press', '45-Degree Leg Press', 3, 8, 12, 120, '45-degree leg press', 'quadriceps', 'Keep hips and lower back against the pad; use a comfortable controlled depth.', { demoId: 'ex_leg_press' }),
-      makeExercise('ex_bulgarian_split_squat', 'Dumbbell Bulgarian Split Squat', 2, 8, 10, 90, 'Adjustable bench + dumbbells', 'quadriceps', 'Use a stable stance and controlled range; reps are per leg.', { isPerLeg: true, demoId: 'ex_bulgarian_split_squat' }),
-      makeExercise('ex_leg_extension', 'Leg Extension', 2, 10, 15, 75, 'Leg-extension machine', 'quadriceps', 'Extend smoothly and lower the stack under control.', { demoId: 'ex_leg_extension' }),
-      makeExercise('ex_standing_calf_raise', 'Standing Calf Raise', 3, 10, 15, 60, 'Smith machine or dumbbells', 'calves', 'Pause in a comfortable stretch and rise fully onto the balls of your feet.', { demoId: 'ex_standing_calf_raise' }),
-      makeExercise('ex_front_plank', 'Front Plank', 3, 30, 60, 60, 'Floor space', 'abs', 'Brace and keep a straight line from head to heels; stop when your position breaks.', { trackType: 'hold', durationUnit: 'sec', target: '30–60 seconds', demoId: 'ex_front_plank' })
+      makeExercise('ex_seated_leg_curl', 'Seated Leg Curl', 3, 10, 15, 90, 'Seated Leg Curl Machine', 'hamstrings', 'Jeff Nippard: Pre-exhaust hamstrings! Hinge torso slightly forward for deeper stretch. Curl smoothly, pause at peak, 2–3s controlled eccentric.', { demoId: 'ex_seated_leg_curl' }),
+      makeExercise('ex_smith_squat', 'Smith Machine Squat', 3, 5, 10, 150, 'Smith Machine', 'quadriceps', 'Jeff Nippard: Feet 3–6 inches forward from bar line for upright torso & maximum quad loading. Deep knee flexion; LAST SET TO FAILURE.', { demoId: 'ex_smith_squat' }),
+      makeExercise('ex_rdl_tue', 'Romanian Deadlift (RDL)', 3, 5, 10, 120, 'Barbell / DBs + Straps', 'hamstrings', 'Jeff Nippard: Use straps. Soft knee bend, push hips straight back to wall. Keep bar glued to shins, flat back throughout; stop once hips stop traveling back.', { demoId: 'ex_db_rdl' }),
+      makeExercise('ex_leg_ext_tue', 'Leg Extension', 3, 10, 15, 75, 'Leg Extension Machine', 'quadriceps', 'Jeff Nippard: Set seat backrest back to stretch rectus femoris. Grip handles tight to anchor pelvis. Squeeze quads hard at peak.', { demoId: 'ex_leg_extension' }),
+      makeExercise('ex_standing_calf_raise', 'Standing Calf Raise', 4, 10, 15, 60, 'Smith Machine or Dumbbells', 'calves', 'Jeff Nippard: Lower into full stretch and PAUSE 1–2s at bottom to eliminate tendon bounce. Drive through big toes to peak height.', { demoId: 'ex_standing_calf_raise' })
     ]
   },
   {
-    id: 'wed', name: 'Wednesday', title: 'Upper 2', subtitle: 'Back, rear delts, biceps + core', badge: 'Pull + Core',
-    time: '8:30 PM • 75–90 min', muscles: [{ id: 'lats', role: 'Primary' }, { id: 'back', role: 'Primary' }, { id: 'rear-shoulders', role: 'Secondary' }, { id: 'biceps', role: 'Secondary' }, { id: 'obliques', role: 'Core' }],
-    warmup: '5–8 min easy bike, then light pulldown and row warm-up sets.', cardio: 'Main work: use full controlled range; stop most sets with 1–2 good reps left.',
+    id: 'wed', name: 'Wednesday', title: 'Mid-Week Rest & Recovery', subtitle: 'Central nervous system reset & muscle glycogen refill', badge: 'Rest',
+    time: 'Recovery', muscles: [], warmup: 'Rest day! Muscle tissue repairs and grows during quality recovery.',
+    cardio: '20–30 min leisurely walk, mobility stretches, and maintain 150g+ protein target.',
+    exercises: []
+  },
+  {
+    id: 'thu', name: 'Thursday', title: 'Push', subtitle: 'Paused Bench, Shoulder Press, Pec Deck & Triceps', badge: 'Push Day',
+    time: '8:30 PM • 75–90 min', muscles: [{ id: 'chest', role: 'Primary' }, { id: 'shoulders', role: 'Primary' }, { id: 'triceps', role: 'Secondary' }],
+    warmup: '5–8 min easy bike + band pull-aparts + gradual Bench Press warm-up sets.',
+    cardio: 'Optional 10 min cool-down walking.',
     exercises: [
-      makeExercise('ex_lat_pulldown', 'Lat Pulldown', 4, 8, 12, 120, 'Lat-pulldown station', 'lats', 'Pull elbows down; avoid swinging or pulling behind your neck.', { demoId: 'ex_lat_pulldown' }),
-      makeExercise('ex_seated_cable_row', 'Seated Cable Row', 3, 8, 12, 120, 'Seated cable row', 'back', 'Sit tall, pull toward your torso, and return without rounding your back.', { demoId: 'ex_seated_cable_row' }),
-      makeExercise('ex_chest_supported_row', 'Chest-Supported Dumbbell Row', 3, 8, 12, 90, 'Dumbbells + adjustable bench', 'back', 'Set bench to a low incline; keep chest supported and row without jerking.', { demoId: 'ex_chest_supp_row' }),
-      makeExercise('ex_face_pull', 'Cable Face Pull', 3, 12, 20, 75, 'Functional trainer + rope', 'rear-shoulders', 'Pull the rope toward eye level with elbows high and controlled.', { demoId: 'ex_face_pull' }),
-      makeExercise('ex_ez_preacher_curl', 'EZ-Bar Preacher Curl', 3, 8, 12, 75, 'EZ curl bar + preacher bench', 'biceps', 'Keep upper arms supported and lower the bar under control.', { demoId: 'ex_ez_bar_curl' }),
-      makeExercise('ex_hammer_curl', 'Dumbbell Hammer Curl', 2, 10, 15, 60, 'Dumbbells', 'biceps', 'Keep palms facing inward and avoid swinging.', { demoId: 'ex_hammer_curl' }),
-      makeExercise('ex_dead_bug', 'Dead Bug', 3, 8, 10, 60, 'Floor space', 'abs', 'Keep your lower back gently against the floor; extend the opposite arm and leg slowly, then switch sides.', { isPerLeg: true, weighted: false, demoId: 'ex_dead_bug' })
+      makeExercise('ex_barbell_bench', 'Barbell Flat Bench Press', 3, 8, 10, 150, 'Bench Press Station + Barbell', 'chest', 'Jeff Nippard: Modest arch, shoulder blades pinched. Lower with 2s control and PAUSE 1 full second on lower chest before explosive press.', { demoId: 'ex_barbell_bench' }),
+      makeExercise('ex_plate_shoulder_press', 'Machine Shoulder Press', 3, 10, 12, 120, 'Plate-Loaded / Selectorized Press', 'shoulders', 'Jeff Nippard: Handles at chin height. Keep elbows tucked forward ~30° in scapular plane (not flared 90°). Press overhead smoothly.', { demoId: 'ex_plate_shoulder_press' }),
+      makeExercise('ex_pec_deck', 'Pec Deck Fly', 3, 15, 20, 75, 'Pec Deck Machine', 'chest', 'Jeff Nippard: Set arms for deep comfortable chest stretch without rolling shoulders forward. Keep chest proud, sweep handles forward.', { demoId: 'ex_pec_deck_fly' }),
+      makeExercise('ex_cable_lat_raise_thu', 'Cable Lateral Raise', 3, 10, 15, 75, 'Functional Trainer + Handle', 'shoulders', 'Jeff Nippard: Pulley at hip height. Scoop weight outward away from body in scapular plane (~20° forward). 2s eccentric descent.', { demoId: 'ex_cable_lateral_raise' }),
+      makeExercise('ex_overhead_cable_ext_thu', 'Overhead Cable Triceps Extension', 3, 5, 10, 90, 'Cable Station + Rope', 'triceps', 'Jeff Nippard: Heavy overload (5–10 reps). Lean forward, let rope sink behind head for deep stretch, extend forearms cleanly.', { demoId: 'ex_overhead_triceps_ext' }),
+      makeExercise('ex_tricep_cable_kickback', 'Triceps Cable Kickback', 3, 10, 15, 60, 'Cable Station (no handle/cuff)', 'triceps', 'Jeff Nippard: Cable at hip height. Hinge forward 45°, pin upper arm parallel to torso. Extend forearm back into peak contraction; hold 1s.', { demoId: 'ex_cable_kickback' })
     ]
   },
   {
-    id: 'thu', name: 'Thursday', title: 'Core + Easy Conditioning', subtitle: 'Low-fatigue trunk stability and recovery', badge: 'Core + Cardio',
-    time: '30–40 min', muscles: [{ id: 'abs', role: 'Core' }, { id: 'obliques', role: 'Core' }, { id: 'back', role: 'Stability' }],
-    warmup: '5 min very easy bike, then a few gentle hip and shoulder movements.', cardio: 'Keep this session easy: 15–20 min conversational pace on the exercise bike, then controlled core work. It should leave you feeling better, not tired, before Friday legs.',
+    id: 'fri', name: 'Friday', title: 'Legs (Legs 2)', subtitle: 'High-Intensity Quads, RDL, Hip Thrust & Leg Press', badge: 'Legs 2',
+    time: '8:30 PM • 75–90 min', muscles: [{ id: 'quadriceps', role: 'Primary' }, { id: 'hamstrings', role: 'Primary' }, { id: 'glutes', role: 'Primary' }, { id: 'calves', role: 'Secondary' }],
+    warmup: '5–8 min easy bike + hip opener dynamic stretches.',
+    cardio: 'None scheduled: prioritize maximal intensity on designated failure sets.',
     exercises: [
-      makeExercise('ex_bird_dog', 'Bird Dog', 2, 8, 10, 45, 'Floor space', 'back', 'On hands and knees, reach opposite arm and leg; pause briefly without letting your hips twist.', { isPerLeg: true, weighted: false, demoId: 'ex_bird_dog' }),
-      makeExercise('ex_front_plank_thu', 'Front Plank', 2, 20, 35, 45, 'Floor space', 'abs', 'Brace gently and keep a straight line from head to heels; end the hold before your lower back sags.', { trackType: 'hold', durationUnit: 'sec', target: '20–35 seconds', demoId: 'ex_front_plank' })
+      makeExercise('ex_leg_ext_fri', 'Leg Extension', 2, 8, 10, 90, 'Leg Extension Machine', 'quadriceps', 'Jeff Nippard: Lean seat back for bigger quad stretch. Focus entirely on squeezing quads to move the weight. BOTH SETS TO ABSOLUTE FAILURE.', { demoId: 'ex_leg_extension' }),
+      makeExercise('ex_barbell_rdl_fri', 'Barbell Romanian Deadlift (RDL)', 2, 6, 8, 120, 'Barbell + Plates + Straps', 'hamstrings', 'Jeff Nippard: Push hips back and lower bar straight down centered over mid-foot. Flat back the entire time; drive hips forward at top.', { demoId: 'ex_db_rdl' }),
+      makeExercise('ex_hip_thrust_fri', 'Barbell Hip Thrust', 2, 6, 8, 120, 'Barbell + Flat Bench', 'glutes', 'Jeff Nippard: Bench just below shoulder blades, shins vertical. Squeeze glutes hard at lockout with posterior pelvic tilt; LAST SET TO FAILURE.', { demoId: 'ex_hip_thrust' }),
+      makeExercise('ex_leg_press_fri', '45° Leg Press', 1, 6, 8, 150, '45-Degree Leg Press', 'quadriceps', 'Jeff Nippard: Single all-out top set! Feet middle of sled. Deep controlled knee flexion without lower back lifting off pad. TRY TILL FAILURE.', { demoId: 'ex_leg_press' }),
+      makeExercise('ex_standing_db_calf_fri', 'Standing Dumbbell Calf Raise', 2, 8, 10, 60, 'Heavy Dumbbells + Step', 'calves', 'Jeff Nippard: Hold heavy dumbbells. Pause for 2 full seconds in the deep bottom stretch on every rep to eliminate elasticity.', { demoId: 'ex_standing_calf_raise' })
     ]
   },
   {
-    id: 'fri', name: 'Friday', title: 'Legs 2', subtitle: 'Hamstrings and glutes + core', badge: 'Legs B',
-    time: '8:30 PM • 75–90 min', muscles: [{ id: 'hamstrings', role: 'Primary' }, { id: 'glutes', role: 'Primary' }, { id: 'quadriceps', role: 'Secondary' }, { id: 'calves', role: 'Secondary' }, { id: 'abs', role: 'Core' }],
-    warmup: '5–8 min easy bike, then gradually load the trap/hex bar for practice sets.', cardio: 'Keep the trap-bar deadlift controlled and submaximal; no max-effort attempts.',
+    id: 'sat', name: 'Saturday', title: 'Pull', subtitle: 'Close-Grip Lat, Chest-Supported Row, Rear Delts, Shrugs & Curls', badge: 'Pull Day',
+    time: '8:30 PM • 75–90 min', muscles: [{ id: 'lats', role: 'Primary' }, { id: 'back', role: 'Primary' }, { id: 'rear-shoulders', role: 'Secondary' }, { id: 'biceps', role: 'Secondary' }],
+    warmup: '5–8 min easy bike + light pulldown and row warm-up sets.',
+    cardio: 'Optional: 10–15 min brisk incline treadmill walk.',
     exercises: [
-      makeExercise('ex_trap_bar_deadlift', 'Trap/Hex-Bar Deadlift', 3, 6, 8, 150, 'Trap/hex bar + plates', 'hamstrings', 'Brace, push through the floor, and finish standing tall without leaning back.'),
-      makeExercise('ex_hip_thrust', 'Barbell Hip Thrust', 3, 8, 12, 120, 'Barbell + flat bench', 'glutes', 'Keep ribs down and finish with hips extended, not your lower back.', { demoId: 'ex_hip_thrust' }),
-      makeExercise('ex_seated_leg_curl', 'Leg Curl', 3, 10, 15, 75, 'Leg-curl machine', 'hamstrings', 'Curl smoothly and control the return.', { demoId: 'ex_seated_leg_curl' }),
-      makeExercise('ex_reverse_lunge', 'Dumbbell Reverse Lunge', 2, 8, 10, 90, 'Dumbbells', 'glutes', 'Step back under control and keep the front foot planted; reps are per leg.', { isPerLeg: true, demoId: 'ex_walking_lunge' }),
-      makeExercise('ex_seated_calf_raise', 'Smith Calf Raise', 3, 10, 15, 60, 'Smith machine', 'calves', 'Use a stable foot position and avoid bouncing.', { demoId: 'ex_seated_calf_raise' }),
-      makeExercise('ex_crunch', 'Basic Crunch', 3, 10, 15, 60, 'Floor space', 'abs', 'Lie on your back with knees bent; gently curl your shoulders toward your hips, then lower with control. Avoid pulling your neck.', { weighted: false, demoId: 'ex_crunch' })
-    ]
-  },
-  {
-    id: 'sat', name: 'Saturday', title: 'Upper 3', subtitle: 'Balanced upper body + core', badge: 'Upper Mix',
-    time: '8:30 PM • 75–90 min', muscles: [{ id: 'chest', role: 'Primary' }, { id: 'back', role: 'Primary' }, { id: 'shoulders', role: 'Secondary' }, { id: 'arms', role: 'Secondary' }, { id: 'obliques', role: 'Core' }],
-    warmup: '5–8 min easy bike, then light incline-press and row warm-up sets.', cardio: 'Balanced upper-body session; keep 2 reps in reserve on presses and rows.',
-    exercises: [
-      makeExercise('ex_incline_barbell_press', 'Incline Barbell Press', 3, 8, 12, 120, 'Barbell + adjustable bench + rack', 'chest', 'Use safety arms or a spotter; lower under control to the upper chest.', { demoId: 'ex_incline_db_bench' }),
-      makeExercise('ex_one_arm_db_row', 'One-Arm Dumbbell Row', 3, 8, 12, 90, 'Dumbbell + flat bench', 'back', 'Brace on the bench and row toward your hip without twisting.', { isPerLeg: true, demoId: 'ex_chest_supp_row' }),
-      makeExercise('ex_cable_chest_press', 'Cable Chest Press', 2, 10, 15, 75, 'Functional trainer + handles', 'chest', 'Stand in a stable staggered stance and press forward smoothly.', { demoId: 'ex_cable_chest_press' }),
-      makeExercise('ex_cable_rear_delt_fly', 'Cable Rear-Delt Fly', 3, 12, 20, 75, 'Functional trainer + handles', 'rear-shoulders', 'Use light resistance and move arms out without shrugging.', { demoId: 'ex_cable_rear_delt_fly' }),
-      makeExercise('ex_preacher_curl', 'Preacher Curl', 2, 10, 15, 60, 'Preacher bench + EZ bar or dumbbells', 'biceps', 'Keep upper arms supported and avoid forcing the bottom stretch.', { demoId: 'ex_ez_bar_curl' }),
-      makeExercise('ex_overhead_triceps', 'Overhead Cable Triceps Extension', 2, 10, 15, 60, 'Functional trainer + rope', 'triceps', 'Keep elbows comfortably pointed forward and extend without arching.', { demoId: 'ex_overhead_triceps_ext' }),
-      makeExercise('ex_side_plank', 'Side Plank', 3, 25, 45, 60, 'Floor space', 'obliques', 'Keep hips stacked and body straight; stop when your position breaks.', { trackType: 'hold', durationUnit: 'sec', isPerLeg: true, target: '25–45 seconds per side', demoId: 'ex_side_plank' })
+      makeExercise('ex_close_grip_lat_pulldown', 'Close-Grip Lat Pulldown', 3, 10, 15, 100, 'Lat Pulldown + V-Grip/Neutral', 'lats', 'Jeff Nippard: Torso nearly vertical at top for maximum stretch. Drive elbows down tight to sides directly into hip pockets.', { demoId: 'ex_close_grip_lat_pulldown' }),
+      makeExercise('ex_incline_chest_supp_row', 'Incline Chest-Supported DB Row', 3, 10, 12, 90, '30–45° Incline Bench + DBs', 'back', 'Jeff Nippard: Proper machine row replacement! Bench at 30–45°. Flare elbows 45–60° and pinch shoulder blades together at top for 1s.', { demoId: 'ex_chest_supp_row' }),
+      makeExercise('ex_close_grip_cable_row', 'Close-Grip Seated Cable Row', 2, 15, 20, 75, 'Seated Cable Row + V-Grip', 'lats', 'Jeff Nippard: Sit upright with tall posture. Let shoulders protract slightly at stretch; pull to navel keeping elbows close to ribcage.', { demoId: 'ex_seated_cable_row' }),
+      makeExercise('ex_reverse_cable_fly', 'Reverse Cable Fly', 3, 15, 20, 60, 'Functional Trainer (Eye Level)', 'rear-shoulders', 'Jeff Nippard: Hold cable balls without handles. Light weight, high reps (15–20) so mid-traps do not take over. Wide horizontal arc.', { demoId: 'ex_cable_rear_delt_fly' }),
+      makeExercise('ex_shrugs_pull', 'Dumbbell / Trap-Bar Shrugs', 4, 15, 20, 60, 'Dumbbells or Trap/Hex Bar', 'traps', 'Jeff Nippard: Shrug machine replacement! Lean torso forward ~10° to align with upper trap fibers. Shrug up and back; pause 1–2s at peak.', { demoId: 'ex_shrugs' }),
+      makeExercise('ex_ez_bar_curl', 'EZ-Bar Curl', 3, 10, 15, 75, 'EZ Curl Bar + Plates', 'biceps', 'Jeff Nippard: Semi-supinated grip on EZ bar protects wrists while maximizing bicep tension. Pin elbows to ribs; zero torso swing.', { demoId: 'ex_ez_bar_curl' }),
+      makeExercise('ex_preacher_curl_sat', 'Preacher Curl (Machine or EZ-Bar/DB)', 3, 15, 20, 60, 'Preacher Bench + EZ-Bar / DBs or Machine', 'biceps', 'Jeff Nippard: Targets bicep short head with strict isolation. Armpits snug against pad. Curl smoothly and control the 2–3s descent.', { demoId: 'ex_ez_preacher_curl' })
     ]
   }
 ];
@@ -1249,6 +1249,171 @@ const EXERCISE_DEMOS = {
       'Using excessive weight or swinging the torso.'
     ],
     breathing: 'Exhale as you open the arms; inhale as you return.'
+  },
+  'ex_barbell_bench': {
+    videoId: 'vthMCtgVtFw',
+    setup: [
+      'Lie on bench with eyes directly under the bar. Plant feet firmly flat on the floor.',
+      'Retract and depress shoulder blades into the bench pad; establish a natural, modest arch (butt glued to pad).',
+      'Grip the bar slightly wider than shoulder-width with wrists stacked directly over elbows.'
+    ],
+    execution: [
+      'Unrack and stabilize the bar directly over your chest.',
+      'Lower the bar under control with a 2–3s eccentric, tucking elbows ~45–60° from torso.',
+      'Touch lower sternum and PAUSE for 1 full second with zero bounce to eliminate stretch reflex.',
+      'Drive through your feet and press explosively up and slightly back toward your eye-line.'
+    ],
+    mistakes: [
+      'Bouncing the bar off the ribcage or lifting your butt off the bench pad.',
+      'Flaring elbows out at 90° (places high shear stress on rotator cuff tendons).'
+    ],
+    breathing: 'Inhale deeply and brace trunk before descent; pause on chest, then exhale forcefully as you drive past sticking point.'
+  },
+  'ex_incline_barbell_press': {
+    videoId: '8iPEnn-ltC8',
+    setup: [
+      'Set adjustable bench to a low 15°–30° incline (steeper 45° shifts excessive tension to front deltoids).',
+      'Retract shoulder blades into the pad and plant feet firmly on the ground.',
+      'Grip bar slightly wider than shoulder width so forearms remain vertical at the bottom.'
+    ],
+    execution: [
+      'Lower the bar under strict control to the upper chest, roughly 1–2 inches below the clavicles.',
+      'Pause briefly in the lengthened stretch at the bottom without resting weight on bones.',
+      'Drive up and slightly backward over shoulders, keeping elbows angled ~45°.'
+    ],
+    mistakes: [
+      'Using too high of an incline angle (turns it into a shoulder press).',
+      'Flaring elbows outward or bouncing bar off the clavicle.'
+    ],
+    breathing: 'Deep breath and abdominal brace at the top; lower under control; exhale while pressing upward.'
+  },
+  'ex_pec_deck_fly': {
+    videoId: 'Iwe6AmxVf7o',
+    setup: [
+      'Adjust seat height so handles are level with your mid-to-lower chest.',
+      'Pin shoulder blades firmly against back pad and puff chest out proud.',
+      'Grab handles with a slight bend in your elbows and keep wrists neutral.'
+    ],
+    execution: [
+      'Allow arms to travel back until you feel a deep, loaded stretch across the pecs.',
+      'Pause for 1 second in the lengthened position where growth stimulus is maximized.',
+      'Drive inner elbows and biceps toward each other in a hugging motion to contract pecs.'
+    ],
+    mistakes: [
+      'Allowing shoulders to roll forward off the pad at peak stretch or during the squeeze.',
+      'Turning the fly into a press by excessively bending elbows.'
+    ],
+    breathing: 'Inhale as your arms open into the deep stretch; exhale as you bring the handles together.'
+  },
+  'ex_pendlay_row': {
+    videoId: 'h4nkgNkZpy8',
+    setup: [
+      'Position barbell over mid-foot with plates resting completely flat on the floor.',
+      'Hinge hips back until your torso is completely parallel to the floor; keep spine neutral.',
+      'Take a slightly wider than shoulder-width overhand grip with long arms.'
+    ],
+    execution: [
+      'Brace your core and tighten your lats.',
+      'Explosively pull the bar straight up to your lower chest / upper abdomen.',
+      'Squeeze upper back and mid-traps hard at the top, then lower the bar under control back to the floor.',
+      'Reset completely to a dead stop before starting each new rep.'
+    ],
+    mistakes: [
+      'Raising your torso upright or using hip heave/momentum to swing the weight.',
+      'Rounding the lumbar spine under heavy loads.'
+    ],
+    breathing: 'Inhale and brace core at the bottom; exhale explosively as you pull to chest.'
+  },
+  'ex_bayesian_curl': {
+    videoId: 'r5cEksxK0q4',
+    setup: [
+      'Set cable pulley to the bottom setting with a single D-handle.',
+      'Face away from the cable machine and take 1–2 steps forward with arm extended behind your torso.',
+      'Keep shoulder retracted so the biceps long head starts in a maximum lengthened stretch.'
+    ],
+    execution: [
+      'Curl the handle forward and upward while keeping your upper arm stationary behind your body line.',
+      'Supinate your wrist (rotate pinky outward) at peak contraction for maximum bicep recruitment.',
+      'Lower slowly over 3 seconds back into the deep stretch behind your hip.'
+    ],
+    mistakes: [
+      'Swinging torso forward or letting upper arm move forward like a front raise.',
+      'Rushing the eccentric stretch where tension is highest.'
+    ],
+    breathing: 'Exhale on the curl; inhale on the slow 3-second negative.'
+  },
+  'ex_smith_squat': {
+    videoId: '4nwt_eX38H8',
+    setup: [
+      'Set Smith bar across upper traps (high bar position) and unlock bar with wrists straight.',
+      'Step feet 3–6 inches forward from directly under the bar, roughly shoulder-width apart.',
+      'This foot placement enables a fully upright torso and targets quads with minimal spinal shear.'
+    ],
+    execution: [
+      'Initiate movement by bending knees and letting them track smoothly over your toes.',
+      'Descend smoothly into deep knee flexion until thighs reach or pass parallel.',
+      'Drive through mid-foot to return upright without violently locking out knees at the top.',
+      'On the final set, push smoothly until technical failure (no more clean reps).'
+    ],
+    mistakes: [
+      'Placing feet directly under or behind the bar (forces torso forward and stresses lower back).',
+      'Collapsing knees inward during the concentric drive.'
+    ],
+    breathing: 'Inhale and brace trunk before descent; exhale as you pass the sticking point on the drive up.'
+  },
+  'ex_cable_kickback': {
+    videoId: 'nRiJVZDpdL0',
+    setup: [
+      'Set cable pulley around hip height with no handle attachment (hold the rubber ball/cable directly).',
+      'Hinge forward at the hips to about a 45° angle with a staggered stance.',
+      'Pin upper arm parallel to or slightly behind your torso; elbow bent at 90°.'
+    ],
+    execution: [
+      'Keep upper arm locked in space; extend your forearm backward until your arm is completely straight.',
+      'Pause and squeeze the lateral and long heads of the triceps at peak contraction for 1 full second.',
+      'Control the return to 90° without letting your elbow drop down.'
+    ],
+    mistakes: [
+      'Swinging the upper arm back and forth (turns it into a shoulder extension movement).',
+      'Using excessive weight that prevents complete elbow lockout.'
+    ],
+    breathing: 'Exhale as you kick back to full lockout; inhale on the controlled return.'
+  },
+  'ex_close_grip_lat_pulldown': {
+    videoId: 'CAwf7n6Luuc',
+    setup: [
+      'Attach a close-grip neutral (V-bar) or parallel grip handle to the lat pulldown machine.',
+      'Lock thighs firmly under the pads with feet flat on the floor.',
+      'Hold handles and sit tall with your torso almost completely vertical.'
+    ],
+    execution: [
+      'Start from full vertical arm extension to feel the lats fully stretched at the top.',
+      'Depress your scapulae, then drive your elbows straight down toward your sides/pockets.',
+      'Pull handle down to upper chest, squeeze lats, and control the weight back up over 2–3 seconds.'
+    ],
+    mistakes: [
+      'Leaning back 45° and turning the pulldown into a sloppy mid-back row.',
+      'Shrugging shoulders up toward ears at the bottom.'
+    ],
+    breathing: 'Exhale as you drive elbows down; inhale as arms extend into the stretch.'
+  },
+  'ex_shrugs': {
+    videoId: 'kGgT8e7wXJk',
+    setup: [
+      'Hold heavy dumbbells at your sides or stand inside a trap/hex bar with neutral grip.',
+      'Lean torso forward ~10° (upper trap fibers run diagonally, not purely vertical).',
+      'Keep chin tucked, neck neutral, and knees softly unlocked.'
+    ],
+    execution: [
+      'Shrug your shoulders up and slightly backward along the diagonal line of your upper traps.',
+      'Hold and squeeze the peak contraction at the top for 1–2 full seconds.',
+      'Lower the weights smoothly down into a full stretch at the bottom.'
+    ],
+    mistakes: [
+      'Rolling shoulders in circular motions (wears out rotator cuff with zero extra trap growth).',
+      'Jerking the neck forward or bouncing the weight quickly.'
+    ],
+    breathing: 'Inhale at the bottom; exhale and hold as you shrug to peak height; release on descent.'
   }
 };
 
@@ -1399,7 +1564,14 @@ const EXERCISE_IMAGES = {
   'ex_reverse_crunch': ['Reverse_Crunch/0.jpg', 'Reverse_Crunch/1.jpg'],
   'ex_bird_dog': ['Dead_Bug/0.jpg', 'Dead_Bug/1.jpg'],
   'ex_side_plank_sat': ['Push_Up_to_Side_Plank/0.jpg', 'Push_Up_to_Side_Plank/1.jpg'],
-  'ex_cable_wood_chop': ['Standing_Cable_Wood_Chop/0.jpg', 'Standing_Cable_Wood_Chop/1.jpg']
+  'ex_cable_wood_chop': ['Standing_Cable_Wood_Chop/0.jpg', 'Standing_Cable_Wood_Chop/1.jpg'],
+  'ex_pec_deck_fly': ['Butterfly/0.jpg', 'Butterfly/1.jpg'],
+  'ex_pendlay_row': ['Bent_Over_Two-Arm_Long_Barbell_Row/0.jpg', 'Bent_Over_Two-Arm_Long_Barbell_Row/1.jpg'],
+  'ex_bayesian_curl': ['Preacher_Curl/0.jpg', 'Preacher_Curl/1.jpg'],
+  'ex_smith_squat': ['Barbell_Squat/0.jpg', 'Barbell_Squat/1.jpg'],
+  'ex_cable_kickback': ['Cable_One_Arm_Tricep_Extension/0.jpg', 'Cable_One_Arm_Tricep_Extension/1.jpg'],
+  'ex_close_grip_lat_pulldown': ['Close-Grip_Front_Lat_Pulldown/0.jpg', 'Close-Grip_Front_Lat_Pulldown/1.jpg'],
+  'ex_shrugs': ['Dumbbell_Shrug/0.jpg', 'Dumbbell_Shrug/1.jpg']
 };
 
 function getExerciseThumbnailUrl(exerciseId) {
