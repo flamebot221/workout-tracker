@@ -146,7 +146,7 @@
     .square-checkbox {
       width: 18px;
       height: 18px;
-      border-radius: 4px;
+      border-radius: 6px;
       border: 1.5px solid rgba(255, 255, 255, 0.25);
       background-color: #0C0E12;
       display: flex;
@@ -165,24 +165,51 @@
       color: #000000 !important;
     }
 
-    /* Scenic hero banner */
+    /* Scenic hero banner — cropped to the mountain region of the source image
+       so the artwork's own baked-in text does not ghost behind the overlay */
     .hero-banner {
-      background: linear-gradient(to right, rgba(12, 14, 18, 0.94) 0%, rgba(12, 14, 18, 0.7) 45%, rgba(12, 14, 18, 0.4) 100%),
-                  url('./hero_mountain_banner.jpg');
-      background-size: cover;
-      background-position: center;
+      background-color: #0C0E12;
+      background-image: linear-gradient(to right, rgba(12, 14, 18, 0.92) 0%, rgba(12, 14, 18, 0.55) 100%),
+                        url('./hero_mountain_banner.jpg');
+      background-size: auto, 250% auto;
+      background-position: center, 63% 42%;
+      background-repeat: no-repeat, no-repeat;
       border: 1px solid rgba(255, 255, 255, 0.08);
       border-radius: 8px;
     }
 
-    /* Forest quote banner */
+    /* Forest quote banner — cropped to the treeline region */
     .quote-banner {
-      background: linear-gradient(to right, rgba(19, 23, 31, 0.92) 0%, rgba(19, 23, 31, 0.75) 100%),
-                  url('./quote_card_banner.jpg');
-      background-size: cover;
-      background-position: center;
+      background-color: #13171F;
+      background-image: linear-gradient(to right, rgba(19, 23, 31, 0.9) 0%, rgba(19, 23, 31, 0.5) 100%),
+                        url('./quote_card_banner.jpg');
+      background-size: auto, 250% auto;
+      background-position: center, 76% 50%;
+      background-repeat: no-repeat, no-repeat;
       border: 1px solid rgba(255, 255, 255, 0.08);
       border-radius: 8px;
+    }
+
+    /* Featured / raised surface — used for the primary card on each view */
+    .card-feature {
+      background: linear-gradient(180deg, #171D27 0%, #131820 100%);
+      border: 1px solid rgba(255, 255, 255, 0.09);
+      box-shadow: 0 12px 30px -20px rgba(0, 0, 0, 0.9);
+    }
+
+    /* Numeric displays: tabular figures keep columns aligned */
+    .stat-value {
+      font-variant-numeric: tabular-nums;
+      letter-spacing: -0.01em;
+    }
+
+    /* Restrained uppercase micro-label */
+    .micro-label {
+      font-size: 10px;
+      line-height: 1;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
     }
 
     /* Scrollbar */
@@ -233,6 +260,12 @@
       border-color: #D99026 !important;
     }
 
+    html:not(.dark) .card-feature {
+      background: #FFFFFF !important;
+      border: 1px solid rgba(210, 200, 185, 0.6) !important;
+      box-shadow: 0 2px 10px rgba(60, 50, 40, 0.07) !important;
+    }
+
     html:not(.dark) .btn-gold {
       background-color: #D99026 !important;
       color: #FFFFFF !important;
@@ -265,20 +298,17 @@
     /* Inputs in Creamy Mode */
     html:not(.dark) input,
     html:not(.dark) .input-weight,
-    html:not(.dark) .input-reps,
-    html:not(.dark) #global-search-input {
+    html:not(.dark) .input-reps {
       background-color: #FAF7F0 !important;
       color: #1E1B18 !important;
       border-color: rgba(195, 185, 170, 0.6) !important;
     }
-    html:not(.dark) input::placeholder,
-    html:not(.dark) #global-search-input::placeholder {
+    html:not(.dark) input::placeholder {
       color: #9C9283 !important;
     }
     html:not(.dark) input:focus,
     html:not(.dark) .input-weight:focus,
-    html:not(.dark) .input-reps:focus,
-    html:not(.dark) #global-search-input:focus {
+    html:not(.dark) .input-reps:focus {
       background-color: #FFFFFF !important;
       border-color: #D99026 !important;
     }
@@ -342,12 +372,14 @@
       border-color: rgba(190, 178, 160, 0.35) !important;
     }
 
-    /* Banners in Creamy Mode */
+    /* Banners in Creamy Mode (same scenic crops as dark mode) */
     html:not(.dark) .hero-banner {
-      background: linear-gradient(to right, rgba(248, 245, 238, 0.97) 0%, rgba(248, 245, 238, 0.85) 45%, rgba(248, 245, 238, 0.55) 100%),
+      background-color: #F8F5EE !important;
+      background-image: linear-gradient(to right, rgba(248, 245, 238, 0.94) 0%, rgba(248, 245, 238, 0.7) 100%),
                   url('./hero_mountain_banner.jpg') !important;
-      background-size: cover !important;
-      background-position: center !important;
+      background-size: auto, 250% auto !important;
+      background-position: center, 63% 42% !important;
+      background-repeat: no-repeat, no-repeat !important;
       border: 1px solid rgba(210, 200, 185, 0.6) !important;
     }
     html:not(.dark) .hero-banner h1,
@@ -359,10 +391,12 @@
     }
 
     html:not(.dark) .quote-banner {
-      background: linear-gradient(to right, rgba(242, 237, 226, 0.97) 0%, rgba(242, 237, 226, 0.85) 100%),
+      background-color: #F2EDE2 !important;
+      background-image: linear-gradient(to right, rgba(242, 237, 226, 0.92) 0%, rgba(242, 237, 226, 0.62) 100%),
                   url('./quote_card_banner.jpg') !important;
-      background-size: cover !important;
-      background-position: center !important;
+      background-size: auto, 250% auto !important;
+      background-position: center, 76% 50% !important;
+      background-repeat: no-repeat, no-repeat !important;
       border: 1px solid rgba(210, 200, 185, 0.6) !important;
     }
     html:not(.dark) .quote-banner h4,
@@ -384,13 +418,6 @@
     }
     html:not(.dark) #floating-rest-widget .bg-\[\#0C0E12\] {
       background-color: #EFE9DE !important;
-    }
-
-    /* Modals in Creamy Mode */
-    html:not(.dark) #exercise-demo-modal .dashboard-card,
-    html:not(.dark) #plan-overview-modal .dashboard-card {
-      background-color: #F8F5EE !important;
-      border-color: rgba(210, 200, 185, 0.7) !important;
     }
 
     /* Active Nav Items in Creamy Mode */
@@ -428,10 +455,13 @@
     <div>
       <!-- Brand Logo & Motto -->
       <div class="mb-7">
-        <div class="flex items-center gap-2">
+        <div class="flex items-center gap-2.5">
+          <span class="w-8 h-8 rounded-lg bg-[#E5A93C] text-[#0C0E12] flex items-center justify-center shadow-lg shadow-amber-900/30">
+            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.5 6.5v11M3.5 9v5M17.5 6.5v11M20.5 9v5M6.5 12h11"/></svg>
+          </span>
           <span class="text-xl font-black text-[#E5A93C] tracking-tight font-sans">myfit</span>
         </div>
-        <p class="text-[11px] text-gray-400 mt-1 leading-tight font-medium">
+        <p class="text-[11px] text-gray-400 mt-2 leading-tight font-medium">
           Discipline today,<br>a better tomorrow.
         </p>
       </div>
@@ -454,18 +484,13 @@
         </button>
 
         <button id="desk-nav-diet" onclick="switchNavTab('diet')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded text-gray-400 hover:text-white hover:bg-white/[0.03] border border-transparent transition-all text-left">
-          <span class="text-base">🍽️</span>
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 2v7a3 3 0 0 0 3 3v10M7 2v6M10 2v6"/><path d="M17 2c-1.5 1-2 3-2 5s.5 3 2 3v12"/></svg>
           <span>Diet Log</span>
         </button>
 
         <button id="desk-nav-progress" onclick="switchNavTab('progress')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded text-gray-400 hover:text-white hover:bg-white/[0.03] border border-transparent transition-all text-left">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
           <span>Progress & Logs</span>
-        </button>
-
-        <button id="desk-nav-library" onclick="switchNavTab('library')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded text-gray-400 hover:text-white hover:bg-white/[0.03] border border-transparent transition-all text-left">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
-          <span>Exercise Demos</span>
         </button>
       </nav>
     </div>
@@ -474,7 +499,7 @@
     <div class="pt-4 border-t border-white/[0.07] space-y-3">
       <button onclick="toggleTheme()" class="w-full flex items-center justify-between px-3 py-2 rounded btn-dark text-xs font-semibold">
         <span class="flex items-center gap-2">
-          <span id="desk-theme-icon">☀️</span>
+          <span id="desk-theme-icon" class="text-amber-400 flex items-center"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg></span>
           <span id="desk-theme-label">Creamy Mode</span>
         </span>
         <span class="text-[10px] text-amber-400 font-mono">Toggle</span>
@@ -491,64 +516,47 @@
     <!-- TOP HEADER BAR -->
     <header class="sticky top-0 z-30 bg-[#0C0E12]/95 backdrop-blur-md border-b border-white/[0.07] px-4 lg:px-7 py-3 flex items-center justify-between gap-4">
       
-      <!-- Mobile Brand Logo / Desktop Search Bar -->
-      <div class="flex items-center gap-3 flex-1 max-w-md">
+      <!-- Mobile Brand Logo -->
+      <!-- Left: mobile brand + desktop section title -->
+      <div class="flex items-center gap-3 flex-1 min-w-0">
         <div class="lg:hidden flex items-center gap-1.5">
           <span class="text-base font-black text-[#E5A93C] font-sans">myfit</span>
         </div>
-
-        <!-- Search Bar (Square) -->
-        <div class="relative w-full">
-          <svg class="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-          <input 
-            type="text" 
-            id="global-search-input" 
-            placeholder="Search exercises, cues, workouts..." 
-            oninput="handleGlobalSearch(this.value)"
-            class="w-full bg-[#161B24] border border-white/[0.08] text-xs text-gray-200 placeholder-gray-500 pl-8 pr-3 py-1.5 rounded focus:outline-none focus:border-[#E5A93C]/50 transition-colors"
-          />
-        </div>
+        <h1 id="header-section-title" class="hidden lg:block text-sm font-bold text-white tracking-tight truncate">Dashboard</h1>
       </div>
 
       <!-- Right Header Items: Date, Deload Toggle & Quick Rest -->
-      <div class="flex items-center gap-2.5">
+      <div class="flex items-center gap-2 sm:gap-2.5">
         
         <!-- Date Badge -->
         <div class="hidden sm:flex items-center gap-1.5 text-xs text-gray-400 bg-[#161B24] border border-white/[0.07] px-2.5 py-1 rounded font-mono">
-          <span>📅</span>
+          <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
           <span id="header-date-display">Today</span>
         </div>
 
-        <!-- Week 7 Deload Toggle (Square Button) -->
-        <button id="btn-deload-toggle" onclick="toggleWeek7Deload()" class="text-[11px] font-semibold px-2.5 py-1.5 rounded bg-[#161B24] border border-white/[0.08] text-gray-300 hover:text-white transition-all flex items-center gap-1.5">
+        <!-- Light Week / Deload Toggle (Square Button) -->
+        <button id="btn-deload-toggle" onclick="toggleDeload()" class="text-[11px] font-semibold px-2.5 py-1.5 rounded bg-[#161B24] border border-white/[0.08] text-gray-300 hover:text-white transition-all flex items-center gap-1.5">
           <span id="deload-dot" class="w-1.5 h-1.5 rounded-sm bg-gray-500"></span>
           <span id="deload-text">Deload: OFF</span>
         </button>
 
         <!-- Quick 90s Rest Trigger -->
         <button onclick="startRestTimer(90, 'Quick Rest')" class="hidden sm:flex items-center gap-1.5 text-xs text-amber-400 bg-amber-500/10 border border-amber-500/25 px-2.5 py-1.5 rounded font-mono font-bold hover:bg-amber-500/20 transition-colors">
-          <span>⏱️ Rest 90s</span>
+          <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 2h4"/><path d="M12 14l3-3"/><circle cx="12" cy="14" r="8"/></svg>
+          <span>Rest 90s</span>
         </button>
 
         <!-- Force Sync / Refresh Button (Instant update on Android) -->
         <button onclick="forceAppRefresh()" title="Reload newest version & clear cache" class="flex items-center gap-1.5 text-[11px] font-semibold px-2 py-1.5 rounded bg-[#161B24] border border-white/[0.08] text-gray-300 hover:text-amber-400 hover:border-amber-400/40 transition-all">
-          <span class="text-xs">🔄</span>
+          <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 4v6h-6"/><path d="M3 20v-6h6"/><path d="M3.5 9a9 9 0 0 1 14.9-3.4L21 8M3 16l2.6 2.4A9 9 0 0 0 20.5 15"/></svg>
           <span class="text-[10.5px] hidden sm:inline">Sync</span>
         </button>
 
         <!-- Theme Toggle: Dark (Default) / Creamy Light Mode -->
         <button id="btn-theme-toggle" onclick="toggleTheme()" title="Switch Theme (Dark / Creamy Light)" class="flex items-center gap-1.5 text-[11px] font-semibold px-2.5 py-1.5 rounded bg-[#161B24] border border-white/[0.08] text-gray-300 hover:text-amber-400 hover:border-amber-400/40 transition-all">
-          <span id="theme-toggle-icon" class="text-xs">☀️</span>
+          <span id="theme-toggle-icon" class="text-amber-400 flex items-center"><svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg></span>
           <span id="theme-toggle-text" class="text-[10.5px] hidden sm:inline">Light</span>
         </button>
-
-        <!-- User Badge -->
-        <div class="flex items-center gap-2 bg-[#161B24] border border-white/[0.08] px-2 py-1 rounded">
-          <div class="w-5 h-5 rounded-sm bg-emerald-600/30 text-emerald-400 text-[10px] font-bold flex items-center justify-center font-mono">
-            U
-          </div>
-          <span class="text-xs text-gray-300 font-medium hidden md:inline">8:30 PM Gym</span>
-        </div>
       </div>
     </header>
 
@@ -583,9 +591,9 @@
           <div class="dashboard-card p-3.5 flex flex-col justify-between">
             <div class="flex items-center justify-between text-gray-400 text-xs mb-1">
               <span>Current Weight</span>
-              <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
+              <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
             </div>
-            <div class="text-xl font-black text-white font-mono" id="stat-weight-val">94.5 kg</div>
+            <div class="stat-value text-xl font-black text-white font-mono" id="stat-weight-val">94.5 kg</div>
             <div class="text-[10px] text-gray-400 mt-1">Rolling 7-day average</div>
           </div>
 
@@ -595,7 +603,7 @@
               <span>Goal Target</span>
               <span class="text-xs text-amber-400 font-bold">12 Weeks</span>
             </div>
-            <div class="text-xl font-black text-amber-400 font-mono">85.0 kg</div>
+            <div class="stat-value text-xl font-black text-amber-400 font-mono">85.0 kg</div>
             <div class="text-[10px] text-gray-400 mt-1">Total fat loss: <strong class="text-white font-mono">9.5 kg</strong></div>
           </div>
 
@@ -603,9 +611,9 @@
           <div class="dashboard-card p-3.5 flex flex-col justify-between">
             <div class="flex items-center justify-between text-gray-400 text-xs mb-1">
               <span>Total Lost</span>
-              <span class="text-emerald-400">📉</span>
+              <span class="text-emerald-400"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="22 17 13.5 8.5 8.5 13.5 2 7"/><polyline points="16 17 22 17 22 11"/></svg></span>
             </div>
-            <div class="text-xl font-black text-emerald-400 font-mono" id="stat-total-lost-val">0.0 kg</div>
+            <div class="stat-value text-xl font-black text-emerald-400 font-mono" id="stat-total-lost-val">0.0 kg</div>
             <div class="text-[10px] text-gray-400 mt-1" id="stat-remaining-val">9.5 kg remaining</div>
           </div>
 
@@ -613,9 +621,9 @@
           <div class="dashboard-card p-3.5 flex flex-col justify-between">
             <div class="flex items-center justify-between text-gray-400 text-xs mb-1">
               <span>Calorie Deficit</span>
-              <span class="text-amber-400">🔥</span>
+              <span class="text-gray-500"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.07-2.14-.22-4.05 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.15.43-2.29 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg></span>
             </div>
-            <div class="text-xl font-black text-white font-mono">500–700</div>
+            <div class="stat-value text-xl font-black text-white font-mono">500–700</div>
             <div class="text-[10px] text-gray-400 mt-1">kcal/day fat loss engine</div>
           </div>
 
@@ -623,9 +631,9 @@
           <div class="dashboard-card p-3.5 flex flex-col justify-between col-span-2 sm:col-span-1">
             <div class="flex items-center justify-between text-gray-400 text-xs mb-1">
               <span>Daily Protein</span>
-              <span class="text-cyan-400">🍗</span>
+              <span class="text-gray-500"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15.5 3.5a5 5 0 0 0-5 5c0 .8.2 1.6.6 2.3L5 17.2A2.6 2.6 0 0 0 8.8 21l6.4-6.1c.7.4 1.5.6 2.3.6a5 5 0 0 0 0-10z"/></svg></span>
             </div>
-            <div class="text-xl font-black text-cyan-400 font-mono">140–170 g</div>
+            <div class="stat-value text-xl font-black text-white font-mono">140–170 g</div>
             <div class="text-[10px] text-gray-400 mt-1">Muscle retention priority</div>
           </div>
 
@@ -638,11 +646,11 @@
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
 
           <!-- ============================================== -->
-          <!-- LEFT 7 COLS: TODAY'S WORKOUT (CROSSED WITH DEMOS) -->
+          <!-- LEFT 7 COLS: TODAY'S WORKOUT -->
           <!-- ============================================== -->
           <div class="lg:col-span-7 space-y-4">
             
-            <div class="dashboard-card p-4 sm:p-5">
+            <div class="dashboard-card card-feature p-4 sm:p-5">
               
               <!-- Card Header -->
               <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-1 pb-3 border-b border-white/[0.06] mb-3">
@@ -659,9 +667,9 @@
                 <span id="dash-workout-time" class="text-xs text-gray-400 font-mono mt-1 sm:mt-0">8:30 PM • 75–90 min</span>
               </div>
 
-              <!-- Exercise List (Crossed with Square Demos directly!) -->
+              <!-- Exercise List -->
               <div id="dash-exercise-list" class="space-y-2.5 my-3">
-                <!-- Dynamically generated with Square Demo Thumbnails -->
+                <!-- Dynamically generated -->
               </div>
 
               <!-- Bottom Actions -->
@@ -732,7 +740,7 @@
               <div class="flex items-center justify-between text-[11px] text-gray-500 font-mono mt-2 pt-2 border-t border-white/[0.04]">
                 <span>Week 1 (94.5 kg)</span>
                 <span>Week 4 (~92 kg)</span>
-                <span>Week 7 Deload</span>
+                <span>Mid-Point</span>
                 <span>Week 10 (~87 kg)</span>
                 <span class="text-emerald-400 font-bold">Week 12 (85 kg)</span>
               </div>
@@ -752,28 +760,28 @@
               </span>
               <div class="grid grid-cols-5 gap-1.5 text-center">
                 
-                <button onclick="quickLogItem('weight')" class="p-2 rounded bg-[#161B24] border border-white/[0.06] hover:border-emerald-400/40 text-gray-300 hover:text-white flex flex-col items-center gap-1 transition-all">
-                  <span class="text-base">⚖️</span>
+                <button onclick="quickLogItem('weight')" class="p-2 rounded bg-[#161B24] border border-white/[0.06] hover:border-[#E5A93C]/50 text-gray-300 hover:text-white flex flex-col items-center gap-1.5 transition-all">
+                  <span class="text-amber-400/90"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="5" r="3"/><path d="M6.5 8h11l1.2 10.3a2 2 0 0 1-2 2.2H7.3a2 2 0 0 1-2-2.2z"/></svg></span>
                   <span class="text-[10px] font-bold">Weight</span>
                 </button>
 
-                <button onclick="quickLogItem('protein')" class="p-2 rounded bg-[#161B24] border border-white/[0.06] hover:border-cyan-400/40 text-gray-300 hover:text-white flex flex-col items-center gap-1 transition-all">
-                  <span class="text-base">🍗</span>
+                <button onclick="quickLogItem('protein')" class="p-2 rounded bg-[#161B24] border border-white/[0.06] hover:border-[#E5A93C]/50 text-gray-300 hover:text-white flex flex-col items-center gap-1.5 transition-all">
+                  <span class="text-amber-400/90"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15.5 3.5a5 5 0 0 0-5 5c0 .8.2 1.6.6 2.3L5 17.2A2.6 2.6 0 0 0 8.8 21l6.4-6.1c.7.4 1.5.6 2.3.6a5 5 0 0 0 0-10z"/></svg></span>
                   <span class="text-[10px] font-bold">Protein</span>
                 </button>
 
-                <button onclick="quickLogItem('waist')" class="p-2 rounded bg-[#161B24] border border-white/[0.06] hover:border-amber-400/40 text-gray-300 hover:text-white flex flex-col items-center gap-1 transition-all">
-                  <span class="text-base">📏</span>
+                <button onclick="quickLogItem('waist')" class="p-2 rounded bg-[#161B24] border border-white/[0.06] hover:border-[#E5A93C]/50 text-gray-300 hover:text-white flex flex-col items-center gap-1.5 transition-all">
+                  <span class="text-amber-400/90"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21.3 8.7 15.3 2.7a1 1 0 0 0-1.4 0L2.7 13.9a1 1 0 0 0 0 1.4l6 6a1 1 0 0 0 1.4 0L21.3 10a1 1 0 0 0 0-1.4z"/><path d="M7 12l1.5 1.5M10 9l1.5 1.5M13 6l1.5 1.5"/></svg></span>
                   <span class="text-[10px] font-bold">Waist</span>
                 </button>
 
-                <button onclick="quickLogItem('water')" class="p-2 rounded bg-[#161B24] border border-white/[0.06] hover:border-cyan-400/40 text-gray-300 hover:text-white flex flex-col items-center gap-1 transition-all">
-                  <span class="text-base">💧</span>
+                <button onclick="quickLogItem('water')" class="p-2 rounded bg-[#161B24] border border-white/[0.06] hover:border-[#E5A93C]/50 text-gray-300 hover:text-white flex flex-col items-center gap-1.5 transition-all">
+                  <span class="text-amber-400/90"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2.5 6.5 9.3a7 7 0 1 0 11 0z"/></svg></span>
                   <span class="text-[10px] font-bold">Water</span>
                 </button>
 
-                <button onclick="quickLogItem('sleep')" class="p-2 rounded bg-[#161B24] border border-white/[0.06] hover:border-purple-400/40 text-gray-300 hover:text-white flex flex-col items-center gap-1 transition-all">
-                  <span class="text-base">😴</span>
+                <button onclick="quickLogItem('sleep')" class="p-2 rounded bg-[#161B24] border border-white/[0.06] hover:border-[#E5A93C]/50 text-gray-300 hover:text-white flex flex-col items-center gap-1.5 transition-all">
+                  <span class="text-amber-400/90"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></span>
                   <span class="text-[10px] font-bold">Sleep</span>
                 </button>
 
@@ -797,61 +805,15 @@
               </div>
             </div>
 
-            <!-- MY 12-WEEK GOALS (Interactive, Persistent, Fully Debugged) -->
-            <div class="dashboard-card p-4">
-              <div class="flex items-center justify-between pb-2 border-b border-white/[0.06] mb-2.5">
-                <div>
-                  <h3 class="text-xs font-bold text-white uppercase tracking-wider">12-Week Transformation Goals</h3>
-                  <p class="text-[10.5px] text-gray-400">Core targets from workout-plan.md</p>
-                </div>
-                <span id="my-goals-counter" class="text-xs font-mono font-bold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
-                  0 / 6
-                </span>
-              </div>
-
-              <div id="my-goals-container" class="space-y-2 text-xs">
-                <!-- Dynamically populated and synced with localStorage via JS -->
-              </div>
-            </div>
-
-            <!-- WEEKLY GYM CONSISTENCY -->
+            <!-- WEEKLY PLAN CONSISTENCY (rendered from WORKOUT_DAYS) -->
             <div class="dashboard-card p-4">
               <div class="flex items-center justify-between mb-2.5">
                 <h3 class="text-xs font-bold text-white uppercase tracking-wider">Weekly Schedule Consistency</h3>
-                <span class="text-xs font-black text-emerald-400 font-mono">6 Gym + 2 Run Options</span>
+                <span id="weekly-split-summary" class="text-xs font-black text-emerald-400 font-mono">—</span>
               </div>
 
-              <!-- Fixed weekly split -->
-              <div class="grid grid-cols-7 gap-1 text-center font-mono">
-                <div class="flex flex-col items-center gap-1">
-                  <span class="text-[10px] text-gray-400">Mon</span>
-                  <span class="text-[8px] text-cyan-400 font-bold">RUN + GYM</span>
-                </div>
-                <div class="flex flex-col items-center gap-1">
-                  <span class="text-[10px] text-gray-400">Tue</span>
-                  <span class="text-[8px] text-emerald-400 font-bold">GYM</span>
-                </div>
-                <div class="flex flex-col items-center gap-1">
-                  <span class="text-[10px] text-gray-400">Wed</span>
-                  <span class="text-[8px] text-emerald-400 font-bold">GYM</span>
-                </div>
-                <div class="flex flex-col items-center gap-1">
-                  <span class="text-[10px] text-gray-400">Thu</span>
-                  <span class="text-[8px] text-emerald-400 font-bold">CORE + BIKE</span>
-                </div>
-                <div class="flex flex-col items-center gap-1">
-                  <span class="text-[10px] text-gray-400">Fri</span>
-                  <span class="text-[8px] text-emerald-400 font-bold">GYM</span>
-                </div>
-                <div class="flex flex-col items-center gap-1">
-                  <span class="text-[10px] text-gray-400">Sat</span>
-                  <span class="text-[8px] text-emerald-400 font-bold">GYM</span>
-                </div>
-                <div class="flex flex-col items-center gap-1">
-                  <span class="text-[10px] text-gray-400">Sun</span>
-                  <span class="text-[8px] text-cyan-400 font-bold">RUN</span>
-                </div>
-              </div>
+              <!-- Rendered dynamically so it always matches the real plan -->
+              <div id="weekly-split-grid" class="grid grid-cols-7 gap-1 text-center font-mono"></div>
             </div>
 
             <!-- QUOTE BANNER -->
@@ -906,20 +868,20 @@
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-5">
             <div class="p-3 rounded bg-[#161B24] border border-white/[0.05] text-xs">
                 <span id="prog-warmup-title" class="font-bold text-amber-400 flex items-center gap-1.5 mb-1">
-                <span>🚴</span> 8-Min Bike Warm-Up
+                <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="5.5" cy="17.5" r="3.5"/><circle cx="18.5" cy="17.5" r="3.5"/><path d="M15 6h3l1.5 6M6 17.5l4-8h5.5l-5 8M9 6h3"/></svg> 8-Min Bike Warm-Up
               </span>
               <p id="prog-warmup-text" class="text-gray-300 text-[11px] leading-relaxed"></p>
             </div>
 
             <div class="p-3 rounded bg-[#161B24] border border-white/[0.05] text-xs">
                 <span id="prog-cardio-title" class="font-bold text-emerald-400 flex items-center gap-1.5 mb-1">
-                <span>🏃</span> 12–15 Min Cardio
+                <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="13" cy="4.5" r="2"/><path d="m5 22 3-6 3.2 1.2L14 12M8 16l-2-4.5 5-1.5 3 3 3-1"/></svg> 12–15 Min Cardio
               </span>
               <p id="prog-cardio-text" class="text-gray-300 text-[11px] leading-relaxed"></p>
             </div>
           </div>
 
-          <!-- Exercise List Crossed with Demos -->
+          <!-- Exercise List -->
           <div class="space-y-3" id="prog-exercises-list">
             <!-- Populated via JS -->
           </div>
@@ -933,7 +895,7 @@
       <div id="view-tracker" class="hidden space-y-5">
         
         <!-- Active Header & Rest Station -->
-        <div class="dashboard-card p-4 sm:p-5 space-y-3">
+        <div class="dashboard-card card-feature p-4 sm:p-5 space-y-3">
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-white/[0.06]">
             <div>
               <div class="flex items-center gap-2 mb-1">
@@ -960,8 +922,8 @@
           <!-- DEDICATED REST TIMER STATION (Between Sets & Workouts) -->
           <div class="pt-1">
             <div class="flex items-center justify-between mb-2">
-              <span class="text-[11px] font-bold text-amber-400 flex items-center gap-1 uppercase tracking-wider">
-                <span>⏱️</span> Prescribed Rest Timers (Between Sets & Workouts)
+              <span class="text-[11px] font-bold text-amber-400 flex items-center gap-1.5 uppercase tracking-wider">
+                <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 2h4"/><path d="M12 14l3-3"/><circle cx="12" cy="14" r="8"/></svg> Prescribed Rest Timers
               </span>
               <span class="text-[10px] text-gray-400">Tap to start countdown</span>
             </div>
@@ -969,25 +931,25 @@
             <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
               <button onclick="startRestTimer(60, 'Rest: Arms, Calves & Abs')" class="p-2.5 rounded bg-[#161B24] border border-white/[0.08] hover:border-amber-400/50 text-left transition-all">
                 <div class="text-[10px] text-gray-400 uppercase font-bold">Isolation Lifts</div>
-                <div class="text-sm font-black text-white font-mono mt-0.5">⏱️ 60–75s</div>
+                <div class="text-sm font-black text-amber-400 font-mono mt-0.5">60–75s</div>
                 <div class="text-[9.5px] text-gray-500">Arms, Calves, Leg Curls</div>
               </button>
 
               <button onclick="startRestTimer(90, 'Rest: Shoulders & Upper Accessories')" class="p-2.5 rounded bg-[#161B24] border border-white/[0.08] hover:border-amber-400/50 text-left transition-all">
                 <div class="text-[10px] text-gray-400 uppercase font-bold">Secondary Lifts</div>
-                <div class="text-sm font-black text-amber-400 font-mono mt-0.5">⏱️ 90s</div>
+                <div class="text-sm font-black text-amber-400 font-mono mt-0.5">90s</div>
                 <div class="text-[9.5px] text-gray-500">DB Shoulder Press, Rows</div>
               </button>
 
               <button onclick="startRestTimer(100, 'Rest: Primary Upper Lifts')" class="p-2.5 rounded bg-[#161B24] border border-white/[0.08] hover:border-amber-400/50 text-left transition-all">
                 <div class="text-[10px] text-gray-400 uppercase font-bold">Main Compounds</div>
-                <div class="text-sm font-black text-emerald-400 font-mono mt-0.5">⏱️ 100–120s</div>
+                <div class="text-sm font-black text-amber-400 font-mono mt-0.5">100–120s</div>
                 <div class="text-[9.5px] text-gray-500">Flat DB Bench, Lat Pulldown</div>
               </button>
 
               <button onclick="startRestTimer(120, 'Rest & Transition to Next Exercise')" class="p-2.5 rounded bg-[#161B24] border border-white/[0.08] hover:border-amber-400/50 text-left transition-all">
                 <div class="text-[10px] text-gray-400 uppercase font-bold">Exercise Transition</div>
-                <div class="text-sm font-black text-cyan-400 font-mono mt-0.5">⏱️ 120s (2 min)</div>
+                <div class="text-sm font-black text-amber-400 font-mono mt-0.5">120s (2 min)</div>
                 <div class="text-[9.5px] text-gray-500">Moving to next movement</div>
               </button>
             </div>
@@ -997,7 +959,7 @@
         <!-- 8-Minute Warmup Counter Bar -->
         <div id="warmup-timer-card" class="dashboard-card p-4 flex items-center justify-between gap-3 bg-[#161B24]">
           <div class="flex items-center gap-3">
-            <span class="text-xl">🚴</span>
+            <span class="text-amber-400"><svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="5.5" cy="17.5" r="3.5"/><circle cx="18.5" cy="17.5" r="3.5"/><path d="M15 6h3l1.5 6M6 17.5l4-8h5.5l-5 8M9 6h3"/></svg></span>
             <div>
               <h4 id="tracker-warmup-title" class="text-xs font-bold text-white">8-Minute Exercise Bike Warm-Up</h4>
               <p id="tracker-warmup-text" class="text-[11px] text-gray-400">Easy to moderate pace, followed by movement-specific warm-up sets.</p>
@@ -1010,7 +972,7 @@
           </div>
         </div>
 
-        <!-- Exercise Logging Cards Container (With Inline Rest Timers & Demos) -->
+        <!-- Exercise Logging Cards Container (With Inline Rest Timers) -->
         <div id="tracker-exercise-cards" class="space-y-4">
           <!-- Dynamically populated via JS -->
         </div>
@@ -1018,7 +980,7 @@
         <!-- 12-15 Min Cardio Stopwatch -->
         <div id="cardio-timer-card" class="dashboard-card p-4 flex items-center justify-between gap-3 bg-[#161B24]">
           <div class="flex items-center gap-3">
-            <span class="text-xl">🏃</span>
+            <span class="text-emerald-400"><svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="13" cy="4.5" r="2"/><path d="m5 22 3-6 3.2 1.2L14 12M8 16l-2-4.5 5-1.5 3 3 3-1"/></svg></span>
             <div>
               <h4 class="text-xs font-bold text-white">12–15 Min Post-Lift Cardio (Conversational Pace)</h4>
               <p class="text-[11px] text-gray-400">Stationary bike, incline treadmill walk, or elliptical. Finish 10 min prior to leaving.</p>
@@ -1201,35 +1163,26 @@
           </div>
         </div>
 
-      </div>
-
-      <!-- ======================================================== -->
-      <!-- TAB 6: EXERCISE LIBRARY (Searchable with Motion Demos) -->
-      <!-- ======================================================== -->
-      <div id="view-library" class="hidden space-y-5">
-        
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-          <div>
-            <h2 class="text-xl font-black text-white tracking-tight">Exercise Library & Technique Demos</h2>
-            <p class="text-xs text-gray-400">Complete collection of all 32 plan exercises with animated motion guides</p>
-          </div>
-
-          <!-- Muscle Filter Tabs (All Square Buttons) -->
-          <div class="flex flex-wrap gap-1.5" id="library-muscle-filters">
-            <button onclick="filterLibrary('all')" class="px-2.5 py-1 rounded text-xs font-bold bg-[#E5A93C] text-black">All (32)</button>
-            <button onclick="filterLibrary('chest')" class="px-2.5 py-1 rounded text-xs font-medium bg-[#161B24] border border-white/10 text-gray-300">Chest</button>
-            <button onclick="filterLibrary('lats')" class="px-2.5 py-1 rounded text-xs font-medium bg-[#161B24] border border-white/10 text-gray-300">Back/Lats</button>
-            <button onclick="filterLibrary('quadriceps')" class="px-2.5 py-1 rounded text-xs font-medium bg-[#161B24] border border-white/10 text-gray-300">Quads/Legs</button>
-            <button onclick="filterLibrary('hamstrings')" class="px-2.5 py-1 rounded text-xs font-medium bg-[#161B24] border border-white/10 text-gray-300">Hamstrings</button>
-            <button onclick="filterLibrary('shoulders')" class="px-2.5 py-1 rounded text-xs font-medium bg-[#161B24] border border-white/10 text-gray-300">Shoulders</button>
-            <button onclick="filterLibrary('arms')" class="px-2.5 py-1 rounded text-xs font-medium bg-[#161B24] border border-white/10 text-gray-300">Arms</button>
-            <button onclick="filterLibrary('core')" class="px-2.5 py-1 rounded text-xs font-medium bg-[#161B24] border border-white/10 text-gray-300">Core</button>
-          </div>
+        <!-- Recovery & Body Logs (fed by the Dashboard Quick Entry tiles) -->
+        <div class="dashboard-card p-4">
+          <h3 class="text-xs font-bold text-white uppercase tracking-wider pb-2 border-b border-white/[0.06] mb-3">Body &amp; Recovery Logs</h3>
+          <div id="recovery-logs-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3"></div>
         </div>
 
-        <!-- Exercise Cards Grid -->
-        <div id="library-exercise-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-          <!-- Dynamically populated via JS -->
+        <!-- SESSION DATABASE (IndexedDB-backed workout history) -->
+        <div class="dashboard-card p-4">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-2 border-b border-white/[0.06] mb-3 gap-2">
+            <div>
+              <h3 class="text-xs font-bold text-white uppercase tracking-wider">Workout Session Database</h3>
+              <p class="text-[10.5px] text-gray-400 mt-0.5">Every finished session is stored automatically on this device.</p>
+            </div>
+            <div class="flex items-center gap-2 flex-shrink-0">
+              <button onclick="exportSessionCSV()" class="px-2.5 py-1.5 rounded btn-dark text-[11px] font-semibold">Export CSV</button>
+              <button onclick="exportSessionJSON()" class="px-2.5 py-1.5 rounded btn-dark text-[11px] font-semibold">Export JSON</button>
+            </div>
+          </div>
+          <div id="session-history-summary" class="text-[11px] text-gray-400 mb-2"></div>
+          <div id="session-history-container" class="space-y-2 text-xs"></div>
         </div>
 
       </div>
@@ -1242,7 +1195,7 @@
   <!-- 4. MOBILE BOTTOM APP BAR (Square Buttons for Android) -->
   <!-- ======================================================== -->
   <nav id="mobile-bottom-nav" class="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-[#0C0E12]/95 backdrop-blur-xl border-t border-white/[0.08] px-3 py-2">
-    <div class="max-w-md mx-auto grid grid-cols-6 gap-1 text-center">
+    <div class="max-w-md mx-auto grid grid-cols-5 gap-1 text-center">
       
       <!-- Nav Button 1: Dashboard -->
       <button id="mob-nav-dashboard" onclick="switchNavTab('dashboard')" class="flex flex-col items-center justify-center p-1.5 rounded text-[#E5A93C] bg-[#E5A93C]/10 transition-colors">
@@ -1263,7 +1216,7 @@
       </button>
 
       <button id="mob-nav-diet" onclick="switchNavTab('diet')" class="flex flex-col items-center justify-center p-1.5 rounded text-gray-400 hover:text-white transition-colors">
-        <span class="text-sm">🍽️</span>
+        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 2v7a3 3 0 0 0 3 3v10M7 2v6M10 2v6"/><path d="M17 2c-1.5 1-2 3-2 5s.5 3 2 3v12"/></svg>
         <span class="text-[10px] font-medium mt-0.5">Diet</span>
       </button>
 
@@ -1271,12 +1224,6 @@
       <button id="mob-nav-progress" onclick="switchNavTab('progress')" class="flex flex-col items-center justify-center p-1.5 rounded text-gray-400 hover:text-white transition-colors">
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
         <span class="text-[10px] font-medium mt-0.5">Logs</span>
-      </button>
-
-      <!-- Nav Button 5: Demos -->
-      <button id="mob-nav-library" onclick="switchNavTab('library')" class="flex flex-col items-center justify-center p-1.5 rounded text-gray-400 hover:text-white transition-colors">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
-        <span class="text-[10px] font-medium mt-0.5">Demos</span>
       </button>
 
     </div>
@@ -1318,101 +1265,10 @@
     </div>
   </div>
 
-  <!-- ======================================================== -->
-  <!-- 6. EXERCISE DEMONSTRATION & TECHNIQUE MODAL (Square) -->
-  <!-- ======================================================== -->
-  <div id="exercise-demo-modal" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-end sm:items-center justify-center p-0 sm:p-4 hidden">
-    <div class="dashboard-card w-full max-w-lg rounded-t-lg sm:rounded-lg p-5 border border-white/10 shadow-2xl max-h-[90vh] overflow-y-auto no-scrollbar">
-      
-      <!-- Modal Header -->
-      <div class="flex items-start justify-between pb-3 border-b border-white/[0.08] mb-3">
-        <div>
-          <div class="flex items-center gap-2 mb-1">
-            <span id="demo-exercise-muscle" class="text-[10px] font-bold text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/25">CHEST</span>
-            <span id="demo-exercise-equip" class="text-[10px] text-gray-400">Dumbbells</span>
-          </div>
-          <h3 id="demo-exercise-title" class="text-base font-extrabold text-white">Dumbbell Flat Bench Press</h3>
-        </div>
-        <button onclick="closeExerciseDemo()" class="w-8 h-8 rounded bg-[#1D222E] text-gray-400 hover:text-white flex items-center justify-center text-lg">&times;</button>
-      </div>
-
-      <!-- Guaranteed Motion Loop Player (Position 1 Setup <-> Position 2 Peak) -->
-      <div class="mb-4">
-        <div class="relative w-full aspect-video rounded overflow-hidden bg-[#0C0E12] border border-white/10 flex items-center justify-center">
-          <img id="demo-motion-img" src="" alt="Exercise demonstration" class="w-full h-full object-contain transition-opacity duration-200" />
-          
-          <!-- Motion Indicator Badge (Square) -->
-          <div class="absolute bottom-2.5 left-2.5 flex items-center gap-1.5 bg-black/85 px-2.5 py-1 rounded border border-white/10">
-            <span class="w-2 h-2 rounded-sm bg-amber-400 animate-pulse"></span>
-            <span id="demo-step-badge" class="text-[10px] font-bold text-amber-300 font-mono">1 / 2: Setup</span>
-          </div>
-
-          <!-- Motion Controls (All Square Buttons) -->
-          <div class="absolute bottom-2.5 right-2.5 flex items-center gap-1">
-            <button id="btn-toggle-motion" onclick="toggleMotionLoop()" class="bg-black/85 hover:bg-black px-2.5 py-1 rounded border border-white/10 text-[10.5px] font-bold text-white flex items-center gap-1.5 transition-all">
-              <span id="motion-btn-icon">⏸️</span>
-              <span id="motion-btn-text">Pause</span>
-            </button>
-            <button onclick="stepMotionManually()" title="Step to next frame" class="w-7 h-7 bg-black/85 hover:bg-black rounded border border-white/10 text-xs font-bold text-white flex items-center justify-center">
-              &rarr;
-            </button>
-          </div>
-        </div>
-
-        <!-- 1-Tap Watch on YouTube Button (Direct App Launch on Android) -->
-        <div class="mt-2.5 flex items-center justify-between gap-2 p-2.5 rounded bg-red-950/20 border border-red-500/25 text-xs">
-          <div class="flex items-center gap-2 text-red-200 text-[11px]">
-            <span class="text-base">▶️</span>
-            <span>Prefer a full narrated video tutorial?</span>
-          </div>
-          <a id="demo-youtube-link" href="#" target="_blank" rel="noopener noreferrer" class="px-3 py-1.5 rounded bg-red-600 hover:bg-red-500 text-white font-bold text-[11px] flex items-center gap-1 shadow flex-shrink-0">
-            <span>Watch on YouTube</span>
-            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
-          </a>
-        </div>
-      </div>
-
-      <!-- Step-by-Step Technique Blueprint -->
-      <div class="space-y-3 text-xs mb-4">
-        <!-- Setup Guide -->
-        <div class="p-3 rounded bg-[#161B24] border border-white/[0.06]">
-          <h4 class="font-bold text-amber-400 text-xs flex items-center gap-1.5 mb-2">
-            <span>🛠️</span> 1. Setup & Starting Position
-          </h4>
-          <ul id="demo-setup-list" class="space-y-1 text-gray-300 list-disc list-inside leading-relaxed text-[11.5px]"></ul>
-        </div>
-
-        <!-- Movement Execution -->
-        <div class="p-3 rounded bg-[#161B24] border border-white/[0.06]">
-          <h4 class="font-bold text-emerald-400 text-xs flex items-center gap-1.5 mb-2">
-            <span>🎯</span> 2. Execution & Technique
-          </h4>
-          <ul id="demo-execution-list" class="space-y-1 text-gray-300 list-disc list-inside leading-relaxed text-[11.5px]"></ul>
-        </div>
-
-        <!-- Common Mistakes to Avoid -->
-        <div class="p-3 rounded bg-rose-950/20 border border-rose-500/30 text-rose-200">
-          <h4 class="font-bold text-rose-400 text-xs flex items-center gap-1.5 mb-2">
-            <span>⚠️</span> 3. Common Mistakes to Avoid
-          </h4>
-          <ul id="demo-mistakes-list" class="space-y-1 text-rose-200/90 list-disc list-inside leading-relaxed text-[11.5px]"></ul>
-        </div>
-
-        <!-- Breathing Pattern -->
-        <div class="p-2.5 rounded bg-[#161B24] border border-white/[0.04] text-[11px] text-gray-300 flex items-center gap-2">
-          <span class="text-base">💨</span>
-          <div><strong class="text-white">Breathing:</strong> <span id="demo-breathing-text"></span></div>
-        </div>
-      </div>
-
-      <button onclick="closeExerciseDemo()" class="w-full py-2.5 rounded btn-gold font-bold text-xs">Done / Return to Workout</button>
-    </div>
-  </div>
-
   <!-- TOAST ALERTS CONTAINER -->
   <div id="toast-container" class="fixed top-16 right-4 z-50 space-y-2 pointer-events-none"></div>
 
   <!-- APPLICATION LOGIC ENGINE (Cache-busted) -->
-  <script src="./app.js?v=3.6.0"></script>
+  <script src="./app.js?v=3.9.0"></script>
 </body>
 </html>
