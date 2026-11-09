@@ -110,7 +110,8 @@ const STORAGE_KEYS = {
   DIET_LOGS: 'pumpd_diet_logs_v1',
   DIET_CUSTOM_FOODS: 'pumpd_diet_custom_foods_v1',
   LAST_TAB: 'pumpd_last_active_tab_v2',
-  REST_TARGET: 'pumpd_rest_timer_target_v2'
+  REST_TARGET: 'pumpd_rest_timer_target_v2',
+  NEXT_SESSION_TARGETS: 'pumpd_next_session_targets_v1'
 };
 
 function getExerciseTargetText(ex, setsCount = ex.sets) {
@@ -541,22 +542,139 @@ function checkDoubleProgression(exerciseId, workingSets) {
   const validSets = workingSets.filter(s => s.completed && Number(s.reps) > 0);
   const targetCount = AppState.isDeload ? Math.max(1, ex.sets - 1) : ex.sets;
 
+  // --- Extra-rep detection (went BEYOND maxReps) ---
+  if (validSets.length >= targetCount) {
+    const isLeg = ['quadriceps', 'hamstrings', 'glutes', 'calves'].includes(ex.primaryMuscle);
+    const maxExtraReps = Math.max(0, ...validSets.map(s => Number(s.reps) - ex.maxReps));
+    if (maxExtraReps >= 1) {
+      let bump, note;
+      if (maxExtraReps === 1) {
+        bump = isLeg ? 2.5 : 1.25;
+        note = `+1 extra rep over target — small bump`;
+      } else if (maxExtraReps === 2) {
+        bump = isLeg ? 5 : 2.5;
+        note = `+2 extra reps — comfortable increase`;
+      } else {
+        bump = isLeg ? 5 : 2.5;
+        note = `+${maxExtraReps} extra reps — weight was too light`;
+      }
+      const currentWeight = Number(validSets[0]?.weight) || 0;
+      const suggestedWeight = currentWeight > 0 ? (currentWeight + bump).toFixed(2).replace(/\.00$/, '') : null;
+      const suggestedReps = ex.minReps;
+      const weightStr = suggestedWeight ? ` → Suggested next session: <strong>${suggestedWeight} kg × ${suggestedReps} reps</strong>` : ` → Add <strong>+${bump} kg</strong> next session and drop to ${suggestedReps} reps.`;
+      return {
+        type: 'EXTRA_REPS',
+        msg: `${icon('zap', 'w-3.5 h-3.5 inline -mt-0.5 mr-1')}${note}! Weight was easy.${weightStr}`,
+        suggestion: suggestedWeight ? { weight: Number(suggestedWeight), reps: suggestedReps, bump } : null
+      };
+    }
+  }
+
   if (validSets.length >= targetCount && validSets.every(s => Number(s.reps) >= ex.maxReps)) {
     const inc = (ex.primaryMuscle === 'quadriceps' || ex.primaryMuscle === 'hamstrings' || ex.primaryMuscle === 'glutes') ? '+2.5–5 kg' : '+1–2.5 kg';
+    const isLeg = ['quadriceps', 'hamstrings', 'glutes', 'calves'].includes(ex.primaryMuscle);
+    const bump = isLeg ? 2.5 : 1.25;
+    const currentWeight = Number(validSets[0]?.weight) || 0;
+    const suggestedWeight = currentWeight > 0 ? (currentWeight + bump).toFixed(2).replace(/\.00$/, '') : null;
+    const suggestedReps = ex.minReps;
     return {
       type: 'PROGRESSED',
-      msg: `${icon('target', 'w-3.5 h-3.5 inline -mt-0.5 mr-1')}Milestone achieved — hit ${ex.maxReps} reps on all sets. Add ${inc} next session and reset to ${ex.minReps} reps.`
+      msg: `${icon('target', 'w-3.5 h-3.5 inline -mt-0.5 mr-1')}Milestone achieved — hit ${ex.maxReps} reps on all sets. Add ${inc} next session and reset to ${ex.minReps} reps.`,
+      suggestion: suggestedWeight ? { weight: Number(suggestedWeight), reps: suggestedReps, bump } : null
     };
   }
 
   if (validSets.length >= targetCount && !validSets.every(s => Number(s.reps) >= ex.minReps)) {
     return {
       type: 'BELOW',
-      msg: `${icon('alert', 'w-3.5 h-3.5 inline -mt-0.5 mr-1')}Under ${ex.minReps} reps. If this happens twice running, reduce weight by 5–10% to rebuild clean form.`
+      msg: `${icon('alert', 'w-3.5 h-3.5 inline -mt-0.5 mr-1')}Under ${ex.minReps} reps. If this happens twice running, reduce weight by 5–10% to rebuild clean form.`,
+      suggestion: null
     };
   }
 
   return null;
+}
+
+// ----------------------------------------------------
+// 7B. NEXT-SESSION TARGET PERSISTENCE
+// ----------------------------------------------------
+function saveNextSessionTarget(exerciseId, suggestion) {
+  const store = loadStorage(STORAGE_KEYS.NEXT_SESSION_TARGETS, {});
+  store[exerciseId] = {
+    ...suggestion,
+    savedAt: new Date().toISOString()
+  };
+  saveStorage(STORAGE_KEYS.NEXT_SESSION_TARGETS, store);
+}
+
+function loadNextSessionTarget(exerciseId) {
+  const store = loadStorage(STORAGE_KEYS.NEXT_SESSION_TARGETS, {});
+  return store[exerciseId] || null;
+}
+
+function clearNextSessionTarget(exerciseId) {
+  const store = loadStorage(STORAGE_KEYS.NEXT_SESSION_TARGETS, {});
+  delete store[exerciseId];
+  saveStorage(STORAGE_KEYS.NEXT_SESSION_TARGETS, store);
+}
+
+// Compute and persist suggestions for all exercises in a finished session
+function computeAndSaveAllSuggestions(day, exerciseData) {
+  exerciseData.forEach(exEntry => {
+    const ex = day.exercises.find(e => e.id === exEntry.id);
+    if (!ex || ex.trackType === 'run' || ex.trackType === 'hold' || ex.weighted === false) return;
+
+    const validSets = (exEntry.sets || []).filter(s => s.completed && Number(s.reps) > 0 && Number(s.weight) > 0);
+    if (validSets.length === 0) return;
+
+    const res = checkDoubleProgression(exEntry.id, validSets);
+    if (res && res.suggestion) {
+      const currentWeight = Number(validSets[0]?.weight) || 0;
+      const maxRepsLogged = Math.max(...validSets.map(s => Number(s.reps)));
+      saveNextSessionTarget(exEntry.id, {
+        weight: res.suggestion.weight,
+        reps: res.suggestion.reps,
+        reason: res.type,
+        previousWeight: currentWeight,
+        previousReps: maxRepsLogged,
+        bump: res.suggestion.bump
+      });
+    }
+  });
+}
+
+// ----------------------------------------------------
+// 7C. EXERCISE HISTORY HELPERS (reads from DB sessions)
+// ----------------------------------------------------
+async function getExerciseHistory(exerciseId, limit = 6) {
+  const sessions = await dbGetAllSessions();
+  sessions.sort((a, b) => a.date.localeCompare(b.date));
+  const history = [];
+  sessions.forEach(s => {
+    const exEntry = (s.exercises || []).find(e => {
+      // Match by exercise ID or by name (for older records)
+      const day = WORKOUT_DAYS.find(d => d.exercises.some(x => x.id === exerciseId));
+      const exDef = day?.exercises.find(x => x.id === exerciseId);
+      return e.name === exDef?.name;
+    });
+    if (!exEntry) return;
+    const completedSets = (exEntry.sets || []).filter(st => st.completed && Number(st.weight) > 0 && Number(st.reps) > 0);
+    if (completedSets.length === 0) return;
+    const avgWeight = (completedSets.reduce((acc, st) => acc + Number(st.weight), 0) / completedSets.length);
+    const avgReps = (completedSets.reduce((acc, st) => acc + Number(st.reps), 0) / completedSets.length);
+    const maxReps = Math.max(...completedSets.map(st => Number(st.reps)));
+    const maxWeight = Math.max(...completedSets.map(st => Number(st.weight)));
+    history.push({
+      date: s.date,
+      sessionId: s.id,
+      sets: completedSets,
+      avgWeight: avgWeight.toFixed(1),
+      avgReps: avgReps.toFixed(1),
+      maxReps,
+      maxWeight
+    });
+  });
+  return history.slice(-limit);
 }
 
 // ----------------------------------------------------
@@ -1534,6 +1652,29 @@ function renderTrackerView() {
       `;
     }
 
+    // Build next-session hint (from previous session suggestion)
+    const nextTarget = loadNextSessionTarget(ex.id);
+    let hintHtml = '';
+    if (nextTarget && ex.trackType !== 'run' && ex.trackType !== 'hold' && ex.weighted !== false) {
+      const reasonLabel = nextTarget.reason === 'EXTRA_REPS'
+        ? `Went ${nextTarget.previousReps > ex.maxReps ? `+${nextTarget.previousReps - ex.maxReps}` : 'over'} target last time`
+        : `Hit max reps last time`;
+      hintHtml = `
+        <div class="flex items-center justify-between gap-2 p-2.5 rounded bg-amber-500/10 border border-amber-500/30 text-[11px]">
+          <div class="flex items-center gap-2 min-w-0">
+            ${icon('sparkles', 'w-3.5 h-3.5 text-amber-400 flex-shrink-0')}
+            <div class="min-w-0">
+              <span class="text-amber-300 font-bold">Last session: ${nextTarget.previousWeight} kg × ${nextTarget.previousReps} reps</span>
+              <span class="text-gray-400 mx-1">·</span>
+              <span class="text-gray-400">${reasonLabel}</span>
+              <div class="text-amber-400 font-black font-mono mt-0.5">→ Try today: ${nextTarget.weight} kg × ${nextTarget.reps} reps (+${nextTarget.bump} kg bump)</div>
+            </div>
+          </div>
+          <button onclick="clearNextSessionTarget('${ex.id}'); renderTrackerView()" title="Dismiss hint" class="w-6 h-6 rounded btn-dark flex items-center justify-center text-gray-500 hover:text-white flex-shrink-0 text-base leading-none">✕</button>
+        </div>
+      `;
+    }
+
     card.innerHTML = `
       <div class="pb-2 border-b border-white/[0.06]">
         <div>
@@ -1543,6 +1684,7 @@ function renderTrackerView() {
         ${ex.cues ? `<p class="text-[10.5px] text-gray-400 leading-relaxed mt-1.5">${ex.cues}</p>` : ''}
       </div>
 
+      ${hintHtml}
       <div class="space-y-0.5">${setsRowsHtml}</div>
       <div id="prog-alert-${ex.id}" class="mt-2 text-[11px] p-2.5 rounded hidden"></div>
     `;
@@ -1605,11 +1747,26 @@ function renderTrackerView() {
       if (banner && res) {
         banner.innerHTML = res.msg;
         banner.className = `mt-2 text-[11px] p-2.5 rounded ${
-          res.type === 'PROGRESSED' 
+          res.type === 'PROGRESSED' || res.type === 'EXTRA_REPS'
             ? 'bg-emerald-950/70 border border-emerald-500/50 text-emerald-300 font-bold' 
             : 'bg-amber-950/70 border border-amber-500/50 text-amber-300'
         }`;
         banner.classList.remove('hidden');
+        // Live-persist the suggestion so it's ready for next session
+        if (res.suggestion && (res.type === 'PROGRESSED' || res.type === 'EXTRA_REPS')) {
+          const currentWeight = Number(workingSets.find(s => s.completed)?.weight) || 0;
+          const maxRepsNow = Math.max(...workingSets.filter(s => s.completed && s.reps > 0).map(s => Number(s.reps)));
+          saveNextSessionTarget(exId, {
+            weight: res.suggestion.weight,
+            reps: res.suggestion.reps,
+            reason: res.type,
+            previousWeight: currentWeight,
+            previousReps: maxRepsNow,
+            bump: res.suggestion.bump
+          });
+        }
+      } else if (banner && !res) {
+        banner.classList.add('hidden');
       }
 
       // Immediate auto-save to storage
@@ -1686,6 +1843,9 @@ function saveActiveWorkoutSession() {
     dbPutSession(record);
   }
 
+  // Compute and persist next-session suggestions for all exercises
+  computeAndSaveAllSuggestions(day, exerciseData);
+
   // Auto-check "8:30 PM Workout Session" in Today's Transformation Checklist!
   let todayChecklist = getTodayChecklistState();
   if (!todayChecklist.includes('chk_workout')) {
@@ -1697,6 +1857,99 @@ function saveActiveWorkoutSession() {
   triggerHaptic('success');
   playDing();
   showToast('Workout session finished and logged.', 'success');
+  showProgressionWinsModal(day, exerciseData);
+}
+
+// ----------------------------------------------------
+// 12B. PROGRESSION WINS MODAL (shown on session finish)
+// ----------------------------------------------------
+function showProgressionWinsModal(day, exerciseData) {
+  // Build list of exercises with suggestions
+  const wins = [];
+  exerciseData.forEach(exEntry => {
+    const ex = day.exercises.find(e => e.id === exEntry.id);
+    if (!ex || ex.trackType === 'run' || ex.trackType === 'hold' || ex.weighted === false) return;
+    const validSets = (exEntry.sets || []).filter(s => s.completed && Number(s.reps) > 0 && Number(s.weight) > 0);
+    if (validSets.length === 0) return;
+    const target = loadNextSessionTarget(exEntry.id);
+    if (!target) return;
+    wins.push({ ex, target, sets: validSets });
+  });
+
+  // Count completed sets for summary
+  let completedSets = 0;
+  let totalSets = 0;
+  exerciseData.forEach(e => {
+    totalSets += (e.sets || []).length;
+    completedSets += (e.sets || []).filter(s => s.completed).length;
+  });
+
+  const winsHtml = wins.length === 0
+    ? `<p class="text-gray-400 text-xs">Keep grinding — progression targets will appear once you log sets and hit or exceed your rep targets.</p>`
+    : wins.map(({ ex, target, sets }) => {
+        const typeLabel = target.reason === 'EXTRA_REPS'
+          ? `<span class="text-amber-400 font-bold">Went over target</span>`
+          : `<span class="text-emerald-400 font-bold">Hit max reps</span>`;
+        const prevStr = `${target.previousWeight} kg × ${target.previousReps} reps`;
+        const nextStr = `${target.weight} kg × ${target.reps} reps`;
+        return `
+          <div class="p-3 rounded bg-[#161B24] border border-white/[0.07] space-y-1.5">
+            <div class="flex items-center justify-between gap-2 flex-wrap">
+              <span class="text-xs font-extrabold text-white">${ex.name}</span>
+              ${typeLabel}
+            </div>
+            <div class="flex items-center gap-3 text-[11px] font-mono flex-wrap">
+              <span class="text-gray-400">Last: <span class="text-white font-bold">${prevStr}</span></span>
+              <span class="text-gray-600">→</span>
+              <span class="text-amber-400">Next: <span class="font-black">${nextStr}</span></span>
+              <span class="text-emerald-400 text-[10px] font-bold">+${target.bump} kg</span>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+  const modal = document.createElement('div');
+  modal.id = 'progression-wins-modal';
+  modal.className = 'fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm';
+  modal.innerHTML = `
+    <div class="dashboard-card w-full max-w-md max-h-[90vh] overflow-y-auto p-5 space-y-4 shadow-2xl border border-white/[0.12]">
+      <div class="flex items-center justify-between gap-3">
+        <div>
+          <h2 class="text-base font-extrabold text-white flex items-center gap-2">
+            ${icon('zap', 'w-4 h-4 text-amber-400')}
+            Session Complete!
+          </h2>
+          <p class="text-[11px] text-gray-400 mt-0.5">${completedSets} / ${totalSets} sets logged · ${day.name}: ${day.title}</p>
+        </div>
+        <button onclick="closeProgressionWinsModal()" class="w-8 h-8 rounded btn-dark flex items-center justify-center text-gray-400 hover:text-white flex-shrink-0">✕</button>
+      </div>
+
+      ${wins.length > 0 ? `
+      <div class="p-3 rounded bg-amber-500/10 border border-amber-500/30">
+        <div class="text-[11px] font-bold text-amber-400 uppercase tracking-wider mb-1 flex items-center gap-1.5">
+          ${icon('sparkles', 'w-3.5 h-3.5')}Next Session Targets (${wins.length} exercise${wins.length > 1 ? 's' : ''})
+        </div>
+        <p class="text-[10.5px] text-gray-400">You exceeded targets on these exercises. Weight bumped, reps reset to bottom of range.</p>
+      </div>
+      ` : ''}
+
+      <div class="space-y-2">${winsHtml}</div>
+
+      <div class="flex gap-2 pt-1">
+        <button onclick="closeProgressionWinsModal()" class="flex-1 py-2.5 rounded btn-dark text-xs font-bold">View Dashboard</button>
+        <button onclick="closeProgressionWinsModal(); switchNavTab('progress')" class="flex-1 py-2.5 rounded btn-gold text-xs font-bold flex items-center justify-center gap-1.5">
+          ${icon('target', 'w-3.5 h-3.5')}View History
+        </button>
+      </div>
+    </div>
+  `;
+
+  document.body.appendChild(modal);
+}
+
+function closeProgressionWinsModal() {
+  const modal = document.getElementById('progression-wins-modal');
+  if (modal) modal.remove();
   switchNavTab('dashboard');
 }
 
@@ -1749,6 +2002,7 @@ function renderProgressView() {
 
   renderRecoveryLogs();
   renderSessionHistory();
+  renderExerciseProgressHistory();
 }
 
 // ----------------------------------------------------
@@ -1890,7 +2144,120 @@ function sessionDetailHtml(session) {
 }
 
 // ----------------------------------------------------
-// 13D. EXPORT (CSV / JSON "table files")
+// 13D. EXERCISE PROGRESS HISTORY (per-exercise tracker)
+// ----------------------------------------------------
+async function renderExerciseProgressHistory() {
+  const container = document.getElementById('exercise-history-container');
+  if (!container) return;
+
+  container.innerHTML = `<div class="text-gray-500 text-xs py-2">Loading exercise history…</div>`;
+
+  const sessions = await dbGetAllSessions();
+  if (sessions.length === 0) {
+    container.innerHTML = `<p class="text-gray-500 text-xs">No sessions logged yet. Finish a workout to start building your history.</p>`;
+    return;
+  }
+
+  sessions.sort((a, b) => a.date.localeCompare(b.date));
+
+  // Build a map: exerciseName → array of { date, sets[] }
+  const exerciseMap = {};
+  sessions.forEach(s => {
+    (s.exercises || []).forEach(e => {
+      if (!exerciseMap[e.name]) exerciseMap[e.name] = [];
+      const completedSets = (e.sets || []).filter(st => st.completed && Number(st.weight) > 0 && Number(st.reps) > 0);
+      if (completedSets.length > 0) {
+        exerciseMap[e.name].push({ date: s.date, sets: completedSets });
+      }
+    });
+  });
+
+  const exerciseNames = Object.keys(exerciseMap).filter(n => exerciseMap[n].length > 0);
+  if (exerciseNames.length === 0) {
+    container.innerHTML = `<p class="text-gray-500 text-xs">No weighted sets recorded yet.</p>`;
+    return;
+  }
+
+  container.innerHTML = '';
+  exerciseNames.forEach(name => {
+    const history = exerciseMap[name];
+    const latest = history[history.length - 1];
+    const latestMaxWeight = Math.max(...latest.sets.map(s => Number(s.weight)));
+    const latestMaxReps  = Math.max(...latest.sets.map(s => Number(s.reps)));
+
+    // Find next-session target for this exercise (match by name)
+    const exDef = WORKOUT_DAYS.flatMap(d => d.exercises).find(e => e.name === name);
+    const nextTarget = exDef ? loadNextSessionTarget(exDef.id) : null;
+
+    // Trend: compare last two sessions
+    let trendHtml = '';
+    if (history.length >= 2) {
+      const prev = history[history.length - 2];
+      const prevMax = Math.max(...prev.sets.map(s => Number(s.weight)));
+      const diff = latestMaxWeight - prevMax;
+      if (diff > 0) trendHtml = `<span class="text-emerald-400 font-bold text-[10px]">↑ +${diff} kg</span>`;
+      else if (diff < 0) trendHtml = `<span class="text-rose-400 font-bold text-[10px]">↓ ${diff} kg</span>`;
+      else trendHtml = `<span class="text-gray-400 text-[10px]">→ Same weight</span>`;
+    }
+
+    const sessionRows = history.slice(-6).reverse().map((entry, idx) => {
+      const maxW = Math.max(...entry.sets.map(s => Number(s.weight)));
+      const maxR = Math.max(...entry.sets.map(s => Number(s.reps)));
+      const setCount = entry.sets.length;
+      const isLatest = idx === 0;
+
+      // Check if any set exceeded the exercise's maxReps
+      const exDef2 = WORKOUT_DAYS.flatMap(d => d.exercises).find(e => e.name === name);
+      const didOvershoot = exDef2 && entry.sets.some(s => Number(s.reps) > exDef2.maxReps);
+      const didHitMax    = exDef2 && entry.sets.every(s => Number(s.reps) >= exDef2.maxReps);
+
+      let badge = '';
+      if (didOvershoot) badge = `<span class="text-amber-400 text-[9px] font-bold px-1.5 py-0.5 rounded bg-amber-500/15 border border-amber-500/30">OVER</span>`;
+      else if (didHitMax) badge = `<span class="text-emerald-400 text-[9px] font-bold px-1.5 py-0.5 rounded bg-emerald-500/15 border border-emerald-500/30">MAX</span>`;
+
+      return `
+        <div class="flex items-center justify-between py-1.5 border-b border-white/[0.04] last:border-0 text-[11px]">
+          <span class="font-mono text-gray-${isLatest ? '200 font-bold' : '500'}">${entry.date}</span>
+          <div class="flex items-center gap-2">
+            <span class="font-mono text-${isLatest ? 'white font-bold' : 'gray-300'}">${setCount}×${maxR} @ ${maxW} kg</span>
+            ${badge}
+          </div>
+        </div>
+      `;
+    }).join('');
+
+    const nextTargetHtml = nextTarget
+      ? `<div class="mt-2 pt-2 border-t border-amber-500/20 flex items-center gap-2 text-[11px]">
+           ${icon('sparkles', 'w-3.5 h-3.5 text-amber-400 flex-shrink-0')}
+           <span class="text-amber-300 font-bold">Next session target: ${nextTarget.weight} kg × ${nextTarget.reps} reps</span>
+           <span class="text-gray-500">(+${nextTarget.bump} kg bump)</span>
+         </div>`
+      : '';
+
+    const item = document.createElement('div');
+    item.className = 'rounded bg-[#161B24] border border-white/[0.04] overflow-hidden';
+    item.innerHTML = `
+      <button class="w-full flex items-center justify-between gap-3 p-3 text-left hover:bg-white/[0.03] transition-colors" onclick="this.nextElementSibling.classList.toggle('hidden')">
+        <div class="min-w-0">
+          <div class="font-bold text-white text-xs truncate">${name}</div>
+          <div class="text-[10.5px] text-gray-400 font-mono mt-0.5">${history.length} session${history.length !== 1 ? 's' : ''} logged</div>
+        </div>
+        <div class="text-right flex-shrink-0 flex items-center gap-2">
+          ${trendHtml}
+          <div class="text-white font-mono font-bold text-xs">${latestMaxWeight} kg × ${latestMaxReps}</div>
+        </div>
+      </button>
+      <div class="hidden px-3 pb-3 pt-1 border-t border-white/[0.04]">
+        <div class="space-y-0">${sessionRows}</div>
+        ${nextTargetHtml}
+      </div>
+    `;
+    container.appendChild(item);
+  });
+}
+
+// ----------------------------------------------------
+// 13E. EXPORT (CSV / JSON "table files")
 // ----------------------------------------------------
 function csvCell(v) {
   const s = String(v === undefined || v === null ? '' : v);
