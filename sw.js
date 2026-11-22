@@ -1,10 +1,10 @@
 // Service Worker for myfit 12-Week Transformation PWA
-// Version 3.9.0 - Icon system, palette + surface polish
-const CACHE_NAME = 'myfit-workout-v3.9.0';
+// Version 3.9.1 - Updated workout plan
+const CACHE_NAME = 'myfit-workout-v3.9.1';
 const STATIC_ASSETS = [
   './',
   './index.html',
-  './app.js?v=3.9.0',
+  './app.js?v=3.9.1',
   './manifest.json',
   './icon.svg',
   './hero_mountain_banner.jpg',

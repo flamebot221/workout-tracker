@@ -16,18 +16,18 @@ const WORKOUT_DAYS = [
     exercises: []
   },
   {
-    id: 'mon', name: 'Monday', title: 'Upper Body', subtitle: 'Incline Bench, Flyes, Pull-Up Progression, Pendlay Rows & Arms', badge: 'Upper Body',
+    id: 'mon', name: 'Monday', title: 'Upper Body', subtitle: 'Incline Bench, Flyes, Pull-Up Progression, Chest-Supported Rows & Arms', badge: 'Upper Body',
     time: '8:30 PM • 75–90 min', muscles: [{ id: 'chest', role: 'Primary' }, { id: 'lats', role: 'Primary' }, { id: 'back', role: 'Primary' }, { id: 'shoulders', role: 'Secondary' }, { id: 'triceps', role: 'Secondary' }, { id: 'biceps', role: 'Secondary' }],
-    warmup: '5–8 min easy bike + dynamic shoulder mobility + 2–3 progressive warm-up sets for Incline Barbell Press.',
+    warmup: '5–8 min easy bike + dynamic shoulder mobility + 2–3 progressive warm-up sets for Smith Incline Bench.',
     cardio: 'Optional: 10–15 min post-workout stationary bike or brisk incline walk (conversational pace).',
     exercises: [
-      makeExercise('ex_incline_barbell_press', 'Incline Barbell Bench Press', 3, 6, 8, 150, 'Barbell + 15–30° Incline Bench', 'chest', 'Jeff Nippard: 15–30° incline. Scapulae retracted, 2–3s controlled descent touching upper chest below collarbone. Drive up without excessive elbow flare.', { demoId: 'ex_incline_barbell_press' }),
+      makeExercise('ex_incline_barbell_press', 'Smith Machine Incline Bench Press', 3, 6, 8, 150, 'Smith Machine + 15–30° Incline Bench', 'chest', 'Jeff Nippard: Fixed bar path. Set the bench so the bar touches the upper chest below the collarbone. Pinch shoulders down and back; keep elbows tucked at about 45–60°.', { demoId: 'ex_incline_barbell_press' }),
       makeExercise('ex_seated_cable_fly', 'Seated Cable Fly / Pec Deck', 2, 10, 12, 90, 'Cable Station / Pec Deck', 'chest', 'Jeff Nippard: Handles at mid-chest level. Keep shoulders pinned back to pad. Pause 1s in deep lengthened stretch, squeeze inner chest across.', { demoId: 'ex_pec_deck_fly' }),
-      makeExercise('ex_lat_pulldown_prog', 'Lat Pulldown (Pull-Up Progression)', 3, 6, 8, 120, 'Lat Pulldown Station', 'lats', 'Jeff Nippard: Pull-up strength builder! Torso slight 10–15° lean. Depress scapulae, drive elbows into hip pockets. Slow 2–3s negative to full stretch.', { demoId: 'ex_lat_pulldown' }),
+      makeExercise('ex_lat_pulldown_prog', 'Lat Pulldown (Pull-Up Progression)', 3, 6, 8, 120, 'Lat Pulldown + Straps', 'lats', 'Jeff Nippard: Pull-up strength builder! Pull straps with a thumbless hook grip. Depress the scapulae, drive elbows into the hip pockets, and control the 2s eccentric.', { demoId: 'ex_lat_pulldown' }),
       makeExercise('ex_cable_lateral_raise_mon', 'High Cable / DB Lateral Raise', 2, 8, 10, 75, 'Functional Trainer / DBs', 'shoulders', 'Jeff Nippard: Pulley at hip height. Scoop the weight outward 20° forward in scapular plane. Controlled lowering phase.', { demoId: 'ex_cable_lateral_raise' }),
-      makeExercise('ex_pendlay_row', 'Pendlay Row', 2, 8, 10, 120, 'Barbell + Plates', 'back', 'Jeff Nippard: Torso strictly parallel to floor, neutral spine, dead stop on floor every rep. Explosively pull bar to lower sternum without hip heave.', { demoId: 'ex_pendlay_row' }),
+      makeExercise('ex_pendlay_row', 'Chest-Supported Machine Row / T-Bar Row', 2, 8, 10, 120, 'Chest-Supported Row + Straps', 'back', 'Jeff Nippard: Keep the chest glued to the pad and elbows at about 45° to the torso. Squeeze shoulder blades together at the top; use straps to keep the grip passive.', { demoId: 'ex_chest_supp_row' }),
       makeExercise('ex_overhead_cable_triceps', 'Cable Overhead Triceps Extension', 2, 8, 10, 75, 'Cable Station + Rope', 'triceps', 'Jeff Nippard: Lengthened long-head overload. Lean forward 30°, let rope stretch behind head, lock out forearms under control.', { demoId: 'ex_overhead_triceps_ext' }),
-      makeExercise('ex_bayesian_preacher_curl', 'Bayesian Curl / Preacher Curl', 2, 8, 10, 75, 'Cable Pulley or Preacher Bench', 'biceps', 'Jeff Nippard: Face away from low cable with shoulder extended behind torso (Bayesian) or preacher bench. Keep upper arm stable, curl with zero shoulder momentum.', { demoId: 'ex_bayesian_curl' })
+      makeExercise('ex_bayesian_preacher_curl', 'Preacher Curl', 2, 8, 10, 75, 'Preacher Bench + EZ-Bar or Machine', 'biceps', 'Jeff Nippard: Lock the armpits against the top of the pad and keep the elbows fixed. Curl smoothly and lower through a strict 2–3s eccentric stretch.', { demoId: 'ex_ez_preacher_curl' })
     ]
   },
   {
@@ -52,15 +52,15 @@ const WORKOUT_DAYS = [
   {
     id: 'thu', name: 'Thursday', title: 'Push', subtitle: 'Paused Bench, Shoulder Press, Pec Deck & Triceps', badge: 'Push Day',
     time: '8:30 PM • 75–90 min', muscles: [{ id: 'chest', role: 'Primary' }, { id: 'shoulders', role: 'Primary' }, { id: 'triceps', role: 'Secondary' }],
-    warmup: '5–8 min easy bike + band pull-aparts + gradual Bench Press warm-up sets.',
+    warmup: '5–8 min easy bike + band pull-aparts + gradual Smith Flat Bench warm-up sets.',
     cardio: 'Optional 10 min cool-down walking.',
     exercises: [
-      makeExercise('ex_barbell_bench', 'Barbell Flat Bench Press', 3, 8, 10, 150, 'Bench Press Station + Barbell', 'chest', 'Jeff Nippard: Modest arch, shoulder blades pinched. Lower with 2s control and PAUSE 1 full second on lower chest before explosive press.', { demoId: 'ex_barbell_bench' }),
+      makeExercise('ex_barbell_bench', 'Smith Machine Flat Bench Press', 3, 8, 10, 150, 'Smith Machine + Flat Bench', 'chest', 'Jeff Nippard: Focus on the chest arch and scapular retraction. Lower under control and PAUSE for 1 full second on the lower chest, then drive up.', { demoId: 'ex_barbell_bench' }),
       makeExercise('ex_plate_shoulder_press', 'Machine Shoulder Press', 3, 10, 12, 120, 'Plate-Loaded / Selectorized Press', 'shoulders', 'Jeff Nippard: Handles at chin height. Keep elbows tucked forward ~30° in scapular plane (not flared 90°). Press overhead smoothly.', { demoId: 'ex_plate_shoulder_press' }),
       makeExercise('ex_pec_deck', 'Pec Deck Fly', 3, 15, 20, 75, 'Pec Deck Machine', 'chest', 'Jeff Nippard: Set arms for deep comfortable chest stretch without rolling shoulders forward. Keep chest proud, sweep handles forward.', { demoId: 'ex_pec_deck_fly' }),
       makeExercise('ex_cable_lat_raise_thu', 'Cable Lateral Raise', 3, 10, 15, 75, 'Functional Trainer + Handle', 'shoulders', 'Jeff Nippard: Pulley at hip height. Scoop weight outward away from body in scapular plane (~20° forward). 2s eccentric descent.', { demoId: 'ex_cable_lateral_raise' }),
       makeExercise('ex_overhead_cable_ext_thu', 'Overhead Cable Triceps Extension', 3, 5, 10, 90, 'Cable Station + Rope', 'triceps', 'Jeff Nippard: Heavy overload (5–10 reps). Lean forward, let rope sink behind head for deep stretch, extend forearms cleanly.', { demoId: 'ex_overhead_triceps_ext' }),
-      makeExercise('ex_tricep_cable_kickback', 'Triceps Cable Kickback', 3, 10, 15, 60, 'Cable Station (no handle/cuff)', 'triceps', 'Jeff Nippard: Cable at hip height. Hinge forward 45°, pin upper arm parallel to torso. Extend forearm back into peak contraction; hold 1s.', { demoId: 'ex_cable_kickback' })
+      makeExercise('ex_tricep_cable_kickback', 'V-Bar Cable Triceps Pushdown', 3, 10, 15, 60, 'Cable Station + V-Bar', 'triceps', 'Jeff Nippard: Pin elbows to the ribs and press the V-bar down until fully locked out. Squeeze for 1 second, then control the return to 90° elbow flexion.', { demoId: 'ex_v_bar_triceps_pushdown' })
     ]
   },
   {
@@ -71,8 +71,8 @@ const WORKOUT_DAYS = [
     exercises: [
       makeExercise('ex_leg_ext_fri', 'Leg Extension', 2, 8, 10, 90, 'Leg Extension Machine', 'quadriceps', 'Jeff Nippard: Lean seat back for bigger quad stretch. Focus entirely on squeezing quads to move the weight. BOTH SETS TO ABSOLUTE FAILURE.', { demoId: 'ex_leg_extension' }),
       makeExercise('ex_barbell_rdl_fri', 'Barbell Romanian Deadlift (RDL)', 2, 6, 8, 120, 'Barbell + Plates + Straps', 'hamstrings', 'Jeff Nippard: Push hips back and lower bar straight down centered over mid-foot. Flat back the entire time; drive hips forward at top.', { demoId: 'ex_db_rdl' }),
-      makeExercise('ex_hip_thrust_fri', 'Barbell Hip Thrust', 2, 6, 8, 120, 'Barbell + Flat Bench', 'glutes', 'Jeff Nippard: Bench just below shoulder blades, shins vertical. Squeeze glutes hard at lockout with posterior pelvic tilt; LAST SET TO FAILURE.', { demoId: 'ex_hip_thrust' }),
-      makeExercise('ex_leg_press_fri', '45° Leg Press', 1, 6, 8, 150, '45-Degree Leg Press', 'quadriceps', 'Jeff Nippard: Single all-out top set! Feet middle of sled. Deep controlled knee flexion without lower back lifting off pad. TRY TILL FAILURE.', { demoId: 'ex_leg_press' }),
+      makeExercise('ex_hip_thrust_fri', 'Smith Machine Hip Thrust', 2, 6, 8, 120, 'Smith Machine + Flat Bench', 'glutes', 'Jeff Nippard: Upper back on the bench edge and shins vertical at the top. Drive through heels, tuck the chin, and posteriorly tilt the pelvis. Stop at 1–2 RIR.', { demoId: 'ex_hip_thrust' }),
+      makeExercise('ex_leg_press_fri', '45° Leg Press', 2, 6, 10, 150, '45-Degree Leg Press', 'quadriceps', 'Jeff Nippard: Warm up progressively. Use one heavy top set at 1–2 RIR, rest 2.5 min, then one back-off set at 80–85 kg. Stop before pelvis tucks under.', { demoId: 'ex_leg_press' }),
       makeExercise('ex_standing_db_calf_fri', 'Standing Dumbbell Calf Raise', 2, 8, 10, 60, 'Heavy Dumbbells + Step', 'calves', 'Jeff Nippard: Hold heavy dumbbells. Pause for 2 full seconds in the deep bottom stretch on every rep to eliminate elasticity.', { demoId: 'ex_standing_calf_raise' })
     ]
   },
